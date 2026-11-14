@@ -829,9 +829,9 @@
         const PRIORITY_BRANDS = ["JOCKEY", "VAN HEUSEN", "U.S. POLO ASSN.", "PARK AVENUE"];
         const MODEL_FALLBACK_CHAIN = [
             "gemini-2.5-flash",
+            "gemini-2.5-pro",
             "gemini-2.0-flash",
-            "gemini-2.0-flash-lite",
-            "gemini-1.5-flash"
+            "gemini-2.0-flash-lite"
         ];
 
         function normalizeBrandName(rawBrand) {
@@ -859,7 +859,6 @@
         function refreshSavedStylesDropdown() {
             const brand = getActiveSelectedBrand();
             const existingSel = document.getElementById('ctrl-existing-style');
-            const newStyleInput = document.getElementById('ctrl-style');
             const currentDropdownVal = existingSel.value;
 
             const stylesMap = liveBrandStock[brand] || {};
@@ -1331,8 +1330,8 @@
                 }
             }
             const brandName = normalizeBrandName(selectedBrand);
-            const dropdownStyle = document.getElementById('ctrl-existing-style').value.trim().toUpperCase();
-            const typedStyle = document.getElementById('ctrl-style').value.trim().toUpperCase();
+            const dropdownStyle = document.getElementById('ctrl-existing-style').value.trim().toUpperCase().replace(/\s+/g, '');
+            const typedStyle = document.getElementById('ctrl-style').value.trim().toUpperCase().replace(/\s+/g, '');
             const styleNo = typedStyle || dropdownStyle;
 
             const rawName = document.getElementById('ctrl-name').value.trim().toUpperCase();
@@ -1364,7 +1363,8 @@
                 return;
             }
             const cleanBrand = normalizeBrandName(brandName);
-            const basePath = getStockFirebasePath(cleanBrand, styleNo, isLegacy);
+            const cleanStyle = String(styleNo).trim().toUpperCase().replace(/\s+/g, '');
+            const basePath = getStockFirebasePath(cleanBrand, cleanStyle, isLegacy);
             const qtyRef = database.ref(`${basePath}/colors/${color}/${size}`);
 
             qtyRef.once('value').then(snap => {
@@ -1373,7 +1373,7 @@
 
                 if (updated < 0) {
                     if (notifyChat) {
-                        addChatMessage('ai', `⚠️ ${cleanBrand} Style ${styleNo} ka stock kam hai. Sirf ${current} pcs available hain.`, true);
+                        addChatMessage('ai', `⚠️ ${cleanBrand} Style ${cleanStyle} ka stock kam hai. Sirf ${current} pcs available hain.`, true);
                     } else {
                         showCyberToast(`⚠️ Stock kam hai! Sirf ${current} pcs available hain.`, true);
                     }
@@ -1386,12 +1386,12 @@
 
                 const mode = qtyDelta > 0 ? 'ADD' : 'MINUS';
                 const tag = qtyDelta > 0 ? 'STOCK ADDED (+)' : 'STOCK MINUS (-)';
-                logStockChange(mode, `[${tag}] ${cleanBrand} | ${Math.abs(qtyDelta)} pcs | Style ${styleNo} (${itemName}) - ${color} Size ${size} | Total: ${updated} pcs`);
+                logStockChange(mode, `[${tag}] ${cleanBrand} | ${Math.abs(qtyDelta)} pcs | Style ${cleanStyle} (${itemName}) - ${color} Size ${size} | Total: ${updated} pcs`);
 
                 if (notifyChat) {
-                    addChatMessage('ai', `✅ Done! ${cleanBrand} - Style ${styleNo} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`, true);
+                    addChatMessage('ai', `✅ Done! ${cleanBrand} - Style ${cleanStyle} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`, true);
                 } else {
-                    showCyberToast(`✅ ${cleanBrand} | Style ${styleNo} (${color} ${size}): ${updated} pcs`);
+                    showCyberToast(`✅ ${cleanBrand} | Style ${cleanStyle} (${color} ${size}): ${updated} pcs`);
                 }
             });
         }
@@ -1548,7 +1548,7 @@
         }
         animateOrb();
 
-        /* 7. RAX AI VOICE, CHAT & BRAND-AWARE 5-KEY FAILOVER */
+        /* 7. RAX AI VOICE, CHAT & FULL OFFLINE + ONLINE COMMAND ENGINE */
         let voiceEnabled = true;
 
         function toggleVoiceOutput() {
@@ -1606,8 +1606,88 @@
             return null;
         }
 
-        function localFallbackParser(q) {
-            const lower = q.toLowerCase();
+        /* Instant Smart Local Parser (Handles ADD, MINUS, CHECK & CHAT even if API key fails/busy) */
+        function localSmartCommandParser(q) {
+            const raw = q.trim();
+            const lower = raw.toLowerCase();
+
+            // 1. Detect Brand
+            let brand = "JOCKEY";
+            if (lower.includes("van") || lower.includes("heusen") || lower.includes("husen")) brand = "VAN HEUSEN";
+            else if (lower.includes("polo") || lower.includes("uspa")) brand = "U.S. POLO ASSN.";
+            else if (lower.includes("park") || lower.includes("avenue")) brand = "PARK AVENUE";
+            else if (lower.includes("jockey") || lower.includes("jocky")) brand = "JOCKEY";
+
+            // 2. Detect ADD or MINUS intent
+            const isAdd = /\b(add|plus|jod|jodo|dal|daal|daldo|daaldo|entry|in)\b/i.test(lower);
+            const isMinus = /\b(minus|less|nikal|nikalo|ghata|ghatao|dispatch|sale|sold|out|kam)\b/i.test(lower);
+
+            if (isAdd || isMinus) {
+                const intent = isMinus ? "MINUS" : "ADD";
+
+                // Color
+                const color = /\bwhite\b/i.test(lower) ? "WHITE" : "ASSTD";
+
+                // Quantity (look for "5 peace", "5 piece", "5 pcs", "5 pis", or standalone number before add/minus)
+                let qty = 0;
+                const qtyWithUnit = lower.match(/(\d+)\s*(?:pcs?|pieces?|peaces?|pis|pic|pack|box|nos?)\b/i);
+                if (qtyWithUnit) {
+                    qty = parseInt(qtyWithUnit[1], 10);
+                } else {
+                    const nums = lower.match(/\b(\d+)\b/g);
+                    if (nums && nums.length > 0) {
+                        qty = parseInt(nums[nums.length - 1], 10);
+                    }
+                }
+
+                // Style Number (handles "IC 32", "IC32", "style number 8035", "style 901")
+                let styleNo = "";
+                const alphaNumStyle = raw.match(/\b([a-zA-Z]{1,4})\s*[-]?\s*(\d{2,5}[a-zA-Z]?)\b/);
+                const explicitStyle = raw.match(/style\s*(?:no|number)?\s*[:\-]?\s*([a-zA-Z0-9\-]+)/i);
+                if (alphaNumStyle) {
+                    styleNo = (alphaNumStyle[1] + alphaNumStyle[2]).toUpperCase();
+                } else if (explicitStyle) {
+                    styleNo = explicitStyle[1].toUpperCase();
+                } else {
+                    const allNums = raw.match(/\b(\d{3,5})\b/g);
+                    if (allNums && allNums.length > 0) styleNo = allNums[0];
+                }
+
+                // Size (handles "size S", "size L", "size 85", or standalone S/M/L/XL/XXL/75..110)
+                let size = "";
+                const sizeMatch = raw.match(/\bsize\s*(?:no|number)?\s*[:\-]?\s*(xxl|xl|xs|s|m|l|75|80|85|90|95|100|105|110)\b/i);
+                if (sizeMatch) {
+                    size = sizeMatch[1].toUpperCase();
+                } else {
+                    const tokenSize = raw.match(/\b(xxl|xl|xs|s|m|l|75|80|85|90|95|100|105|110)\b/i);
+                    if (tokenSize) size = tokenSize[1].toUpperCase();
+                }
+
+                // Optional Item Name
+                let itemName = "";
+                const knownItems = ["TRUNK", "BRIEF", "VEST", "BOXER", "TRACK", "TSHIRT", "T-SHIRT", "SHORTS", "BRA", "PANTY", "SOCKS", "THERMAL"];
+                for (const ki of knownItems) {
+                    if (lower.includes(ki.toLowerCase())) {
+                        itemName = ki;
+                        break;
+                    }
+                }
+
+                if (styleNo && qty > 0) {
+                    return {
+                        intent,
+                        brand,
+                        styleNo,
+                        itemName,
+                        color,
+                        size: size || "M",
+                        qty,
+                        reply: ""
+                    };
+                }
+            }
+
+            // 3. Greeting / Identity
             if (lower.includes('kaun') || lower.includes('kya kar') || lower.includes('who are you') || lower.includes('help') || lower.includes('namaste') || lower.includes('hello') || lower.includes('hey')) {
                 return {
                     intent: "CHAT",
@@ -1615,15 +1695,11 @@
                 };
             }
 
+            // 4. Stock Check by Brand or Style
             const brands = Object.keys(liveBrandStock);
             for (const b of brands) {
-                if (lower.includes(b.toLowerCase()) || (b === 'VAN HEUSEN' && lower.includes('van')) || (b === 'U.S. POLO ASSN.' && lower.includes('polo')) || (b === 'PARK AVENUE' && lower.includes('park'))) {
-                    const styles = Object.keys(liveBrandStock[b]);
-                    const list = styles.map(s => `${s} (${liveBrandStock[b][s].itemName})`).join(', ');
-                    return { intent: "CHECK", reply: `${b} mein ${styles.length} styles hain: ${list}.` };
-                }
                 for (const s of Object.keys(liveBrandStock[b])) {
-                    if (lower.includes(s.toLowerCase())) {
+                    if (lower.replace(/\s+/g, '').includes(s.toLowerCase())) {
                         const item = liveBrandStock[b][s];
                         let summary = `${b} - Style ${s} (${item.itemName}):\n`;
                         if (item.colors) {
@@ -1634,6 +1710,11 @@
                         }
                         return { intent: "CHECK", reply: summary.trim() };
                     }
+                }
+                if (lower.includes(b.toLowerCase()) || (b === 'VAN HEUSEN' && lower.includes('van')) || (b === 'U.S. POLO ASSN.' && lower.includes('polo')) || (b === 'PARK AVENUE' && lower.includes('park'))) {
+                    const styles = Object.keys(liveBrandStock[b]);
+                    const list = styles.map(s => `${s} (${liveBrandStock[b][s].itemName})`).join(', ');
+                    return { intent: "CHECK", reply: `${b} mein ${styles.length} styles hain: ${list}.` };
                 }
             }
 
@@ -1651,59 +1732,61 @@
                 .map((k, idx) => ({ key: (k || '').trim(), idx }))
                 .filter(x => x.key !== '' && !x.key.includes('•'));
 
-            if (validKeys.length === 0) {
-                const local = localFallbackParser(userQuery);
-                if (local) return { data: local };
-                return { error: "Koi valid Gemini API Key nahi mili. Admin Login karke API Keys Vault mein apni asli key paste karke Save karein." };
-            }
-
-            const prompt = `You are RAX AI, stock assistant for Plezer Collection undergarments.
+            if (validKeys.length > 0) {
+                const prompt = `You are RAX AI, stock assistant for Plezer Collection undergarments.
 Rules:
 1. Brands are strictly: "JOCKEY", "VAN HEUSEN", "U.S. POLO ASSN.", "PARK AVENUE" (default "JOCKEY" if not mentioned).
 2. Understand Hindi, Hinglish, and English commands for ADD stock, MINUS/DISPATCH stock, CHECK stock, or general chat.
-3. Colors are strictly "WHITE" or "ASSTD" (default "ASSTD" if not specified).
-4. Sizes can be numbers (75, 80, 85, 90, 95, 100, 105) or letters (S, M, L, XL, XXL).
-5. Live brand-grouped stock JSON: ${JSON.stringify(liveBrandStock)}
-6. Respond ONLY with raw JSON:
+3. Remove spaces in styleNo (e.g. "IC 32" -> "IC32").
+4. Colors are strictly "WHITE" or "ASSTD" (default "ASSTD" if not specified).
+5. Sizes can be numbers (75, 80, 85, 90, 95, 100, 105) or letters (S, M, L, XL, XXL).
+6. Live brand-grouped stock JSON: ${JSON.stringify(liveBrandStock)}
+7. Respond ONLY with raw JSON:
 {"intent":"ADD|MINUS|CHECK|CHAT","brand":"JOCKEY","styleNo":"","itemName":"","color":"ASSTD","size":"","qty":0,"reply":"short helpful Hinglish reply"}
 
 User: ${userQuery}`;
 
-            for (const kObj of validKeys) {
-                activeKeyIndex = kObj.idx;
-                for (const model of MODEL_FALLBACK_CHAIN) {
-                    try {
-                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(kObj.key)}`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                contents: [{ parts: [{ text: prompt }] }],
-                                generationConfig: { temperature: 0.2 }
-                            })
-                        });
-                        const data = await res.json();
-                        if (!res.ok || data.error) continue;
+                for (const kObj of validKeys) {
+                    activeKeyIndex = kObj.idx;
+                    for (const model of MODEL_FALLBACK_CHAIN) {
+                        try {
+                            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(kObj.key)}`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    contents: [{ parts: [{ text: prompt }] }],
+                                    generationConfig: { temperature: 0.1 }
+                                })
+                            });
+                            const data = await res.json();
+                            if (!res.ok || data.error) continue;
 
-                        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                        if (!text) continue;
+                            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                            if (!text) continue;
 
-                        const parsed = safeExtractJson(text);
-                        if (!parsed) continue;
+                            const parsed = safeExtractJson(text);
+                            if (!parsed) continue;
 
-                        const lbl = document.getElementById('active-model-display');
-                        if (lbl) lbl.innerText = `Model: ${model} (Slot ${kObj.idx + 1})`;
+                            const lbl = document.getElementById('active-model-display');
+                            if (lbl) lbl.innerText = `Model: ${model} (Slot ${kObj.idx + 1})`;
 
-                        return { data: parsed };
-                    } catch (e) {
-                        continue;
+                            return { data: parsed };
+                        } catch (e) {
+                            continue;
+                        }
                     }
                 }
             }
 
-            const local = localFallbackParser(userQuery);
-            if (local) return { data: local };
+            // Instant Smart Local Command Engine fallback (Never fails on valid stock/chat commands)
+            const localPlan = localSmartCommandParser(userQuery);
+            if (localPlan) {
+                const lbl = document.getElementById('active-model-display');
+                if (lbl) lbl.innerText = `Engine: Smart Local Core`;
+                return { data: localPlan };
+            }
 
-            return { error: "API Key check karein ya naya Gemini API Key Slot 1 mein dal kar Save karein." };
+            return { error: "Samajh nahi aaya. Jaise bolein: 'Jockey IC32 size S 5 pcs add karo' ya API Key Slot 1 check karein." };
         }
 
         async function processCommand() {
@@ -1748,7 +1831,7 @@ User: ${userQuery}`;
                     return;
                 }
                 const brandName = normalizeBrandName(plan.brand || 'JOCKEY');
-                const styleNo = String(plan.styleNo).toUpperCase();
+                const styleNo = String(plan.styleNo).toUpperCase().replace(/\s+/g, '');
                 const color = plan.color === 'WHITE' ? 'WHITE' : 'ASSTD';
                 const size = String(plan.size || 'M').toUpperCase();
                 const existing = liveBrandStock[brandName]?.[styleNo];
