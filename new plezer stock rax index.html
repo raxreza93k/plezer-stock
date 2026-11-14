@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plezer Collection Rax Stock</title>
+    <title>Plezer Collection</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -31,8 +31,8 @@
             --neon-pink: #ff007f;
             --neon-green: #00ff88;
             --neon-gold: #ffcc00;
-            --glass-bg: rgba(12, 16, 38, 0.85);
-            --glass-border: rgba(0, 243, 255, 0.25);
+            --glass-bg: rgba(12, 16, 38, 0.88);
+            --glass-border: rgba(0, 243, 255, 0.28);
             --text-color: #e6fbff;
         }
 
@@ -51,16 +51,17 @@
         .ambient-orb {
             position: fixed;
             border-radius: 50%;
-            filter: blur(110px);
+            filter: blur(115px);
             z-index: -1;
-            opacity: 0.45;
+            opacity: 0.42;
         }
         .orb-1 { width: 300px; height: 300px; background: var(--cyber-blue); top: 8%; left: 5%; }
         .orb-2 { width: 350px; height: 350px; background: var(--neon-purple); bottom: 8%; right: 5%; }
 
+        /* Clean Header */
         header {
             text-align: center;
-            padding: 14px 15px;
+            padding: 18px 15px;
             background: rgba(6, 9, 22, 0.94);
             border-bottom: 2px solid transparent;
             border-image: linear-gradient(90deg, var(--cyber-blue), var(--neon-purple), var(--neon-pink)) 1;
@@ -72,64 +73,42 @@
         header h1 {
             margin: 0;
             font-family: 'Orbitron', sans-serif;
-            font-size: 19px;
-            letter-spacing: 1.5px;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 2.5px;
             background: linear-gradient(90deg, #00f3ff, #ffffff, #bd00ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            padding-right: 28px;
-        }
-        .header-controls {
-            margin-top: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-        .admin-badge-top {
-            background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink));
-            color: #fff;
-            padding: 3px 10px;
-            border-radius: 6px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 10px;
-            display: none;
         }
 
-        /* Small Corner API Key Icon Button */
-        #corner-api-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            border-radius: 50%;
-            background: rgba(0, 243, 255, 0.12);
-            border: 1px solid var(--cyber-blue);
-            color: var(--cyber-blue);
-            font-size: 14px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.35);
-            cursor: pointer;
-        }
-        #corner-api-btn:hover {
-            background: rgba(0, 243, 255, 0.28);
-            transform: scale(1.08);
-        }
-
-        .container {
+        .main-wrapper {
             max-width: 920px;
-            margin: 16px auto;
+            margin: 18px auto;
             width: 94%;
+        }
+
+        .glass-panel {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 18px;
             padding: 18px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(16px);
+        }
+
+        .panel-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--cyber-blue);
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         input, select {
@@ -137,7 +116,7 @@
             background: rgba(15, 22, 48, 0.92);
             border: 1px solid rgba(0, 243, 255, 0.35);
             padding: 11px 14px;
-            border-radius: 12px;
+            border-radius: 11px;
             color: #fff;
             font-family: 'Rajdhani', sans-serif;
             font-size: 15px;
@@ -152,50 +131,52 @@
         button {
             background: linear-gradient(135deg, var(--cyber-blue), var(--neon-purple));
             border: none;
-            padding: 10px 18px;
+            padding: 11px 18px;
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             font-size: 12px;
             font-weight: 700;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.28);
             transition: all 0.2s;
         }
-        button:hover { transform: translateY(-1px); filter: brightness(1.1); }
-        .btn-mic { background: linear-gradient(135deg, #ff007f, #ff5500); }
+        button:hover { transform: translateY(-1px); filter: brightness(1.12); }
         .btn-green { background: linear-gradient(135deg, #00c853, #00f3ff); color: #050711; }
         .btn-danger { background: linear-gradient(135deg, #ff1744, #d50000); color: #fff; }
-        .btn-small { padding: 6px 14px; font-size: 11px; }
+        .btn-mic { background: linear-gradient(135deg, #ff007f, #ff5500); }
 
-        .search-box { margin-bottom: 14px; }
-
-        /* Admin Stock Action Bar (Add / Minus Buttons) */
-        #admin-stock-toolbar {
+        /* Admin-Only Panels (Strictly Hidden Before Login) */
+        .admin-only-panel {
             display: none;
-            gap: 10px;
-            margin-bottom: 16px;
+            animation: slideUp 0.3s ease-out;
         }
-        #admin-stock-toolbar button {
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stock Control Grid */
+        .stock-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .stock-action-btns {
+            display: flex;
+            gap: 10px;
+        }
+        .stock-action-btns button {
             flex: 1;
             padding: 12px;
             font-size: 13px;
-            letter-spacing: 0.5px;
         }
 
-        .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            color: var(--cyber-blue);
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        /* Stock Table */
         .table-wrapper {
             overflow-x: auto;
-            border-radius: 14px;
+            border-radius: 12px;
             border: 1px solid rgba(0, 243, 255, 0.2);
         }
         table {
@@ -208,12 +189,12 @@
             border-bottom: 1px solid rgba(0, 243, 255, 0.12);
         }
         th {
-            background: linear-gradient(90deg, rgba(0, 243, 255, 0.2), rgba(189, 0, 255, 0.2));
+            background: linear-gradient(90deg, rgba(0, 243, 255, 0.18), rgba(189, 0, 255, 0.18));
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             font-size: 12px;
         }
-        tr:hover { background: rgba(0, 243, 255, 0.05); }
+        tr:hover { background: rgba(0, 243, 255, 0.04); }
 
         .badge-white {
             background: rgba(0, 243, 255, 0.2);
@@ -259,10 +240,152 @@
             display: none;
         }
 
+        /* 5 API Keys Vault Slots */
+        .api-slot-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 243, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 243, 255, 0.22);
+            margin-bottom: 10px;
+        }
+        .api-slot-row.active-slot {
+            border-color: var(--neon-green);
+            background: rgba(0, 255, 136, 0.08);
+        }
+        .slot-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: var(--cyber-blue);
+            min-width: 65px;
+        }
+        .api-slot-row input {
+            margin-bottom: 0;
+            font-family: monospace;
+            font-size: 13px;
+            padding: 8px 10px;
+        }
+
+        /* Activity & IP Logs */
+        #logs-container {
+            font-family: monospace;
+            background: rgba(4, 7, 18, 0.94);
+            border: 1px solid rgba(189, 0, 255, 0.35);
+            padding: 12px;
+            border-radius: 12px;
+            max-height: 240px;
+            overflow-y: auto;
+            font-size: 12px;
+            color: #00ff88;
+        }
+
+        /* Bottom-Left Clean Admin Access Button */
+        #bottom-admin-launcher {
+            position: fixed;
+            bottom: 22px;
+            left: 18px;
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(10, 15, 38, 0.94);
+            border: 1.5px solid var(--neon-purple);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 0 18px rgba(189, 0, 255, 0.45);
+            cursor: pointer;
+        }
+        #bottom-admin-launcher.logged-in {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 18px rgba(255, 0, 127, 0.5);
+        }
+
+        /* System Access Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 6, 16, 0.92);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(12px);
+        }
+        .modal-card {
+            background: linear-gradient(145deg, rgba(14, 20, 48, 0.98), rgba(32, 12, 58, 0.98));
+            border: 2px solid var(--cyber-blue);
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.45);
+            padding: 24px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 370px;
+            text-align: center;
+        }
+        .sys-node-tag {
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+        .modal-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0 0 4px 0;
+            color: #fff;
+            font-size: 20px;
+            letter-spacing: 1.5px;
+        }
+        .modal-sub {
+            font-size: 11px;
+            color: #88ccee;
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .modal-card input { margin-bottom: 12px; }
+        .error-display {
+            background: rgba(255, 0, 50, 0.22);
+            border: 1.5px solid #ff1744;
+            color: #ff8a80;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: none;
+            text-align: left;
+        }
+        .login-progress-wrap {
+            display: none;
+            margin-bottom: 12px;
+        }
+        .login-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .login-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--cyber-blue), var(--neon-green));
+            transition: width 0.3s ease;
+        }
+
         /* Floating Bottom-Right RAX AI Orb */
         #rex-ai-launcher {
             position: fixed;
-            bottom: 18px;
+            bottom: 16px;
             right: 18px;
             z-index: 1500;
             display: flex;
@@ -272,32 +395,31 @@
             user-select: none;
         }
         #particle-canvas {
-            width: 84px;
-            height: 84px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(14, 22, 54, 0.92) 40%, rgba(0, 243, 255, 0.15) 100%);
-            border: 1.5px solid rgba(0, 243, 255, 0.5);
+            background: radial-gradient(circle, rgba(14, 22, 54, 0.94) 40%, rgba(0, 243, 255, 0.16) 100%);
+            border: 1.5px solid rgba(0, 243, 255, 0.55);
             box-shadow: 0 0 22px rgba(0, 243, 255, 0.55), 0 0 35px rgba(189, 0, 255, 0.4);
         }
         .rex-orb-label {
             margin-top: 4px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 900;
             letter-spacing: 1px;
             color: #fff;
-            background: rgba(6, 10, 26, 0.9);
+            background: rgba(6, 10, 26, 0.92);
             border: 1px solid var(--cyber-blue);
             padding: 2px 10px;
             border-radius: 20px;
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
         }
 
-        /* Floating RAX AI Chat Drawer */
+        /* RAX AI Chat Drawer */
         #rex-ai-drawer {
             display: none;
             position: fixed;
-            bottom: 122px;
+            bottom: 118px;
             right: 16px;
             width: 350px;
             max-width: 92vw;
@@ -308,11 +430,6 @@
             padding: 14px;
             z-index: 1600;
             backdrop-filter: blur(18px);
-            animation: popUpDrawer 0.25s ease-out;
-        }
-        @keyframes popUpDrawer {
-            from { transform: translateY(20px) scale(0.95); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
         }
         .drawer-header {
             display: flex;
@@ -324,13 +441,12 @@
         }
         .drawer-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 900;
             background: linear-gradient(90deg, var(--cyber-blue), var(--neon-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .drawer-header-actions { display: flex; gap: 6px; align-items: center; }
         .drawer-icon-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(0, 243, 255, 0.3);
@@ -338,14 +454,14 @@
             padding: 3px 8px;
             font-size: 12px;
             border-radius: 6px;
+            box-shadow: none;
         }
-
         #chat-history {
-            background: rgba(4, 7, 18, 0.78);
+            background: rgba(4, 7, 18, 0.8);
             border: 1px solid rgba(0, 243, 255, 0.18);
             border-radius: 12px;
             padding: 10px;
-            height: 165px;
+            height: 170px;
             overflow-y: auto;
             margin-bottom: 10px;
             display: flex;
@@ -375,101 +491,14 @@
             white-space: pre-line;
             word-wrap: break-word;
         }
-        .msg-error {
-            align-self: flex-start;
-            background: rgba(255, 0, 127, 0.2);
-            border-left: 3px solid var(--neon-pink);
-            color: #ff99cc;
-            padding: 7px 11px;
-            border-radius: 12px 12px 12px 2px;
-            font-size: 13px;
-            max-width: 92%;
-            white-space: pre-line;
-            word-wrap: break-word;
+        .msg-status {
+            align-self: center;
+            color: var(--neon-gold);
+            font-size: 12px;
+            font-family: 'Orbitron', sans-serif;
         }
-
         .drawer-controls { display: flex; gap: 8px; margin-top: 8px; }
         .drawer-controls button { flex: 1; padding: 9px 10px; }
-
-        /* Modals */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 6, 16, 0.92);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(12px);
-        }
-        .modal-card {
-            background: linear-gradient(145deg, rgba(14, 20, 48, 0.98), rgba(32, 12, 58, 0.98));
-            border: 2px solid var(--neon-purple);
-            box-shadow: 0 0 40px rgba(189, 0, 255, 0.6);
-            padding: 24px;
-            border-radius: 20px;
-            width: 92%;
-            max-width: 390px;
-            text-align: center;
-        }
-        .modal-card h3 { font-family: 'Orbitron', sans-serif; margin-top: 0; color: var(--cyber-blue); font-size: 18px; letter-spacing: 1px; }
-        .modal-card input, .modal-card select { margin-bottom: 12px; }
-        .error-display {
-            background: rgba(255, 0, 50, 0.22);
-            border: 1.5px solid #ff1744;
-            color: #ff8a80;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 14px;
-            display: none;
-            text-align: left;
-        }
-
-        .api-slots-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-            margin: 12px 0 16px 0;
-        }
-        .api-slot-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 243, 255, 0.05);
-            padding: 6px 10px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 243, 255, 0.25);
-        }
-        .api-slot-row.active { border-color: var(--neon-green); background: rgba(0, 255, 136, 0.08); }
-        .slot-badge {
-            font-family: 'Orbitron';
-            font-size: 10px;
-            color: #00f3ff;
-            min-width: 52px;
-            text-align: left;
-        }
-        .api-slot-input { margin-bottom: 0 !important; font-family: monospace; font-size: 12px !important; padding: 8px 10px !important; }
-
-        /* Security Logs Footer Section (Only when Admin Logged In) */
-        #admin-logs-section {
-            display: none;
-            border-top: 1px dashed rgba(255, 0, 127, 0.45);
-            padding-top: 16px;
-            margin-top: 24px;
-        }
-        #logs-container {
-            font-family: monospace;
-            background: rgba(5, 8, 20, 0.9);
-            border: 1px solid rgba(189, 0, 255, 0.4);
-            padding: 12px;
-            border-radius: 12px;
-            max-height: 180px;
-            overflow-y: auto;
-            font-size: 12px;
-            color: #00ff88;
-        }
     </style>
 </head>
 <body>
@@ -477,135 +506,139 @@
     <div class="ambient-orb orb-1"></div>
     <div class="ambient-orb orb-2"></div>
 
-    <!-- Top Header -->
+    <!-- Clean Header -->
     <header>
-        <h1>PLEZER COLLECTION RAX STOCK</h1>
-        <!-- Small Corner API Key Icon (Visible only after Admin Login) -->
-        <button id="corner-api-btn" onclick="openApiModal()" title="API Keys Settings">🔑</button>
-        <div class="header-controls">
-            <span class="admin-badge-top" id="top-admin-badge">ADMIN ACTIVE</span>
-            <button id="auth-trigger-btn" class="btn-small" onclick="handleAuthTrigger()">Admin Login</button>
-        </div>
+        <h1>PLEZER COLLECTION</h1>
     </header>
 
-    <!-- Main Godown Stock Table -->
-    <div class="container">
-        <div class="search-box">
-            <input type="text" id="master-search" placeholder="Search Stock..." onkeyup="filterStock()">
-        </div>
+    <div class="main-wrapper">
 
-        <!-- Admin Stock Add / Minus Action Buttons (Visible ONLY after Admin Login) -->
-        <div id="admin-stock-toolbar">
-            <button class="btn-green" onclick="openStockModal('ADD')">+ Add Stock</button>
-            <button class="btn-danger" onclick="openStockModal('MINUS')">- Minus Stock</button>
-        </div>
-
-        <div class="section-title">
-            <span>LIVE GODOWN INVENTORY</span>
-            <span id="stock-count-badge" style="font-size:12px; color:#88ccee; font-family:'Orbitron';">0 Items</span>
-        </div>
-        <div class="table-wrapper">
-            <table id="stock-table">
-                <thead>
-                    <tr>
-                        <th>Style No</th>
-                        <th>Item Name</th>
-                        <th>Available Colors & Sizes</th>
-                    </tr>
-                </thead>
-                <tbody id="stock-body">
-                    <tr><td colspan="3" style="text-align:center; color:#88ccee;">Loading live stock...</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Security Logs (Visible ONLY when Logged In) -->
-        <div id="admin-logs-section">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <span style="font-family: 'Orbitron'; color: var(--neon-pink); font-size: 13px;">SECURITY & DEVICE LOGS</span>
-                <span id="active-model-display" style="font-size:11px; color:#00f3ff; font-family:monospace;">Model: Auto</span>
+        <!-- 1. Live Stock Inventory (Public View + Admin Inline +/- Controls) -->
+        <div class="glass-panel">
+            <div style="margin-bottom: 14px;">
+                <input type="text" id="master-search" placeholder="Search Style No, Item Name, Color or Size..." onkeyup="filterStock()">
             </div>
-            <div id="logs-container">Initializing security logs...</div>
+            <div class="panel-header">
+                <span>LIVE GODOWN INVENTORY</span>
+                <span id="stock-count-badge" style="font-size:11px; color:#88ccee;">0 Items</span>
+            </div>
+            <div class="table-wrapper">
+                <table id="stock-table">
+                    <thead>
+                        <tr>
+                            <th>Style No</th>
+                            <th>Item Name</th>
+                            <th>Available Colors & Sizes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stock-body">
+                        <tr><td colspan="3" style="text-align:center; color:#88ccee;">Loading live stock...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <!-- Admin Login Modal -->
-    <div class="modal-overlay" id="auth-modal">
-        <div class="modal-card">
-            <h3>ADMIN ACCESS</h3>
-            <div class="error-display" id="login-error-box"></div>
-            <input type="email" id="admin-email" placeholder="Admin Email" autocomplete="email">
-            <input type="password" id="admin-password" placeholder="Password" autocomplete="current-password" onkeypress="if(event.key==='Enter') executeLogin()">
-            <button onclick="executeLogin()" style="width: 100%; margin-bottom: 10px; padding: 12px; font-size: 14px;">Login Safely</button>
-            <button onclick="closeAuthModal()" style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); padding: 10px;">Cancel</button>
+        <!-- 2. ADMIN PANEL 1: Add / Minus Stock Control (Visible ONLY after Admin Login) -->
+        <div id="admin-stock-panel" class="glass-panel admin-only-panel">
+            <div class="panel-header">
+                <span>📦 STOCK ADD / MINUS CONTROL</span>
+                <span style="font-size:11px; color:var(--neon-green);">ADMIN ONLY</span>
+            </div>
+            <div class="stock-form-grid">
+                <input type="text" id="ctrl-style" placeholder="Style No (e.g. 901)">
+                <input type="text" id="ctrl-name" placeholder="Item Name (e.g. Trunk)">
+                <select id="ctrl-color">
+                    <option value="ASSTD">ASSTD</option>
+                    <option value="WHITE">WHITE</option>
+                </select>
+                <input type="text" id="ctrl-size" placeholder="Size (e.g. 85 / M)">
+                <input type="number" id="ctrl-qty" placeholder="Quantity">
+            </div>
+            <div class="stock-action-btns">
+                <button class="btn-green" onclick="handleManualStock('ADD')">+ Add Stock</button>
+                <button class="btn-danger" onclick="handleManualStock('MINUS')">- Minus Stock</button>
+            </div>
         </div>
-    </div>
 
-    <!-- Stock Add / Minus Modal -->
-    <div class="modal-overlay" id="stock-action-modal">
-        <div class="modal-card">
-            <h3 id="stock-modal-title">+ ADD STOCK</h3>
-            <input type="text" id="modal-style" placeholder="Style No (e.g. 901)">
-            <input type="text" id="modal-name" placeholder="Item Name (e.g. Jockey Trunk)">
-            <select id="modal-color">
-                <option value="ASSTD">ASSTD (Assorted)</option>
-                <option value="WHITE">WHITE</option>
-            </select>
-            <input type="text" id="modal-size" placeholder="Size (e.g. 85 ya M)">
-            <input type="number" id="modal-qty" placeholder="Quantity (e.g. 10)">
-            <button id="stock-modal-submit-btn" class="btn-green" onclick="submitStockModal()" style="width: 100%; margin-bottom: 10px; padding: 12px; font-size: 14px;">Save Stock</button>
-            <button onclick="closeStockModal()" style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); padding: 10px;">Cancel</button>
-        </div>
-    </div>
-
-    <!-- API Keys Modal (Opens ONLY when tapping Corner 🔑 Icon) -->
-    <div class="modal-overlay" id="api-keys-modal">
-        <div class="modal-card">
-            <h3>🔑 GEMINI API KEYS</h3>
-            <div id="keys-status-label" style="font-size:12px; color:#ffcc00; margin-bottom:6px;">Loading...</div>
-            <div class="api-slots-grid" id="api-slots-container">
+        <!-- 3. ADMIN PANEL 2: Separate 5 Gemini API Keys Vault (Visible ONLY after Admin Login) -->
+        <div id="admin-api-panel" class="glass-panel admin-only-panel">
+            <div class="panel-header">
+                <span>🔑 GEMINI API KEYS VAULT (5 SLOTS)</span>
+                <span id="keys-status-label" style="font-size:11px; color:var(--neon-gold);">Loading...</span>
+            </div>
+            <div id="api-slots-container">
                 <!-- 5 slots generated by JS -->
             </div>
-            <button class="btn-green" onclick="saveAllApiKeys()" style="width: 100%; margin-bottom: 10px; padding: 11px; font-size: 13px;">Save API Keys</button>
-            <button onclick="closeApiModal()" style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); padding: 9px;">Close</button>
+            <button class="btn-green" style="width:100%; padding:12px; font-size:13px;" onclick="saveAllApiKeys()">Save All 5 API Keys</button>
+        </div>
+
+        <!-- 4. ADMIN PANEL 3: Separate Stock & IP Security Logs (Visible ONLY after Admin Login) -->
+        <div id="admin-logs-panel" class="glass-panel admin-only-panel">
+            <div class="panel-header">
+                <span>🛡️ STOCK & IP ACTIVITY LOGS</span>
+                <span id="active-model-display" style="font-size:11px; color:#88ccee; font-family:monospace;">Engine: Ready</span>
+            </div>
+            <div id="logs-container">Initializing activity logs...</div>
+        </div>
+
+    </div>
+
+    <!-- Bottom-Left Admin Login / Logout Button -->
+    <button id="bottom-admin-launcher" onclick="handleAdminButtonClick()">🔒 Admin Login</button>
+
+    <!-- System Access Login Modal -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal-card">
+            <div class="sys-node-tag">NODE // PLEZER-SEC</div>
+            <h3>SYSTEM ACCESS</h3>
+            <div class="modal-sub">ENCRYPTED ADMIN TERMINAL</div>
+            <div class="error-display" id="login-error-box"></div>
+            <input type="email" id="admin-email" placeholder="Admin Email" autocomplete="email">
+            <input type="password" id="admin-password" placeholder="Security Password" autocomplete="current-password" onkeypress="if(event.key==='Enter') executeLogin()">
+            <div class="login-progress-wrap" id="login-progress-wrap">
+                <div style="font-family:'Orbitron'; font-size:11px; color:var(--neon-green); margin-bottom:5px;" id="login-progress-text">VERIFYING ACCESS...</div>
+                <div class="login-progress-bar"><div class="login-progress-fill" id="login-progress-fill"></div></div>
+            </div>
+            <button onclick="executeLogin()" style="width: 100%; margin-bottom: 10px; padding: 12px; font-size: 13px;">INITIALIZE LOGIN</button>
+            <button onclick="closeAuthModal()" style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); padding: 10px;">Cancel</button>
         </div>
     </div>
 
     <!-- Floating Bottom-Right RAX AI Orb -->
     <div id="rex-ai-launcher" onclick="toggleRexDrawer()">
         <canvas id="particle-canvas"></canvas>
-        <div class="rex-orb-label">RAX AI</div>
+        <div class="rex-orb-label">Ask RAX AI</div>
     </div>
 
     <!-- RAX AI Chat Drawer -->
     <div id="rex-ai-drawer">
         <div class="drawer-header">
-            <span class="drawer-title">RAX AI</span>
-            <div class="drawer-header-actions">
+            <span class="drawer-title">RAX AI CORE</span>
+            <div style="display:flex; gap:6px;">
                 <button id="voice-toggle-btn" class="drawer-icon-btn" onclick="toggleVoiceOutput()" title="Voice On/Off">🔊</button>
                 <button class="drawer-icon-btn" onclick="toggleRexDrawer()">✕</button>
             </div>
         </div>
         <div id="chat-history">
-            <div class="msg-ai">Namaste! Main RAX AI hoon. Boliye, stock check ya update karna hai?</div>
+            <div class="msg-ai">Namaste! Main RAX AI hoon. Boliye, kaunsa stock check ya update karna hai?</div>
         </div>
-        <input type="text" id="user-input" placeholder="Ask RAX AI..." onkeypress="if(event.key==='Enter') processCommand()">
+        <input type="text" id="user-input" placeholder="Yahan apna sawal likhein..." onkeypress="if(event.key==='Enter') processCommand()">
         <div class="drawer-controls">
-            <button onclick="processCommand()">Send</button>
-            <button class="btn-mic" onclick="startListening()">🎤 Mic</button>
+            <button onclick="processCommand()">Bhejen</button>
+            <button class="btn-mic" onclick="startListening()">🎤 Bolkar Puchhen</button>
         </div>
     </div>
 
     <script>
-        /* 1. STATE MANAGEMENT & GLOBALS */
+        /* 1. GLOBALS & DEVICE METRICS */
         let currentAdminUser = null;
         let liveStockSnapshot = {};
         let geminiApiKeys = ["", "", "", "", ""];
         let activeKeyIndex = 0;
-        let currentStockModalMode = 'ADD';
         let deviceBatteryLevel = "N/A";
-        let clientIP = "Determining...";
+        let clientIP = "Detecting...";
 
+        // Latest & most reliable Gemini models first
         const MODEL_FALLBACK_CHAIN = [
             "gemini-2.5-flash",
             "gemini-2.5-pro",
@@ -613,57 +646,63 @@
             "gemini-2.0-flash-lite"
         ];
 
-        function logSecurity(actionText) {
-            const logRef = database.ref('security_logs').push();
-            logRef.set({
-                timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+        if ('getBattery' in navigator) {
+            navigator.getBattery().then(b => {
+                deviceBatteryLevel = Math.round(b.level * 100) + "%";
+            });
+        }
+
+        fetch('https://api.ipify.org?format=json')
+            .then(r => r.json())
+            .then(d => { clientIP = d.ip; })
+            .catch(() => { clientIP = "Local/Mobile"; });
+
+        function logActivity(actionText) {
+            const istTime = new Date().toLocaleString('en-IN', {
+                timeZone: 'Asia/Kolkata',
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+            database.ref('security_logs').push({
+                timestamp: istTime,
                 ip: clientIP,
                 batt: deviceBatteryLevel,
                 action: actionText
             }).catch(() => {});
         }
 
-        /* 2. CLEAN AUTHENTICATION & UI TOGGLE */
-        const authTriggerBtn = document.getElementById('auth-trigger-btn');
+        /* 2. ADMIN AUTHENTICATION & STRICT PANEL VISIBILITY */
+        const adminLauncherBtn = document.getElementById('bottom-admin-launcher');
         const authModal = document.getElementById('auth-modal');
         const loginErrorBox = document.getElementById('login-error-box');
-        const adminStockToolbar = document.getElementById('admin-stock-toolbar');
-        const adminLogsSection = document.getElementById('admin-logs-section');
-        const cornerApiBtn = document.getElementById('corner-api-btn');
-        const topAdminBadge = document.getElementById('top-admin-badge');
+        const adminPanels = document.querySelectorAll('.admin-only-panel');
 
-        function updateAuthUIState(user) {
+        function applyAuthState(user) {
             currentAdminUser = user;
             const quickBtns = document.querySelectorAll('.quick-qty-btn');
-            
+
             if (user) {
-                authModal.style.display = "none";
-                authTriggerBtn.innerText = "Logout";
-                authTriggerBtn.className = "btn-small btn-danger";
-                topAdminBadge.style.display = "inline-block";
-                cornerApiBtn.style.display = "flex";
-                adminStockToolbar.style.display = "flex";
-                adminLogsSection.style.display = "block";
-                quickBtns.forEach(btn => btn.style.display = "inline-block");
+                adminLauncherBtn.innerText = "🔓 Admin Logout";
+                adminLauncherBtn.classList.add('logged-in');
+                adminPanels.forEach(p => p.style.display = "block");
+                quickBtns.forEach(b => b.style.display = "inline-block");
             } else {
-                authTriggerBtn.innerText = "Admin Login";
-                authTriggerBtn.className = "btn-small";
-                topAdminBadge.style.display = "none";
-                cornerApiBtn.style.display = "none";
-                adminStockToolbar.style.display = "none";
-                adminLogsSection.style.display = "none";
-                quickBtns.forEach(btn => btn.style.display = "none");
+                adminLauncherBtn.innerText = "🔒 Admin Login";
+                adminLauncherBtn.classList.remove('logged-in');
+                adminPanels.forEach(p => p.style.display = "none");
+                quickBtns.forEach(b => b.style.display = "none");
             }
         }
 
-        function handleAuthTrigger() {
+        function handleAdminButtonClick() {
             if (currentAdminUser) {
                 localStorage.removeItem('plezer_admin_session');
                 try { auth.signOut(); } catch (e) {}
-                updateAuthUIState(null);
-                logSecurity("Admin logged out.");
+                logActivity(`Admin logged out (${currentAdminUser.email}).`);
+                applyAuthState(null);
             } else {
                 loginErrorBox.style.display = "none";
+                document.getElementById('login-progress-wrap').style.display = "none";
                 document.getElementById('admin-password').value = '';
                 authModal.style.display = "flex";
             }
@@ -671,7 +710,14 @@
 
         function closeAuthModal() {
             loginErrorBox.style.display = "none";
+            document.getElementById('login-progress-wrap').style.display = "none";
             authModal.style.display = "none";
+        }
+
+        function showLoginError(msg) {
+            document.getElementById('login-progress-wrap').style.display = "none";
+            loginErrorBox.innerText = msg;
+            loginErrorBox.style.display = "block";
         }
 
         function executeLogin() {
@@ -680,405 +726,354 @@
             const password = document.getElementById('admin-password').value.trim();
 
             if (!email || !password) {
-                showLoginError("❌ Error: Email aur Password dono dalna zaroori hai.");
+                showLoginError("❌ Email aur Password dono dalna zaroori hai.");
                 return;
             }
 
-            const validAdmins = ["plezerstockrax@gmail.com", "9638195993@gmail.com"];
+            const progWrap = document.getElementById('login-progress-wrap');
+            const progFill = document.getElementById('login-progress-fill');
+            const progText = document.getElementById('login-progress-text');
+            progWrap.style.display = "block";
+            progFill.style.width = "60%";
+            progText.innerText = "VERIFYING ACCESS...";
+
+            const validAdmins = ["plezerstockrax@gmail.com", "9638195993@gmail.com", "rezaahmad810287@gmail.com"];
             if (validAdmins.includes(email)) {
                 if (password === "9638195993") {
-                    completeLoginSuccess(email, "Admin Credentials");
+                    progFill.style.width = "100%";
+                    progText.innerText = "ACCESS GRANTED";
+                    setTimeout(() => {
+                        localStorage.setItem('plezer_admin_session', email);
+                        closeAuthModal();
+                        applyAuthState({ email: email });
+                        logActivity(`Admin Login Success (${email})`);
+                    }, 350);
                 } else {
                     showLoginError("❌ Galat Password! Kripya sahi Admin Password dalein.");
-                    logSecurity(`Failed login attempt with wrong password for ${email}`);
+                    logActivity(`Failed login attempt (wrong password) for ${email}`);
                 }
                 return;
             }
 
             auth.signInWithEmailAndPassword(email, password)
-                .then((res) => {
-                    completeLoginSuccess(res.user.email, "Firebase Auth");
+                .then(res => {
+                    progFill.style.width = "100%";
+                    progText.innerText = "ACCESS GRANTED";
+                    setTimeout(() => {
+                        localStorage.setItem('plezer_admin_session', res.user.email);
+                        closeAuthModal();
+                        applyAuthState({ email: res.user.email });
+                        logActivity(`Admin Login Success (${res.user.email})`);
+                    }, 350);
                 })
                 .catch(() => {
-                    showLoginError("❌ Galat Email ya Password! Login fail ho gaya.");
-                    logSecurity(`Failed login attempt for ${email}`);
+                    showLoginError("❌ Galat Email ya Password! Access Denied.");
+                    logActivity(`Failed login attempt for ${email}`);
                 });
         }
 
-        function completeLoginSuccess(email, method) {
-            localStorage.setItem('plezer_admin_session', email);
-            document.getElementById('admin-password').value = '';
-            closeAuthModal();
-            updateAuthUIState({ email: email });
-            logSecurity(`Admin logged in via ${method} (${email}).`);
-        }
-
-        function showLoginError(msg) {
-            loginErrorBox.innerText = msg;
-            loginErrorBox.style.display = "block";
-        }
-
-        const savedSession = localStorage.getItem('plezer_admin_session');
-        if (savedSession) {
-            updateAuthUIState({ email: savedSession });
+        // Restore session on reload
+        const savedAdmin = localStorage.getItem('plezer_admin_session');
+        if (savedAdmin) {
+            applyAuthState({ email: savedAdmin });
         } else {
-            updateAuthUIState(null);
+            applyAuthState(null);
         }
 
-        auth.onAuthStateChanged(user => {
-            if (user) updateAuthUIState(user);
-        });
-
-        /* 3. CORNER API KEY MODAL & 5 SLOTS */
-        function openApiModal() {
-            if (!currentAdminUser) return;
-            renderApiSlots();
-            document.getElementById('api-keys-modal').style.display = 'flex';
-        }
-
-        function closeApiModal() {
-            document.getElementById('api-keys-modal').style.display = 'none';
-        }
-
+        /* 3. 5 GEMINI API KEYS VAULT */
         function renderApiSlots() {
             const container = document.getElementById('api-slots-container');
             container.innerHTML = '';
-            geminiApiKeys.forEach((key, index) => {
-                const isActive = index === activeKeyIndex;
+            for (let i = 0; i < 5; i++) {
+                const isActive = i === activeKeyIndex && (geminiApiKeys[i] || '').trim() !== '';
                 const row = document.createElement('div');
-                row.className = `api-slot-row ${isActive ? 'active' : ''}`;
+                row.className = `api-slot-row ${isActive ? 'active-slot' : ''}`;
                 row.innerHTML = `
-                    <span class="slot-badge">KEY ${index + 1}</span>
-                    <input type="password" class="api-slot-input" id="api-key-${index}" value="${key}" placeholder="Paste Gemini API Key ${index + 1}...">
+                    <span class="slot-label">SLOT ${i + 1}</span>
+                    <input type="password" id="api-key-${i}" value="${geminiApiKeys[i] || ''}" placeholder="Paste Gemini API Key ${i + 1}...">
                 `;
                 container.appendChild(row);
-            });
+            }
         }
 
         database.ref('settings/geminiApiKeys').on('value', snap => {
-            const data = snap.val();
-            if (Array.isArray(data) && data.length === 5) {
-                geminiApiKeys = data;
+            const val = snap.val();
+            if (Array.isArray(val) && val.length === 5) {
+                geminiApiKeys = val;
             } else {
                 geminiApiKeys = ["", "", "", "", ""];
             }
             renderApiSlots();
-            updateKeysStatusLabel();
-        });
-
-        function updateKeysStatusLabel() {
-            const filledCount = geminiApiKeys.filter(k => k.trim() !== '').length;
-            const label = document.getElementById('keys-status-label');
-            if (filledCount > 0) {
-                label.innerText = `✅ ${filledCount}/5 Keys Saved`;
-                label.style.color = "#00ff88";
+            const count = geminiApiKeys.filter(k => k.trim() !== '').length;
+            const statusLbl = document.getElementById('keys-status-label');
+            if (count > 0) {
+                statusLbl.innerText = `✅ ${count}/5 Keys Active`;
+                statusLbl.style.color = "var(--neon-green)";
             } else {
-                label.innerText = "⚠️ No API Key Saved";
-                label.style.color = "#ffcc00";
+                statusLbl.innerText = "⚠️ No API Keys Saved";
+                statusLbl.style.color = "var(--neon-gold)";
             }
-        }
+        });
 
         function saveAllApiKeys() {
             if (!currentAdminUser) return;
-            const newKeys = [];
+            const updatedKeys = [];
             for (let i = 0; i < 5; i++) {
-                newKeys.push(document.getElementById(`api-key-${i}`).value.trim());
+                updatedKeys.push(document.getElementById(`api-key-${i}`).value.trim());
             }
-            database.ref('settings/geminiApiKeys').set(newKeys)
+            database.ref('settings/geminiApiKeys').set(updatedKeys)
                 .then(() => {
-                    closeApiModal();
-                    alert("✅ API Key save ho gayi hai!");
-                    logSecurity("Admin updated Gemini API Keys.");
+                    alert("✅ Sabhi 5 API Keys save ho gayi hain!");
+                    logActivity("Admin updated 5 Gemini API Keys.");
                 })
-                .catch(err => alert("Error: " + err.message));
+                .catch(e => alert("Error: " + e.message));
         }
 
-        /* 4. STOCK ADD / MINUS MODAL & TABLE ACTIONS */
-        function openStockModal(mode) {
-            if (!currentAdminUser) return;
-            currentStockModalMode = mode;
-            const titleEl = document.getElementById('stock-modal-title');
-            const submitBtn = document.getElementById('stock-modal-submit-btn');
-            const nameInput = document.getElementById('modal-name');
+        /* 4. STOCK TABLE & ADMIN ADD/MINUS CONTROLS */
+        database.ref('stock').on('value', snap => {
+            const tbody = document.getElementById('stock-body');
+            const badge = document.getElementById('stock-count-badge');
+            tbody.innerHTML = '';
+            const data = snap.val() || {};
+            liveStockSnapshot = data;
 
-            if (mode === 'ADD') {
-                titleEl.innerText = "+ ADD NEW / EXISTING STOCK";
-                titleEl.style.color = "#00ff88";
-                submitBtn.innerText = "Add Stock";
-                submitBtn.className = "btn-green";
-                nameInput.style.display = "block";
-            } else {
-                titleEl.innerText = "- MINUS / DISPATCH STOCK";
-                titleEl.style.color = "#ff007f";
-                submitBtn.innerText = "Minus Stock";
-                submitBtn.className = "btn-danger";
-                nameInput.style.display = "none";
+            const styles = Object.keys(data);
+            badge.innerText = `${styles.length} Items`;
+            const btnDisplay = currentAdminUser ? 'inline-block' : 'none';
+
+            if (styles.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#88ccee;">No stock entries yet.</td></tr>';
+                return;
             }
 
-            document.getElementById('modal-style').value = '';
-            document.getElementById('modal-name').value = '';
-            document.getElementById('modal-size').value = '';
-            document.getElementById('modal-qty').value = '';
-            document.getElementById('stock-action-modal').style.display = 'flex';
-        }
+            styles.forEach(styleNo => {
+                const item = data[styleNo];
+                let detailsHtml = '';
+                if (item.colors) {
+                    Object.keys(item.colors).forEach(color => {
+                        const cls = color === 'WHITE' ? 'badge-white' : 'badge-asstd';
+                        detailsHtml += `<div style="margin-bottom:6px;"><span class="${cls}">${color}</span> `;
+                        Object.keys(item.colors[color]).forEach(size => {
+                            const qty = item.colors[color][size];
+                            detailsHtml += `<span class="size-pill">
+                                <button class="quick-qty-btn btn-danger" style="display:${btnDisplay};" onclick="adjustStock('${styleNo}','${item.itemName || ''}','${color}','${size}',-1,false)">-</button>
+                                <b>${size}:</b> ${qty} pcs
+                                <button class="quick-qty-btn btn-green" style="display:${btnDisplay};" onclick="adjustStock('${styleNo}','${item.itemName || ''}','${color}','${size}',1,false)">+</button>
+                            </span>`;
+                        });
+                        detailsHtml += `</div>`;
+                    });
+                }
+                tbody.innerHTML += `<tr>
+                    <td style="font-family:'Orbitron'; color:var(--cyber-blue); font-weight:700;">${styleNo}</td>
+                    <td style="font-weight:700; color:#fff;">${item.itemName || 'ITEM'}</td>
+                    <td>${detailsHtml}</td>
+                </tr>`;
+            });
+        });
 
-        function closeStockModal() {
-            document.getElementById('stock-action-modal').style.display = 'none';
-        }
-
-        function submitStockModal() {
+        function handleManualStock(mode) {
             if (!currentAdminUser) return;
-            const styleNo = document.getElementById('modal-style').value.trim().toUpperCase();
-            const rawName = document.getElementById('modal-name').value.trim().toUpperCase();
-            const color = document.getElementById('modal-color').value;
-            const size = document.getElementById('modal-size').value.trim().toUpperCase();
-            const qty = Math.abs(parseInt(document.getElementById('modal-qty').value, 10));
+            const styleNo = document.getElementById('ctrl-style').value.trim().toUpperCase();
+            const rawName = document.getElementById('ctrl-name').value.trim().toUpperCase();
+            const color = document.getElementById('ctrl-color').value;
+            const size = document.getElementById('ctrl-size').value.trim().toUpperCase();
+            const qty = Math.abs(parseInt(document.getElementById('ctrl-qty').value, 10));
 
             if (!styleNo || !size || isNaN(qty) || qty <= 0) {
                 alert("⚠️ Style No, Size aur Quantity sahi se bharein.");
                 return;
             }
 
-            const existingItem = liveStockSnapshot[styleNo];
-            if (currentStockModalMode === 'MINUS' && !existingItem) {
+            const existing = liveStockSnapshot[styleNo];
+            if (mode === 'MINUS' && !existing) {
                 alert("⚠️ Yeh Style No stock mein maujood nahi hai.");
                 return;
             }
 
-            const finalName = rawName || existingItem?.itemName || "GARMENT ITEM";
-            const delta = currentStockModalMode === 'ADD' ? qty : -qty;
-            updateDatabaseStock(styleNo, finalName, color, size, delta, false);
-            closeStockModal();
+            const finalName = rawName || existing?.itemName || "GARMENT ITEM";
+            const delta = mode === 'ADD' ? qty : -qty;
+            adjustStock(styleNo, finalName, color, size, delta, false);
+            document.getElementById('ctrl-qty').value = '';
         }
 
-        function quickAdjust(styleNo, itemName, color, size, delta) {
-            if (!currentAdminUser) return;
-            updateDatabaseStock(styleNo, itemName, color, size, delta, false);
-        }
+        function adjustStock(styleNo, itemName, color, size, qtyDelta, notifyChat) {
+            if (!currentAdminUser) {
+                if (notifyChat) addChatMessage('ai', 'Pehle aap admin login kar le.', true);
+                return;
+            }
+            const ref = database.ref(`stock/${styleNo}/colors/${color}/${size}`);
+            ref.once('value').then(snap => {
+                const current = snap.val() || 0;
+                const updated = current + qtyDelta;
 
-        /* 5. DEVICE & SECURITY LOGS */
-        if ('getBattery' in navigator) {
-            navigator.getBattery().then(battery => {
-                deviceBatteryLevel = Math.round(battery.level * 100) + "%";
+                if (updated < 0) {
+                    if (notifyChat) {
+                        addChatMessage('ai', `⚠️ Stock kam hai. Sirf ${current} pcs available hain.`, true);
+                    } else {
+                        alert(`⚠️ Stock kam hai! Sirf ${current} pcs available hain.`);
+                    }
+                    return;
+                }
+
+                ref.set(updated);
+                database.ref(`stock/${styleNo}/itemName`).set(itemName);
+
+                const tag = qtyDelta > 0 ? 'STOCK ADDED' : 'STOCK MINUS';
+                logActivity(`[${tag}] ${Math.abs(qtyDelta)} pcs | Style ${styleNo} (${itemName}) - ${color} Size ${size} | Remaining: ${updated} pcs`);
+
+                if (notifyChat) {
+                    addChatMessage('ai', `✅ Done! Style ${styleNo} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`, true);
+                }
             });
         }
 
-        fetch('https://api.ipify.org?format=json')
-            .then(r => r.json())
-            .then(d => { clientIP = d.ip; })
-            .catch(() => { clientIP = "Mobile/Local"; });
-
-        database.ref('security_logs').limitToLast(15).on('value', snapshot => {
-            const logsContainer = document.getElementById('logs-container');
-            logsContainer.innerHTML = '';
-            const logs = snapshot.val();
-            if (logs) {
-                Object.values(logs).reverse().forEach(log => {
-                    logsContainer.innerHTML += `<div><span style="color:#00f3ff;">[${log.timestamp}]</span> IP: ${log.ip} | Batt: ${log.batt}<br><span style="color:#fff;">> ${log.action}</span></div><hr style="border:0; border-top:1px dashed #333; margin: 6px 0;">`;
-                });
-            } else {
-                logsContainer.innerHTML = 'No logs yet.';
-            }
-        });
-
-        /* 6. LIVE STOCK TABLE SYNC */
-        database.ref('stock').on('value', snapshot => {
-            const tbody = document.getElementById('stock-body');
-            const countBadge = document.getElementById('stock-count-badge');
-            tbody.innerHTML = '';
-            const data = snapshot.val() || {};
-            liveStockSnapshot = data;
-            
-            const entries = Object.keys(data);
-            countBadge.innerText = `${entries.length} Items`;
-            const btnDisplay = currentAdminUser ? 'inline-block' : 'none';
-
-            if (entries.length > 0) {
-                entries.forEach(styleNo => {
-                    const item = data[styleNo];
-                    let sizesHtml = '';
-                    if (item.colors) {
-                        Object.keys(item.colors).forEach(color => {
-                            const badgeClass = color === 'WHITE' ? 'badge-white' : 'badge-asstd';
-                            sizesHtml += `<div style="margin-bottom:6px;"><span class="${badgeClass}">${color}</span> `;
-                            Object.keys(item.colors[color]).forEach(size => {
-                                const qty = item.colors[color][size];
-                                sizesHtml += `<span class="size-pill">
-                                    <button class="quick-qty-btn btn-danger" style="display:${btnDisplay};" onclick="quickAdjust('${styleNo}','${item.itemName || ''}','${color}','${size}',-1)">-</button>
-                                    <b>${size}:</b> ${qty} pcs
-                                    <button class="quick-qty-btn btn-green" style="display:${btnDisplay};" onclick="quickAdjust('${styleNo}','${item.itemName || ''}','${color}','${size}',1)">+</button>
-                                </span>`;
-                            });
-                            sizesHtml += `</div>`;
-                        });
-                    }
-                    tbody.innerHTML += `<tr>
-                        <td style="font-family:'Orbitron'; color:var(--cyber-blue); font-weight:700;">${styleNo}</td>
-                        <td style="font-weight:700; color:#fff;">${item.itemName || 'N/A'}</td>
-                        <td>${sizesHtml}</td>
-                    </tr>`;
-                });
-            } else {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#aaa;">No stock entries yet.</td></tr>';
-            }
-        });
-
         function filterStock() {
-            const query = document.getElementById('master-search').value.toLowerCase();
+            const q = document.getElementById('master-search').value.toLowerCase();
             const rows = document.getElementById('stock-body').getElementsByTagName('tr');
             for (let i = 0; i < rows.length; i++) {
-                const text = rows[i].innerText.toLowerCase();
-                rows[i].style.display = text.includes(query) ? '' : 'none';
+                rows[i].style.display = rows[i].innerText.toLowerCase().includes(q) ? '' : 'none';
             }
         }
 
-        /* 7. RAX AI PARTICLE ORB */
+        /* 5. ACTIVITY & IP LOGS LISTENER */
+        database.ref('security_logs').limitToLast(25).on('value', snap => {
+            const box = document.getElementById('logs-container');
+            box.innerHTML = '';
+            const logs = snap.val();
+            if (!logs) {
+                box.innerHTML = 'No activity logs yet.';
+                return;
+            }
+            Object.values(logs).reverse().forEach(log => {
+                box.innerHTML += `<div style="margin-bottom:8px;">
+                    <span style="color:var(--cyber-blue);">[${log.timestamp}]</span> | IP: <span style="color:var(--neon-gold);">${log.ip}</span> | Batt: ${log.batt}<br>
+                    <span style="color:#fff;">> ${log.action}</span>
+                </div><hr style="border:0; border-top:1px dashed rgba(255,255,255,0.12); margin:6px 0;">`;
+            });
+        });
+
+        /* 6. RAX AI PARTICLE ORB */
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = 160; canvas.height = 160;
 
         let particles = [];
-        const particleCount = 320;
-        let mode = 'text';
+        const particleCount = 300;
+        let orbMode = 'text';
         let angleY = 0; let angleX = 0;
 
-        function getTextCoordinates(text) {
-            const tempCanvas = document.createElement('canvas');
-            const tCtx = tempCanvas.getContext('2d');
-            tempCanvas.width = canvas.width; tempCanvas.height = canvas.height;
-            tCtx.fillStyle = '#fff';
-            tCtx.font = '900 42px Orbitron, sans-serif';
-            tCtx.textAlign = 'center'; tCtx.textBaseline = 'middle';
-            tCtx.fillText(text, tempCanvas.width / 2, tempCanvas.height / 2);
-
-            const imgData = tCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
-            const coords = [];
-            for (let y = 0; y < tempCanvas.height; y += 2) {
-                for (let x = 0; x < tempCanvas.width; x += 2) {
-                    const index = (y * tempCanvas.width + x) * 4;
-                    if (imgData[index + 3] > 128) {
-                        coords.push({
-                            x: x - tempCanvas.width / 2,
-                            y: y - tempCanvas.height / 2,
-                            z: (Math.random() - 0.5) * 10
-                        });
+        function getTextCoords(text) {
+            const tc = document.createElement('canvas');
+            const tctx = tc.getContext('2d');
+            tc.width = canvas.width; tc.height = canvas.height;
+            tctx.fillStyle = '#fff';
+            tctx.font = '900 42px Orbitron, sans-serif';
+            tctx.textAlign = 'center'; tctx.textBaseline = 'middle';
+            tctx.fillText(text, tc.width / 2, tc.height / 2);
+            const data = tctx.getImageData(0, 0, tc.width, tc.height).data;
+            const pts = [];
+            for (let y = 0; y < tc.height; y += 2) {
+                for (let x = 0; x < tc.width; x += 2) {
+                    if (data[(y * tc.width + x) * 4 + 3] > 128) {
+                        pts.push({ x: x - tc.width / 2, y: y - tc.height / 2, z: (Math.random() - 0.5) * 10 });
                     }
                 }
             }
-            return coords;
+            return pts;
         }
 
-        const textCoords = getTextCoordinates("RAX");
-        const sphereRadius = 56;
-
+        const rCoords = getTextCoords("RAX");
         for (let i = 0; i < particleCount; i++) {
             const phi = Math.acos(-1 + (2 * i) / particleCount);
             const theta = Math.sqrt(particleCount * Math.PI) * phi;
-            const sx = sphereRadius * Math.cos(theta) * Math.sin(phi);
-            const sy = sphereRadius * Math.sin(theta) * Math.sin(phi);
-            const sz = sphereRadius * Math.cos(phi);
-
-            const tCoord = textCoords[i % textCoords.length] || { x: 0, y: 0, z: 0 };
-            const colors = ['#00f3ff', '#bd00ff', '#ff007f', '#00ff88'];
-
+            const tc = rCoords[i % rCoords.length] || { x: 0, y: 0, z: 0 };
+            const palette = ['#00f3ff', '#bd00ff', '#ff007f', '#00ff88'];
             particles.push({
                 x: (Math.random() - 0.5) * 140, y: (Math.random() - 0.5) * 140, z: (Math.random() - 0.5) * 140,
-                tx: tCoord.x, ty: tCoord.y, tz: tCoord.z,
-                sx: sx, sy: sy, sz: sz,
-                color: colors[i % colors.length],
+                tx: tc.x, ty: tc.y, tz: tc.z,
+                sx: 56 * Math.cos(theta) * Math.sin(phi),
+                sy: 56 * Math.sin(theta) * Math.sin(phi),
+                sz: 56 * Math.cos(phi),
+                color: palette[i % palette.length],
                 size: Math.random() * 1.4 + 0.9
             });
         }
-
-        setTimeout(() => { mode = 'sphere'; }, 2600);
+        setTimeout(() => { orbMode = 'sphere'; }, 2400);
 
         function toggleRexDrawer() {
             const drawer = document.getElementById('rex-ai-drawer');
-            const isHidden = drawer.style.display === 'none' || drawer.style.display === '';
-            drawer.style.display = isHidden ? 'block' : 'none';
-            if (isHidden) {
-                mode = 'text';
-                setTimeout(() => { mode = 'sphere'; }, 2200);
+            const open = drawer.style.display !== 'block';
+            drawer.style.display = open ? 'block' : 'none';
+            if (open) {
+                orbMode = 'text';
+                setTimeout(() => { orbMode = 'sphere'; }, 2000);
             }
         }
 
-        function animateParticles() {
+        function animateOrb() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const cx = canvas.width / 2; const cy = canvas.height / 2;
-
-            if (mode === 'sphere') {
+            if (orbMode === 'sphere') {
                 angleY += 0.025;
                 angleX = Math.sin(angleY * 0.5) * 0.25;
             } else {
                 angleY *= 0.88; angleX *= 0.88;
             }
-
-            const cosY = Math.cos(angleY); const sinY = Math.sin(angleY);
-            const cosX = Math.cos(angleX); const sinX = Math.sin(angleX);
+            const cosY = Math.cos(angleY), sinY = Math.sin(angleY);
+            const cosX = Math.cos(angleX), sinX = Math.sin(angleX);
 
             particles.forEach(p => {
-                const targetX = mode === 'text' ? p.tx : p.sx;
-                const targetY = mode === 'text' ? p.ty : p.sy;
-                const targetZ = mode === 'text' ? p.tz : p.sz;
+                const tx = orbMode === 'text' ? p.tx : p.sx;
+                const ty = orbMode === 'text' ? p.ty : p.sy;
+                const tz = orbMode === 'text' ? p.tz : p.sz;
+                p.x += (tx - p.x) * 0.1;
+                p.y += (ty - p.y) * 0.1;
+                p.z += (tz - p.z) * 0.1;
 
-                p.x += (targetX - p.x) * 0.1;
-                p.y += (targetY - p.y) * 0.1;
-                p.z += (targetZ - p.z) * 0.1;
+                const x1 = p.x * cosY - p.z * sinY;
+                const z1 = p.z * cosY + p.x * sinY;
+                const y2 = p.y * cosX - z1 * sinX;
+                const z2 = z1 * cosX + p.y * sinX;
 
-                let x1 = p.x * cosY - p.z * sinY;
-                let z1 = p.z * cosY + p.x * sinY;
-                let y2 = p.y * cosX - z1 * sinX;
-                let z2 = z1 * cosX + p.y * sinX;
-
-                const fov = 200;
-                const scale = fov / (fov + z2 + 70);
-                const screenX = cx + x1 * scale;
-                const screenY = cy + y2 * scale;
-
+                const scale = 200 / (270 + z2);
                 ctx.beginPath();
-                ctx.arc(screenX, screenY, p.size * scale, 0, Math.PI * 2);
+                ctx.arc(cx + x1 * scale, cy + y2 * scale, p.size * scale, 0, Math.PI * 2);
                 ctx.fillStyle = p.color;
                 ctx.fill();
             });
-            requestAnimationFrame(animateParticles);
+            requestAnimationFrame(animateOrb);
         }
-        animateParticles();
+        animateOrb();
 
-        /* 8. RAX AI VOICE & CHAT ENGINE */
+        /* 7. RAX AI VOICE, CHAT & 5-KEY FAILOVER */
         let voiceEnabled = true;
 
         function toggleVoiceOutput() {
             voiceEnabled = !voiceEnabled;
             document.getElementById('voice-toggle-btn').innerText = voiceEnabled ? '🔊' : '🔇';
-            if (!voiceEnabled && 'speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
+            if (!voiceEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
         }
 
         function speakText(text) {
             if (!voiceEnabled || !('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
-            const cleanText = text.replace(/[✅❌⚠️📦🎤⏳]/g, '').trim();
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = 'hi-IN';
-            utterance.rate = 1.02;
-            window.speechSynthesis.speak(utterance);
+            const clean = text.replace(/[✅❌⚠️📦🎤⚡]/g, '').trim();
+            const u = new SpeechSynthesisUtterance(clean);
+            u.lang = 'hi-IN';
+            u.rate = 1.02;
+            window.speechSynthesis.speak(u);
         }
 
-        function addChatMessage(sender, text, shouldSpeak = false) {
-            const historyBox = document.getElementById('chat-history');
-            const bubble = document.createElement('div');
-            if (sender === 'user') bubble.className = 'msg-user';
-            else if (sender === 'error') bubble.className = 'msg-error';
-            else bubble.className = 'msg-ai';
-
-            bubble.innerText = text;
-            historyBox.appendChild(bubble);
-            historyBox.scrollTop = historyBox.scrollHeight;
-
-            if (sender === 'ai' && shouldSpeak) {
-                speakText(text);
-            }
+        function addChatMessage(sender, text, speak = false) {
+            const box = document.getElementById('chat-history');
+            const div = document.createElement('div');
+            div.className = sender === 'user' ? 'msg-user' : (sender === 'status' ? 'msg-status' : 'msg-ai');
+            div.innerText = text;
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
+            if (sender === 'ai' && speak) speakText(text);
+            return div;
         }
 
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1086,35 +1081,33 @@
         if (SpeechRecognition) {
             recognition = new SpeechRecognition();
             recognition.lang = 'en-IN';
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                document.getElementById('user-input').value = transcript;
+            recognition.onresult = (e) => {
+                document.getElementById('user-input').value = e.results[0][0].transcript;
                 processCommand();
-            };
-            recognition.onerror = (e) => {
-                addChatMessage('error', `⚠️ Mic Error: ${e.error}`);
             };
         }
 
         function startListening() {
             if (recognition) {
                 recognition.start();
-                addChatMessage('ai', '🎤 Listening...', false);
-            } else {
-                addChatMessage('error', '⚠️ Voice mic browser mein supported nahi hai.');
+                addChatMessage('status', '🎤 Sun raha hoon...', false);
             }
         }
 
-        /* 9. SILENT FAILOVER ENGINE & STRICT ADMIN GATE */
-        async function executeModelGeneration(userPrompt) {
-            const systemPrompt = `You are RAX AI, a godown stock assistant for Plezer Collection undergarments.
-Strict rules:
-1. If user asks who you are, what your work/role is, or about yourself, reply ONLY: "Main ek RAX AI hoon aur main stock maintain karta hoon."
-2. Understand natural Hindi, Hinglish, and English commands to ADD stock, MINUS/DISPATCH stock, or CHECK stock.
-3. Colors are strictly "WHITE" or "ASSTD" (default to "ASSTD" if not mentioned).
+        async function runGeminiFailover(userQuery) {
+            const validKeys = geminiApiKeys.map((k, idx) => ({ key: k.trim(), idx })).filter(x => x.key !== '');
+            if (validKeys.length === 0) {
+                return { error: "Koi Gemini API Key set nahi hai. Admin Login karke API Keys Vault mein key dalein." };
+            }
+
+            const prompt = `You are RAX AI, stock assistant for Plezer Collection undergarments.
+Rules:
+1. If user asks who you are or what you do, reply: "Main RAX AI hoon aur main Plezer Collection ka stock maintain karta hoon."
+2. Understand Hindi, Hinglish, and English commands for ADD stock, MINUS/DISPATCH stock, CHECK stock, or general greeting.
+3. Colors are strictly "WHITE" or "ASSTD" (default "ASSTD" if not specified).
 4. Sizes can be numbers (75, 80, 85, 90, 95, 100, 105) or letters (S, M, L, XL, XXL).
-5. Current live stock JSON: ${JSON.stringify(liveStockSnapshot)}
-6. Return ONLY valid JSON (no markdown, no backticks) in this exact format:
+5. Live stock JSON: ${JSON.stringify(liveStockSnapshot)}
+6. Respond ONLY with raw valid JSON (no markdown, no backticks):
 {
   "intent": "ADD" | "MINUS" | "CHECK" | "CHAT",
   "styleNo": "string or empty",
@@ -1122,60 +1115,46 @@ Strict rules:
   "color": "WHITE" | "ASSTD",
   "size": "string or empty",
   "qty": number,
-  "reply": "short natural Hinglish response"
-}`;
+  "reply": "helpful short Hinglish response"
+}
 
-            const validKeys = geminiApiKeys.map((k, idx) => ({ key: k.trim(), index: idx })).filter(x => x.key !== '');
-            if (validKeys.length === 0) {
-                return { error: "Koi API Key set nahi hai. Upar kone mein 🔑 icon par tap karke API Key dalein." };
-            }
+User: ${userQuery}`;
 
-            let lastDiagnostics = "";
-
-            for (const keyObj of validKeys) {
-                activeKeyIndex = keyObj.index;
-                const currentKey = keyObj.key;
-
-                for (const modelName of MODEL_FALLBACK_CHAIN) {
+            for (const kObj of validKeys) {
+                activeKeyIndex = kObj.idx;
+                renderApiSlots();
+                for (const model of MODEL_FALLBACK_CHAIN) {
                     try {
-                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${currentKey}`, {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${kObj.key}`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                contents: [{ parts: [{ text: systemPrompt + "\n\nUser Command: " + userPrompt }] }]
-                            })
+                            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
                         });
-
                         const data = await res.json();
-                        if (!res.ok || data.error) {
-                            lastDiagnostics += `[Key ${keyObj.index + 1} | ${modelName}] ${data?.error?.message || res.statusText}\n`;
-                            continue;
-                        }
+                        if (!res.ok || data.error) continue;
 
-                        const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                        if (!rawText) continue;
+                        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (!text) continue;
 
-                        const modelLabel = document.getElementById('active-model-display');
-                        if (modelLabel) modelLabel.innerText = `Model: ${modelName} (Key ${keyObj.index + 1})`;
+                        const lbl = document.getElementById('active-model-display');
+                        if (lbl) lbl.innerText = `Model: ${model} (Slot ${kObj.idx + 1})`;
 
-                        const cleanedJson = rawText.replace(/```json|```/g, '').trim();
-                        return { data: JSON.parse(cleanedJson) };
+                        return { data: JSON.parse(text.replace(/```json|```/g, '').trim()) };
                     } catch (e) {
-                        lastDiagnostics += `[Key ${keyObj.index + 1}] Network error\n`;
+                        continue;
                     }
                 }
             }
-
-            return { error: `Server abhi busy hai ya API Key limit khatam ho gayi hai. Kripya thodi der baad try karein.` };
+            return { error: "Sabhi API Keys abhi busy hain ya limit poori ho gayi hai. Thodi der baad try karein." };
         }
 
         async function processCommand() {
             const inputEl = document.getElementById('user-input');
-            const input = inputEl.value.trim();
-            if (!input) return;
+            const query = inputEl.value.trim();
+            if (!query) return;
             inputEl.value = '';
 
-            addChatMessage('user', input, false);
+            addChatMessage('user', query, false);
 
             if (sessionStorage.getItem('pending_new_style')) {
                 if (!currentAdminUser) {
@@ -1183,105 +1162,52 @@ Strict rules:
                     addChatMessage('ai', 'Pehle aap admin login kar le.', true);
                     return;
                 }
-                const pending = JSON.parse(sessionStorage.getItem('pending_new_style'));
+                const p = JSON.parse(sessionStorage.getItem('pending_new_style'));
                 sessionStorage.removeItem('pending_new_style');
-                updateDatabaseStock(
-                    pending.styleNo,
-                    input.toUpperCase(),
-                    pending.color,
-                    pending.size,
-                    pending.action === 'add' ? pending.qty : -pending.qty,
-                    true
-                );
+                adjustStock(p.styleNo, query.toUpperCase(), p.color, p.size, p.action === 'ADD' ? p.qty : -p.qty, true);
                 return;
             }
 
-            const lower = input.toLowerCase().replace(/[?!.]/g, '').trim();
+            const statusEl = addChatMessage('status', '⚡ System mein khoja ja raha hai...', false);
+            const result = await runGeminiFailover(query);
+            statusEl.remove();
 
-            const isAboutAI = (
-                lower.includes('kya kam') || lower.includes('kya kaam') ||
-                lower.includes('kaam kya') || lower.includes('kam kya') ||
-                lower.includes('kaun ho') || lower.includes('kon ho') ||
-                lower.includes('tum kaun') || lower.includes('tum kon') ||
-                lower.includes('who are you') || lower.includes('what do you do')
-            );
-
-            if (isAboutAI && !lower.includes('style')) {
-                addChatMessage('ai', 'Main ek RAX AI hoon aur main stock maintain karta hoon.', true);
+            if (result.error) {
+                addChatMessage('ai', `⚠️ ${result.error}`, false);
                 return;
             }
 
-            const aiResult = await executeModelGeneration(input);
+            const plan = result.data;
+            if (!plan || !plan.intent) return;
 
-            if (aiResult.error) {
-                addChatMessage('error', `⚠️ ${aiResult.error}`);
-                return;
-            }
+            if (plan.intent === 'ADD' || plan.intent === 'MINUS') {
+                if (!currentAdminUser) {
+                    addChatMessage('ai', 'Pehle aap admin login kar le.', true);
+                    return;
+                }
+                if (!plan.styleNo || !plan.qty || plan.qty <= 0) {
+                    addChatMessage('ai', '⚠️ Style number aur sahi quantity batayein.', true);
+                    return;
+                }
+                const styleNo = String(plan.styleNo).toUpperCase();
+                const color = plan.color === 'WHITE' ? 'WHITE' : 'ASSTD';
+                const size = String(plan.size || 'M').toUpperCase();
+                const existing = liveStockSnapshot[styleNo];
 
-            if (aiResult.data && aiResult.data.intent) {
-                const aiPlan = aiResult.data;
-
-                // Strict Admin Login Requirement for ADD or MINUS
-                if (aiPlan.intent === 'ADD' || aiPlan.intent === 'MINUS') {
-                    if (!currentAdminUser) {
-                        addChatMessage('ai', 'Pehle aap admin login kar le.', true);
-                        return;
-                    }
-                    if (!aiPlan.styleNo || !aiPlan.qty || aiPlan.qty <= 0) {
-                        addChatMessage('ai', '⚠️ Style number aur sahi quantity batayein.', true);
-                        return;
-                    }
-                    const styleNo = String(aiPlan.styleNo).toUpperCase();
-                    const color = aiPlan.color === 'WHITE' ? 'WHITE' : 'ASSTD';
-                    const size = String(aiPlan.size || 'M').toUpperCase();
-                    const existing = liveStockSnapshot[styleNo];
-
-                    if (!existing && !aiPlan.itemName) {
-                        addChatMessage('ai', `Naya style mila! Style ${styleNo} ka Item Name batayein:`, true);
-                        sessionStorage.setItem('pending_new_style', JSON.stringify({
-                            styleNo, color, size, qty: aiPlan.qty, action: aiPlan.intent === 'ADD' ? 'add' : 'minus'
-                        }));
-                        return;
-                    }
-
-                    const itemName = existing?.itemName || String(aiPlan.itemName).toUpperCase();
-                    updateDatabaseStock(styleNo, itemName, color, size, aiPlan.intent === 'ADD' ? aiPlan.qty : -aiPlan.qty, true);
+                if (!existing && !plan.itemName) {
+                    sessionStorage.setItem('pending_new_style', JSON.stringify({
+                        styleNo, color, size, qty: plan.qty, action: plan.intent
+                    }));
+                    addChatMessage('ai', `Naya style mila! Style ${styleNo} ka Item Name batayein:`, true);
                     return;
                 }
 
-                if (aiPlan.intent === 'CHECK' || aiPlan.intent === 'CHAT') {
-                    addChatMessage('ai', aiPlan.reply, true);
-                    return;
-                }
-            }
-        }
-
-        function updateDatabaseStock(styleNo, itemName, color, size, qtyChange, notifyChat) {
-            if (!currentAdminUser) {
-                if (notifyChat) addChatMessage('ai', 'Pehle aap admin login kar le.', true);
+                const finalName = existing?.itemName || String(plan.itemName).toUpperCase();
+                adjustStock(styleNo, finalName, color, size, plan.intent === 'ADD' ? plan.qty : -plan.qty, true);
                 return;
             }
-            const sizeRef = database.ref(`stock/${styleNo}/colors/${color}/${size}`);
-            sizeRef.once('value').then(snap => {
-                const currentQty = snap.val() || 0;
-                const newQty = currentQty + qtyChange;
 
-                if (newQty < 0) {
-                    if (notifyChat) addChatMessage('ai', `⚠️ Stock kam hai. Sirf ${currentQty} pcs available hain.`, true);
-                    return;
-                }
-
-                sizeRef.set(newQty);
-                database.ref(`stock/${styleNo}/itemName`).set(itemName);
-
-                const statusText = `[${qtyChange > 0 ? 'ADD' : 'MINUS'}] ${Math.abs(qtyChange)} pcs | Style ${styleNo} (${itemName}) - ${color} Size ${size} | Total: ${newQty}`;
-                logSecurity(statusText);
-
-                if (notifyChat) {
-                    const confirmMsg = `Done! Style ${styleNo} (${color}, Size ${size}) update ho gaya. Total stock: ${newQty} pcs.`;
-                    addChatMessage('ai', `✅ ${confirmMsg}`, true);
-                }
-            });
+            addChatMessage('ai', plan.reply, true);
         }
     </script>
 </body>
