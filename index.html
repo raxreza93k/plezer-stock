@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plezer Collection Rax Stock</title>
+    <title>Plezer Collection</title>
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -21,7 +22,7 @@
         const database = firebase.database();
         const auth = firebase.auth();
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #050711;
@@ -30,8 +31,8 @@
             --neon-pink: #ff007f;
             --neon-green: #00ff88;
             --neon-gold: #ffcc00;
-            --glass-bg: rgba(12, 16, 38, 0.85);
-            --glass-border: rgba(0, 243, 255, 0.25);
+            --glass-bg: rgba(12, 16, 38, 0.9);
+            --glass-border: rgba(0, 243, 255, 0.28);
             --text-color: #e6fbff;
         }
 
@@ -50,71 +51,150 @@
         .ambient-orb {
             position: fixed;
             border-radius: 50%;
-            filter: blur(110px);
+            filter: blur(115px);
             z-index: -1;
-            opacity: 0.45;
+            opacity: 0.4;
         }
         .orb-1 { width: 300px; height: 300px; background: var(--cyber-blue); top: 8%; left: 5%; }
         .orb-2 { width: 350px; height: 350px; background: var(--neon-purple); bottom: 8%; right: 5%; }
 
+        /* Full-Height & Full-Width Bright Neon Blinking Showroom Header */
         header {
             text-align: center;
-            padding: 16px 15px;
-            background: rgba(6, 9, 22, 0.92);
-            border-bottom: 2px solid transparent;
-            border-image: linear-gradient(90deg, var(--cyber-blue), var(--neon-purple), var(--neon-pink)) 1;
-            backdrop-filter: blur(12px);
+            padding: 36px 8px 38px 8px;
+            background: linear-gradient(180deg, rgba(6, 9, 24, 0.98) 0%, rgba(12, 18, 44, 0.96) 100%);
+            border-bottom: 3px solid #00f3ff;
             position: sticky;
             top: 0;
             z-index: 100;
+            animation: headerBorderBlink 3.2s infinite alternate;
         }
+
         header h1 {
             margin: 0;
             font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
+            font-size: clamp(23px, 6.2vw, 44px);
+            font-weight: 900;
             letter-spacing: 2px;
-            background: linear-gradient(90deg, #00f3ff, #ffffff, #bd00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .header-controls {
-            margin-top: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-        }
-        #auth-status {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            color: var(--cyber-blue);
+            line-height: 1;
+            display: inline-block;
+            color: #ffffff;
+            transform: scaleY(1.85);
+            animation: brightNeonBlink 3.2s infinite alternate;
         }
 
-        .container {
+        .sig-z {
+            display: inline-block;
+            position: relative;
+            color: #ffffff;
+        }
+        .sig-z::after {
+            content: '';
+            position: absolute;
+            left: -2px;
+            right: -2px;
+            bottom: -3px;
+            height: 3px;
+            background: #ffffff;
+            border-radius: 3px;
+            box-shadow: 0 0 8px #ffffff, 0 0 16px #00f3ff;
+        }
+
+        @keyframes brightNeonBlink {
+            0%, 100% {
+                color: #ffffff;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #00f3ff,
+                    0 0 32px #00f3ff,
+                    0 0 54px #0099ff;
+            }
+            25% {
+                color: #ffffff;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #ff007f,
+                    0 0 32px #ff007f,
+                    0 0 54px #bd00ff;
+            }
+            50% {
+                color: #ffffff;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #ff8800,
+                    0 0 32px #ff5500,
+                    0 0 54px #ffcc00;
+            }
+            75% {
+                color: #ffffff;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #00ff88,
+                    0 0 32px #00f3ff,
+                    0 0 54px #bd00ff;
+            }
+        }
+
+        @keyframes headerBorderBlink {
+            0%, 100% {
+                border-bottom-color: #00f3ff;
+                box-shadow: 0 6px 28px rgba(0, 243, 255, 0.45);
+            }
+            33% {
+                border-bottom-color: #ff007f;
+                box-shadow: 0 6px 28px rgba(255, 0, 127, 0.45);
+            }
+            66% {
+                border-bottom-color: #ff8800;
+                box-shadow: 0 6px 28px rgba(255, 136, 0, 0.45);
+            }
+        }
+
+        .main-wrapper {
             max-width: 920px;
             margin: 16px auto;
             width: 94%;
+        }
+
+        .glass-panel {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 18px;
             padding: 18px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(16px);
         }
 
-        input {
+        .panel-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--cyber-blue);
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        input, select {
             width: 100%;
-            background: rgba(15, 22, 48, 0.9);
+            background: rgba(15, 22, 48, 0.92);
             border: 1px solid rgba(0, 243, 255, 0.35);
             padding: 11px 14px;
-            border-radius: 12px;
+            border-radius: 11px;
             color: #fff;
             font-family: 'Rajdhani', sans-serif;
             font-size: 15px;
             font-weight: 600;
             outline: none;
         }
-        input:focus {
+        input:focus, select:focus {
             border-color: var(--neon-pink);
             box-shadow: 0 0 12px rgba(255, 0, 127, 0.4);
         }
@@ -122,31 +202,52 @@
         button {
             background: linear-gradient(135deg, var(--cyber-blue), var(--neon-purple));
             border: none;
-            padding: 10px 18px;
+            padding: 11px 18px;
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             font-size: 12px;
             font-weight: 700;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.28);
+            transition: all 0.2s;
         }
-        .btn-mic { background: linear-gradient(135deg, #ff007f, #ff5500); }
+        button:hover { transform: translateY(-1px); filter: brightness(1.12); }
         .btn-green { background: linear-gradient(135deg, #00c853, #00f3ff); color: #050711; }
-        .btn-small { padding: 5px 12px; font-size: 11px; }
+        .btn-danger { background: linear-gradient(135deg, #ff1744, #d50000); color: #fff; }
+        .btn-mic { background: linear-gradient(135deg, #ff007f, #ff5500); }
 
-        .search-box { margin-bottom: 16px; }
-
-        .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            color: var(--cyber-blue);
-            margin-bottom: 10px;
-            letter-spacing: 1px;
+        /* Admin-Only Panels (Strictly Hidden Before Login) */
+        .admin-only-panel {
+            display: none;
+            animation: slideUp 0.25s ease-out;
         }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stock Control Grid */
+        .stock-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .stock-action-btns {
+            display: flex;
+            gap: 10px;
+        }
+        .stock-action-btns button {
+            flex: 1;
+            padding: 12px;
+            font-size: 13px;
+        }
+
+        /* Stock Table */
         .table-wrapper {
             overflow-x: auto;
-            border-radius: 14px;
+            border-radius: 12px;
             border: 1px solid rgba(0, 243, 255, 0.2);
         }
         table {
@@ -159,11 +260,13 @@
             border-bottom: 1px solid rgba(0, 243, 255, 0.12);
         }
         th {
-            background: linear-gradient(90deg, rgba(0, 243, 255, 0.2), rgba(189, 0, 255, 0.2));
+            background: linear-gradient(90deg, rgba(0, 243, 255, 0.18), rgba(189, 0, 255, 0.18));
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             font-size: 12px;
         }
+        tr:hover { background: rgba(0, 243, 255, 0.04); }
+
         .badge-white {
             background: rgba(0, 243, 255, 0.2);
             color: #00f3ff;
@@ -189,17 +292,216 @@
         .size-pill {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 2px 7px;
+            padding: 3px 8px;
             border-radius: 6px;
-            margin-right: 5px;
+            margin: 2px 5px 2px 0;
             font-size: 14px;
             color: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .quick-qty-btn {
+            padding: 2px 7px;
+            font-size: 13px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: 900;
+            box-shadow: none;
+            display: none;
+        }
+
+        /* 5 API Keys Vault Slots */
+        .api-slot-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 243, 255, 0.05);
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 243, 255, 0.22);
+            margin-bottom: 10px;
+        }
+        .api-slot-row.saved-slot {
+            border-color: var(--neon-green);
+            background: rgba(0, 255, 136, 0.08);
+        }
+        .slot-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: var(--cyber-blue);
+            min-width: 60px;
+        }
+        .slot-saved-tag {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--neon-green);
+            background: rgba(0, 255, 136, 0.14);
+            border: 1px solid var(--neon-green);
+            padding: 2px 6px;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+        .api-slot-row input {
+            margin-bottom: 0;
+            font-family: monospace;
+            font-size: 14px;
+            letter-spacing: 1.5px;
+            padding: 8px 10px;
+        }
+        .slot-clear-btn {
+            background: rgba(255, 23, 68, 0.22);
+            border: 1px solid #ff1744;
+            color: #ff8a80;
+            padding: 7px 10px;
+            font-size: 12px;
+            border-radius: 8px;
+            box-shadow: none;
+            flex-shrink: 0;
+        }
+
+        /* Stock & IP Activity Logs */
+        #logs-container {
+            font-family: monospace;
+            background: rgba(4, 7, 18, 0.95);
+            border: 1px solid rgba(189, 0, 255, 0.35);
+            padding: 12px;
+            border-radius: 12px;
+            max-height: 270px;
+            overflow-y: auto;
+            font-size: 12px;
+            color: #00ff88;
+        }
+        .log-card-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--cyber-blue);
+            margin-bottom: 8px;
+        }
+        .log-card-item.minus-log {
+            border-left-color: var(--neon-pink);
+        }
+        .single-log-del {
+            background: rgba(255, 23, 68, 0.2);
+            border: 1px solid #ff1744;
+            color: #ff8a80;
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 6px;
+            box-shadow: none;
+            flex-shrink: 0;
+        }
+
+        /* Bottom-Left Admin Access Button */
+        #bottom-admin-launcher {
+            position: fixed;
+            bottom: 22px;
+            left: 18px;
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(10, 15, 38, 0.95);
+            border: 1.5px solid var(--neon-purple);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 0 18px rgba(189, 0, 255, 0.45);
+            cursor: pointer;
+        }
+        #bottom-admin-launcher.logged-in {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 18px rgba(255, 0, 127, 0.5);
+        }
+
+        /* System Access Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 6, 16, 0.93);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(12px);
+        }
+        .modal-card {
+            background: linear-gradient(145deg, rgba(14, 20, 48, 0.98), rgba(32, 12, 58, 0.98));
+            border: 2px solid var(--cyber-blue);
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.45);
+            padding: 24px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 370px;
+            text-align: center;
+        }
+        .sys-node-tag {
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+        .modal-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0 0 4px 0;
+            color: #fff;
+            font-size: 20px;
+            letter-spacing: 1.5px;
+        }
+        .modal-sub {
+            font-size: 11px;
+            color: #88ccee;
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .modal-card input { margin-bottom: 12px; }
+        .error-display {
+            background: rgba(255, 0, 50, 0.22);
+            border: 1.5px solid #ff1744;
+            color: #ff8a80;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: none;
+            text-align: left;
+        }
+        .login-progress-wrap {
+            display: none;
+            margin-bottom: 12px;
+        }
+        .login-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .login-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--cyber-blue), var(--neon-green));
+            transition: width 0.25s ease;
         }
 
         /* Floating Bottom-Right RAX AI Orb */
         #rex-ai-launcher {
             position: fixed;
-            bottom: 18px;
+            bottom: 16px;
             right: 18px;
             z-index: 1500;
             display: flex;
@@ -209,32 +511,31 @@
             user-select: none;
         }
         #particle-canvas {
-            width: 84px;
-            height: 84px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(14, 22, 54, 0.92) 40%, rgba(0, 243, 255, 0.15) 100%);
-            border: 1.5px solid rgba(0, 243, 255, 0.5);
+            background: radial-gradient(circle, rgba(14, 22, 54, 0.94) 40%, rgba(0, 243, 255, 0.16) 100%);
+            border: 1.5px solid rgba(0, 243, 255, 0.55);
             box-shadow: 0 0 22px rgba(0, 243, 255, 0.55), 0 0 35px rgba(189, 0, 255, 0.4);
         }
         .rex-orb-label {
             margin-top: 4px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 900;
             letter-spacing: 1px;
             color: #fff;
-            background: rgba(6, 10, 26, 0.9);
+            background: rgba(6, 10, 26, 0.92);
             border: 1px solid var(--cyber-blue);
             padding: 2px 10px;
             border-radius: 20px;
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
         }
 
-        /* Floating RAX AI Chat Drawer */
+        /* RAX AI Chat Drawer */
         #rex-ai-drawer {
             display: none;
             position: fixed;
-            bottom: 122px;
+            bottom: 118px;
             right: 16px;
             width: 350px;
             max-width: 92vw;
@@ -245,11 +546,6 @@
             padding: 14px;
             z-index: 1600;
             backdrop-filter: blur(18px);
-            animation: popUpDrawer 0.25s ease-out;
-        }
-        @keyframes popUpDrawer {
-            from { transform: translateY(20px) scale(0.95); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
         }
         .drawer-header {
             display: flex;
@@ -261,16 +557,11 @@
         }
         .drawer-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 900;
             background: linear-gradient(90deg, var(--cyber-blue), var(--neon-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-        .drawer-header-actions {
-            display: flex;
-            gap: 6px;
-            align-items: center;
         }
         .drawer-icon-btn {
             background: rgba(255, 255, 255, 0.1);
@@ -281,14 +572,12 @@
             border-radius: 6px;
             box-shadow: none;
         }
-
-        /* Chat History Box inside RAX AI */
         #chat-history {
-            background: rgba(4, 7, 18, 0.78);
+            background: rgba(4, 7, 18, 0.8);
             border: 1px solid rgba(0, 243, 255, 0.18);
             border-radius: 12px;
             padding: 10px;
-            height: 165px;
+            height: 170px;
             overflow-y: auto;
             margin-bottom: 10px;
             display: flex;
@@ -318,136 +607,14 @@
             white-space: pre-line;
             word-wrap: break-word;
         }
-        .msg-error {
-            align-self: flex-start;
-            background: rgba(255, 0, 127, 0.18);
-            border-left: 3px solid var(--neon-pink);
-            color: #ff99cc;
-            padding: 7px 11px;
-            border-radius: 12px 12px 12px 2px;
-            font-size: 13px;
-            max-width: 92%;
-            white-space: pre-line;
-            word-wrap: break-word;
-        }
-
-        .drawer-controls {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .drawer-controls button {
-            flex: 1;
-            padding: 9px 10px;
-        }
-
-        /* Custom Neon Popup Toast */
-        #cyber-toast-container {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 330px;
-            width: 90%;
-        }
-        .cyber-toast {
-            background: linear-gradient(135deg, rgba(12, 18, 44, 0.98), rgba(28, 12, 52, 0.98));
-            border: 2px solid var(--cyber-blue);
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.6);
-            color: #ffffff;
-            padding: 14px 16px;
-            border-radius: 14px;
-            animation: slideInToast 0.3s ease;
-        }
-        .cyber-toast.success { border-color: var(--neon-green); box-shadow: 0 0 25px rgba(0, 255, 136, 0.6); }
-        .cyber-toast.error { border-color: var(--neon-pink); box-shadow: 0 0 25px rgba(255, 0, 127, 0.65); }
-        .cyber-toast.warning { border-color: var(--neon-gold); box-shadow: 0 0 25px rgba(255, 204, 0, 0.6); }
-        .toast-title {
-            font-family: 'Orbitron', sans-serif;
+        .msg-status {
+            align-self: center;
+            color: var(--neon-gold);
             font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: #00f3ff;
-        }
-        .cyber-toast.success .toast-title { color: #00ff88; }
-        .cyber-toast.error .toast-title { color: #ff007f; }
-        .cyber-toast.warning .toast-title { color: #ffcc00; }
-        .toast-msg { font-size: 14px; line-height: 1.35; }
-        @keyframes slideInToast {
-            from { transform: translateX(120%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* Neon Login Modal */
-        #login-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 6, 16, 0.88);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-        }
-        .modal-card {
-            background: linear-gradient(145deg, rgba(14, 20, 48, 0.98), rgba(32, 12, 58, 0.98));
-            border: 2px solid var(--neon-purple);
-            box-shadow: 0 0 40px rgba(189, 0, 255, 0.6);
-            padding: 26px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 330px;
-            text-align: center;
-        }
-        .modal-card h3 {
-            font-family: 'Orbitron', sans-serif;
-            margin-top: 0;
-            color: var(--cyber-blue);
-            font-size: 19px;
-        }
-        .modal-card input { margin-bottom: 12px; }
-
-        /* Admin Panel & API Key Box */
-        #admin-panel {
-            display: none;
-            border-top: 2px dashed var(--neon-pink);
-            padding-top: 18px;
-            margin-top: 22px;
-        }
-        .admin-badge {
-            background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink));
-            color: #fff;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 10px;
             font-family: 'Orbitron', sans-serif;
         }
-        .api-config-box {
-            background: rgba(0, 243, 255, 0.06);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 18px;
-        }
-        .api-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        #logs-container {
-            font-family: monospace;
-            background: rgba(5, 8, 20, 0.9);
-            border: 1px solid rgba(189, 0, 255, 0.4);
-            padding: 12px;
-            border-radius: 12px;
-            max-height: 200px;
-            overflow-y: auto;
-            font-size: 12px;
-            color: #00ff88;
-        }
+        .drawer-controls { display: flex; gap: 8px; margin-top: 8px; }
+        .drawer-controls button { flex: 1; padding: 9px 10px; }
     </style>
 </head>
 <body>
@@ -455,320 +622,165 @@
     <div class="ambient-orb orb-1"></div>
     <div class="ambient-orb orb-2"></div>
 
-    <div id="cyber-toast-container"></div>
-
-    <!-- Top Header -->
+    <!-- Tall, Wide & Bright Blinking Neon Header -->
     <header>
-        <h1>PLEZER COLLECTION RAX STOCK</h1>
-        <div class="header-controls">
-            <span id="auth-status">PUBLIC MODE</span>
-            <button id="auth-btn" class="btn-small" onclick="toggleAuthModal()">Admin Login</button>
-        </div>
+        <h1>PLE<span class="sig-z">Z</span>ER COLLECTION</h1>
     </header>
 
-    <!-- Main Godown Stock Table -->
-    <div class="container">
-        <div class="search-box">
-            <input type="text" id="master-search" placeholder="Search Stock..." onkeyup="filterStock()">
-        </div>
+    <div class="main-wrapper">
 
-        <div class="section-title">LIVE GODOWN INVENTORY</div>
-        <div class="table-wrapper">
-            <table id="stock-table">
-                <thead>
-                    <tr>
-                        <th>Style No</th>
-                        <th>Item Name</th>
-                        <th>Available Colors & Sizes</th>
-                    </tr>
-                </thead>
-                <tbody id="stock-body">
-                    <tr><td colspan="3" style="text-align:center; color:#88ccee;">Loading live stock...</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Admin Panel: Secure Gemini API Key Setup & Security Logs -->
-        <div id="admin-panel">
-            <div class="api-config-box">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-family:'Orbitron'; font-size:13px; color:var(--cyber-blue);">GEMINI API KEY (AUTO-FALLBACK)</span>
-                    <span id="api-key-status" style="font-size:12px; color:#ffcc00;">Checking...</span>
-                </div>
-                <div class="api-row">
-                    <input type="password" id="gemini-api-input" placeholder="Paste Gemini API Key (AIzaSy...)">
-                    <button class="btn-green" onclick="saveGeminiApiKey()">Save Key</button>
-                </div>
-                <div id="active-model-label" style="font-size:11px; color:#88ccee; margin-top:6px;">Active Model: Auto-Detect</div>
+        <!-- 1. Live Stock Inventory -->
+        <div class="glass-panel">
+            <div style="margin-bottom: 14px;">
+                <input type="text" id="master-search" placeholder="Search Style No, Item Name, Color or Size..." onkeyup="filterStock()">
             </div>
+            <div class="panel-header">
+                <span>LIVE GODOWN INVENTORY</span>
+                <span id="stock-count-badge" style="font-size:11px; color:#88ccee;">0 Items</span>
+            </div>
+            <div class="table-wrapper">
+                <table id="stock-table">
+                    <thead>
+                        <tr>
+                            <th>Style No</th>
+                            <th>Item Name</th>
+                            <th>Available Colors & Sizes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stock-body">
+                        <tr><td colspan="3" style="text-align:center; color:#88ccee;">Loading live stock...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            <h3 style="font-family: 'Orbitron'; color: var(--neon-pink); font-size: 14px;">
-                <span class="admin-badge">ADMIN</span> SECURITY & DEVICE LOGS
-            </h3>
-            <div id="logs-container">Initializing security logs...</div>
+        <!-- 2. ADMIN PANEL 1: Stock Add / Minus Control (Hidden Until Admin Login) -->
+        <div id="admin-stock-panel" class="glass-panel admin-only-panel">
+            <div class="panel-header">
+                <span>📦 STOCK ADD / MINUS CONTROL</span>
+                <span style="font-size:11px; color:var(--neon-green);">ADMIN ONLY</span>
+            </div>
+            <div class="stock-form-grid">
+                <input type="text" id="ctrl-style" placeholder="Style No (e.g. 901)">
+                <input type="text" id="ctrl-name" placeholder="Item Name (e.g. Trunk)">
+                <select id="ctrl-color">
+                    <option value="ASSTD">ASSTD</option>
+                    <option value="WHITE">WHITE</option>
+                </select>
+                <input type="text" id="ctrl-size" placeholder="Size (e.g. 85 / M)">
+                <input type="number" id="ctrl-qty" placeholder="Quantity">
+            </div>
+            <div class="stock-action-btns">
+                <button class="btn-green" onclick="handleManualStock('ADD')">+ Add Stock</button>
+                <button class="btn-danger" onclick="handleManualStock('MINUS')">- Minus Stock</button>
+            </div>
+        </div>
+
+        <!-- 3. ADMIN PANEL 2: Separate 5 Gemini API Keys Vault (Hidden Until Admin Login) -->
+        <div id="admin-api-panel" class="glass-panel admin-only-panel">
+            <div class="panel-header">
+                <span>🔑 GEMINI API KEYS VAULT (5 SLOTS)</span>
+                <span id="keys-status-label" style="font-size:11px; color:var(--neon-gold);">Loading...</span>
+            </div>
+            <div id="api-slots-container"></div>
+            <button class="btn-green" style="width:100%; padding:12px; font-size:13px;" onclick="saveAllApiKeys()">Save All 5 API Keys</button>
+        </div>
+
+        <!-- 4. ADMIN PANEL 3: Stock Update Logs Only (Hidden Until Admin Login) -->
+        <div id="admin-logs-panel" class="glass-panel admin-only-panel">
+            <div class="panel-header">
+                <span>🛡️ STOCK ADD / MINUS LOGS</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span id="active-model-display" style="font-size:10px; color:#88ccee; font-family:monospace;">Engine: Ready</span>
+                    <button class="btn-danger" style="padding:5px 10px; font-size:10px;" onclick="clearAllStockLogs()">🗑️ Delete All</button>
+                </div>
+            </div>
+            <div id="logs-container">No stock activity logs yet.</div>
+        </div>
+
+    </div>
+
+    <!-- Bottom-Left Admin Login / Logout Button -->
+    <button id="bottom-admin-launcher" onclick="handleAdminButtonClick()">🔒 Admin Login</button>
+
+    <!-- System Access Login Modal -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal-card">
+            <div class="sys-node-tag">NODE // PLEZER-SEC</div>
+            <h3>SYSTEM ACCESS</h3>
+            <div class="modal-sub">ENCRYPTED ADMIN TERMINAL</div>
+            <div class="error-display" id="login-error-box"></div>
+            <input type="email" id="admin-email" placeholder="Admin Email" autocomplete="email">
+            <input type="password" id="admin-password" placeholder="Security Password" autocomplete="current-password" onkeypress="if(event.key==='Enter') executeLogin()">
+            <div class="login-progress-wrap" id="login-progress-wrap">
+                <div style="font-family:'Orbitron'; font-size:11px; color:var(--neon-green); margin-bottom:5px;" id="login-progress-text">VERIFYING ACCESS...</div>
+                <div class="login-progress-bar"><div class="login-progress-fill" id="login-progress-fill"></div></div>
+            </div>
+            <button onclick="executeLogin()" style="width: 100%; margin-bottom: 10px; padding: 12px; font-size: 13px;">INITIALIZE LOGIN</button>
+            <button onclick="closeAuthModal()" style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); padding: 10px;">Cancel</button>
         </div>
     </div>
 
     <!-- Floating Bottom-Right RAX AI Orb -->
     <div id="rex-ai-launcher" onclick="toggleRexDrawer()">
         <canvas id="particle-canvas"></canvas>
-        <div class="rex-orb-label">RAX AI</div>
+        <div class="rex-orb-label">Ask RAX AI</div>
     </div>
 
     <!-- RAX AI Chat Drawer -->
     <div id="rex-ai-drawer">
         <div class="drawer-header">
-            <span class="drawer-title">RAX AI</span>
-            <div class="drawer-header-actions">
+            <span class="drawer-title">RAX AI CORE</span>
+            <div style="display:flex; gap:6px;">
                 <button id="voice-toggle-btn" class="drawer-icon-btn" onclick="toggleVoiceOutput()" title="Voice On/Off">🔊</button>
                 <button class="drawer-icon-btn" onclick="toggleRexDrawer()">✕</button>
             </div>
         </div>
         <div id="chat-history">
-            <div class="msg-ai">RAX AI Ready.</div>
+            <div class="msg-ai">Namaste! Main RAX AI hoon. Boliye, kaunsa stock check ya update karna hai?</div>
         </div>
-        <input type="text" id="user-input" placeholder="Ask RAX AI..." onkeypress="if(event.key==='Enter') processCommand()">
+        <input type="text" id="user-input" placeholder="Yahan apna sawal likhein..." onkeypress="if(event.key==='Enter') processCommand()">
         <div class="drawer-controls">
-            <button onclick="processCommand()">Send</button>
-            <button class="btn-mic" onclick="startListening()">🎤 Mic</button>
-        </div>
-    </div>
-
-    <!-- Admin Login Modal -->
-    <div id="login-modal">
-        <div class="modal-card">
-            <h3>ADMIN ACCESS</h3>
-            <input type="email" id="admin-email" placeholder="Admin Email">
-            <input type="password" id="admin-password" placeholder="Password" onkeypress="if(event.key==='Enter') executeLogin()">
-            <button onclick="executeLogin()" style="width: 100%; margin-bottom: 10px;">Login Safely</button>
-            <button onclick="toggleAuthModal()" style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);">Cancel</button>
+            <button onclick="processCommand()">Bhejen</button>
+            <button class="btn-mic" onclick="startListening()">🎤 Bolkar Puchhen</button>
         </div>
     </div>
 
     <script>
-        /* 1. BOTTOM-RIGHT FLOATING 3D RAX AI PARTICLE ORB */
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = 160;
-        canvas.height = 160;
-
-        let particles = [];
-        const particleCount = 320;
-        let mode = 'text';
-        let angleY = 0;
-        let angleX = 0;
-
-        function getTextCoordinates(text) {
-            const tempCanvas = document.createElement('canvas');
-            const tCtx = tempCanvas.getContext('2d');
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
-            tCtx.fillStyle = '#fff';
-            tCtx.font = '900 42px Orbitron, sans-serif';
-            tCtx.textAlign = 'center';
-            tCtx.textBaseline = 'middle';
-            tCtx.fillText(text, tempCanvas.width / 2, tempCanvas.height / 2);
-
-            const imgData = tCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
-            const coords = [];
-            for (let y = 0; y < tempCanvas.height; y += 2) {
-                for (let x = 0; x < tempCanvas.width; x += 2) {
-                    const index = (y * tempCanvas.width + x) * 4;
-                    if (imgData[index + 3] > 128) {
-                        coords.push({
-                            x: x - tempCanvas.width / 2,
-                            y: y - tempCanvas.height / 2,
-                            z: (Math.random() - 0.5) * 10
-                        });
-                    }
-                }
-            }
-            return coords;
-        }
-
-        const textCoords = getTextCoordinates("RAX");
-        const sphereRadius = 56;
-
-        for (let i = 0; i < particleCount; i++) {
-            const phi = Math.acos(-1 + (2 * i) / particleCount);
-            const theta = Math.sqrt(particleCount * Math.PI) * phi;
-            const sx = sphereRadius * Math.cos(theta) * Math.sin(phi);
-            const sy = sphereRadius * Math.sin(theta) * Math.sin(phi);
-            const sz = sphereRadius * Math.cos(phi);
-
-            const tCoord = textCoords[i % textCoords.length] || { x: 0, y: 0, z: 0 };
-            const colors = ['#00f3ff', '#bd00ff', '#ff007f', '#00ff88'];
-
-            particles.push({
-                x: (Math.random() - 0.5) * 140,
-                y: (Math.random() - 0.5) * 140,
-                z: (Math.random() - 0.5) * 140,
-                tx: tCoord.x,
-                ty: tCoord.y,
-                tz: tCoord.z,
-                sx: sx,
-                sy: sy,
-                sz: sz,
-                color: colors[i % colors.length],
-                size: Math.random() * 1.4 + 0.9
-            });
-        }
-
-        setTimeout(() => { mode = 'sphere'; }, 2600);
-
-        function toggleRexDrawer() {
-            const drawer = document.getElementById('rex-ai-drawer');
-            const isHidden = drawer.style.display === 'none' || drawer.style.display === '';
-            drawer.style.display = isHidden ? 'block' : 'none';
-            if (isHidden) {
-                mode = 'text';
-                setTimeout(() => { mode = 'sphere'; }, 2200);
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const cx = canvas.width / 2;
-            const cy = canvas.height / 2;
-
-            if (mode === 'sphere') {
-                angleY += 0.025;
-                angleX = Math.sin(angleY * 0.5) * 0.25;
-            } else {
-                angleY *= 0.88;
-                angleX *= 0.88;
-            }
-
-            const cosY = Math.cos(angleY);
-            const sinY = Math.sin(angleY);
-            const cosX = Math.cos(angleX);
-            const sinX = Math.sin(angleX);
-
-            particles.forEach(p => {
-                const targetX = mode === 'text' ? p.tx : p.sx;
-                const targetY = mode === 'text' ? p.ty : p.sy;
-                const targetZ = mode === 'text' ? p.tz : p.sz;
-
-                p.x += (targetX - p.x) * 0.1;
-                p.y += (targetY - p.y) * 0.1;
-                p.z += (targetZ - p.z) * 0.1;
-
-                let x1 = p.x * cosY - p.z * sinY;
-                let z1 = p.z * cosY + p.x * sinY;
-                let y2 = p.y * cosX - z1 * sinX;
-                let z2 = z1 * cosX + p.y * sinX;
-
-                const fov = 200;
-                const scale = fov / (fov + z2 + 70);
-                const screenX = cx + x1 * scale;
-                const screenY = cy + y2 * scale;
-
-                ctx.beginPath();
-                ctx.arc(screenX, screenY, p.size * scale, 0, Math.PI * 2);
-                ctx.fillStyle = p.color;
-                ctx.fill();
-            });
-
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
-        /* 2. RAX AI VOICE OUTPUT & CHAT BUBBLES */
-        let voiceEnabled = true;
-
-        function toggleVoiceOutput() {
-            voiceEnabled = !voiceEnabled;
-            document.getElementById('voice-toggle-btn').innerText = voiceEnabled ? '🔊' : '🔇';
-            if (!voiceEnabled && 'speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
-        }
-
-        function speakText(text) {
-            if (!voiceEnabled || !('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-            const cleanText = text.replace(/[✅❌⚠️📦🎤⏳]/g, '').trim();
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = 'hi-IN';
-            utterance.rate = 1.02;
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function addChatMessage(sender, text, shouldSpeak = false) {
-            const historyBox = document.getElementById('chat-history');
-            const bubble = document.createElement('div');
-            if (sender === 'user') bubble.className = 'msg-user';
-            else if (sender === 'error') bubble.className = 'msg-error';
-            else bubble.className = 'msg-ai';
-
-            bubble.innerText = text;
-            historyBox.appendChild(bubble);
-            historyBox.scrollTop = historyBox.scrollHeight;
-
-            if (sender === 'ai' && shouldSpeak) {
-                speakText(text);
-            }
-        }
-
-        /* 3. FIREBASE SETTINGS (SECURE GEMINI API KEY STORAGE) & AUTH */
-        let geminiApiKey = "";
-        let liveStockSnapshot = {};
+        /* 1. GLOBALS, DEVICE NAME, IP & BATTERY DETECTION */
         let currentAdminUser = null;
+        let liveStockSnapshot = {};
+        let geminiApiKeys = ["", "", "", "", ""];
+        let activeKeyIndex = 0;
         let deviceBatteryLevel = "N/A";
-        let clientIP = "Checking...";
+        let clientIP = "Detecting...";
 
-        database.ref('settings/geminiApiKey').on('value', snap => {
-            geminiApiKey = snap.val() || "";
-            const statusEl = document.getElementById('api-key-status');
-            if (geminiApiKey) {
-                statusEl.innerText = "✅ Connected";
-                statusEl.style.color = "#00ff88";
-            } else {
-                statusEl.innerText = "⚠️ Not Set";
-                statusEl.style.color = "#ffcc00";
-            }
-        });
+        const MODEL_FALLBACK_CHAIN = [
+            "gemini-2.5-flash",
+            "gemini-2.5-pro",
+            "gemini-2.0-flash",
+            "gemini-2.0-flash-lite"
+        ];
 
-        function saveGeminiApiKey() {
-            if (!currentAdminUser) {
-                showCyberPopup("ADMIN REQUIRED", "Pehle Admin Login karein.", "error");
-                return;
+        function detectDeviceName() {
+            const ua = navigator.userAgent;
+            const androidMatch = ua.match(/Android\s[\d.]+;\s([^;)]+)/i);
+            if (androidMatch && androidMatch[1]) {
+                return androidMatch[1].replace(/Build\/.*/i, '').trim();
             }
-            const keyVal = document.getElementById('gemini-api-input').value.trim();
-            if (!keyVal) {
-                showCyberPopup("EMPTY KEY", "Gemini API Key paste karein.", "warning");
-                return;
-            }
-            database.ref('settings/geminiApiKey').set(keyVal)
-                .then(() => {
-                    document.getElementById('gemini-api-input').value = '';
-                    showCyberPopup("API KEY SAVED ✅", "Gemini API Key Firebase mein safe ho gayi hai.", "success");
-                })
-                .catch(err => {
-                    showCyberPopup("SAVE ERROR", err.message, "error");
-                });
+            if (/iPhone/i.test(ua)) return "Apple iPhone";
+            if (/iPad/i.test(ua)) return "Apple iPad";
+            if (/Macintosh|Mac OS X/i.test(ua)) return "MacBook / Mac";
+            if (/Windows NT/i.test(ua)) return "Windows PC";
+            return navigator.platform || "Mobile Device";
         }
-
-        function showCyberPopup(title, message, type = 'success') {
-            const container = document.getElementById('cyber-toast-container');
-            const toast = document.createElement('div');
-            toast.className = `cyber-toast ${type}`;
-            toast.innerHTML = `<div class="toast-title">${title}</div><div class="toast-msg">${message}</div>`;
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.transition = 'all 0.35s ease';
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(120%)';
-                setTimeout(() => toast.remove(), 350);
-            }, 3500);
-        }
+        const clientDeviceName = detectDeviceName();
 
         if ('getBattery' in navigator) {
-            navigator.getBattery().then(battery => {
-                deviceBatteryLevel = Math.round(battery.level * 100) + "%";
-                battery.addEventListener('levelchange', () => {
-                    deviceBatteryLevel = Math.round(battery.level * 100) + "%";
+            navigator.getBattery().then(b => {
+                deviceBatteryLevel = Math.round(b.level * 100) + "%";
+                b.addEventListener('levelchange', () => {
+                    deviceBatteryLevel = Math.round(b.level * 100) + "%";
                 });
             });
         }
@@ -776,163 +788,515 @@
         fetch('https://api.ipify.org?format=json')
             .then(r => r.json())
             .then(d => { clientIP = d.ip; })
-            .catch(() => { clientIP = "Mobile/Local"; });
+            .catch(() => { clientIP = "Local/Mobile"; });
 
-        function setAdminActive(email) {
-            currentAdminUser = { email: email };
-            localStorage.setItem('plezer_admin_session', email);
-            document.getElementById('auth-status').innerHTML = '<span class="admin-badge">ADMIN ACTIVE</span>';
-            document.getElementById('auth-btn').innerText = 'Logout';
-            document.getElementById('admin-panel').style.display = 'block';
-            loadSecurityLogs();
+        /* Logs ONLY Stock Add / Minus events (Never logs Admin Login/Logout) */
+        function logStockChange(mode, actionText) {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-IN', {
+                timeZone: 'Asia/Kolkata',
+                day: '2-digit', month: '2-digit', year: 'numeric'
+            });
+            const timeStr = now.toLocaleTimeString('en-IN', {
+                timeZone: 'Asia/Kolkata',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+
+            database.ref('stock_activity_logs').push({
+                mode: mode,
+                date: dateStr,
+                time: timeStr,
+                ip: clientIP,
+                device: clientDeviceName,
+                batt: deviceBatteryLevel,
+                action: actionText
+            }).catch(() => {});
         }
 
-        const savedSession = localStorage.getItem('plezer_admin_session');
-        if (savedSession) {
-            setAdminActive(savedSession);
-        }
+        /* 2. ADMIN AUTHENTICATION & STRICT PANEL VISIBILITY */
+        const adminLauncherBtn = document.getElementById('bottom-admin-launcher');
+        const authModal = document.getElementById('auth-modal');
+        const loginErrorBox = document.getElementById('login-error-box');
+        const adminPanels = document.querySelectorAll('.admin-only-panel');
 
-        auth.onAuthStateChanged(user => {
-            if (user) setAdminActive(user.email);
-        });
+        function applyAuthState(user) {
+            currentAdminUser = user;
+            const quickBtns = document.querySelectorAll('.quick-qty-btn');
 
-        function toggleAuthModal() {
-            if (currentAdminUser) {
-                localStorage.removeItem('plezer_admin_session');
-                try { auth.signOut(); } catch (e) {}
-                currentAdminUser = null;
-                document.getElementById('auth-status').innerText = 'PUBLIC MODE';
-                document.getElementById('auth-btn').innerText = 'Admin Login';
-                document.getElementById('admin-panel').style.display = 'none';
-                showCyberPopup("LOGGED OUT", "Public Mode active.", "warning");
+            if (user) {
+                adminLauncherBtn.innerText = "🔓 Admin Logout";
+                adminLauncherBtn.classList.add('logged-in');
+                adminPanels.forEach(p => p.style.display = "block");
+                quickBtns.forEach(b => b.style.display = "inline-block");
             } else {
-                const modal = document.getElementById('login-modal');
-                modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+                adminLauncherBtn.innerText = "🔒 Admin Login";
+                adminLauncherBtn.classList.remove('logged-in');
+                adminPanels.forEach(p => p.style.display = "none");
+                quickBtns.forEach(b => b.style.display = "none");
             }
         }
 
+        function handleAdminButtonClick() {
+            if (currentAdminUser) {
+                localStorage.removeItem('plezer_admin_session');
+                try { auth.signOut(); } catch (e) {}
+                applyAuthState(null);
+            } else {
+                loginErrorBox.style.display = "none";
+                document.getElementById('login-progress-wrap').style.display = "none";
+                document.getElementById('admin-password').value = '';
+                authModal.style.display = "flex";
+            }
+        }
+
+        function closeAuthModal() {
+            loginErrorBox.style.display = "none";
+            document.getElementById('login-progress-wrap').style.display = "none";
+            authModal.style.display = "none";
+        }
+
+        function showLoginError(msg) {
+            document.getElementById('login-progress-wrap').style.display = "none";
+            loginErrorBox.innerText = msg;
+            loginErrorBox.style.display = "block";
+        }
+
         function executeLogin() {
+            loginErrorBox.style.display = "none";
             const email = document.getElementById('admin-email').value.trim().toLowerCase();
             const password = document.getElementById('admin-password').value.trim();
 
             if (!email || !password) {
-                showCyberPopup("MISSING DETAILS", "Email aur Password bharein.", "warning");
+                showLoginError("❌ Email aur Password dono dalna zaroori hai.");
                 return;
             }
 
-            const validAdmins = ["plezerstockrax@gmail.com", "9638195993@gmail.com"];
-            if (validAdmins.includes(email) && password === "9638195993") {
-                setAdminActive(email);
-                toggleAuthModal();
-                showCyberPopup("ADMIN VERIFIED ✅", "Admin access active.", "success");
-                if (window.location.protocol.startsWith('http')) {
-                    auth.signInWithEmailAndPassword(email, password).catch(() => {});
+            const progWrap = document.getElementById('login-progress-wrap');
+            const progFill = document.getElementById('login-progress-fill');
+            const progText = document.getElementById('login-progress-text');
+            progWrap.style.display = "block";
+            progFill.style.width = "65%";
+            progText.innerText = "VERIFYING ACCESS...";
+
+            const validAdmins = ["plezerstockrax@gmail.com", "9638195993@gmail.com", "rezaahmad810287@gmail.com"];
+            if (validAdmins.includes(email)) {
+                if (password === "9638195993") {
+                    progFill.style.width = "100%";
+                    progText.innerText = "ACCESS GRANTED";
+                    setTimeout(() => {
+                        localStorage.setItem('plezer_admin_session', email);
+                        closeAuthModal();
+                        applyAuthState({ email: email });
+                    }, 220);
+                } else {
+                    showLoginError("❌ Galat Password! Kripya sahi Admin Password dalein.");
                 }
                 return;
             }
 
             auth.signInWithEmailAndPassword(email, password)
-                .then((res) => {
-                    setAdminActive(res.user.email);
-                    toggleAuthModal();
-                    showCyberPopup("ADMIN VERIFIED ✅", "Admin access active.", "success");
+                .then(res => {
+                    progFill.style.width = "100%";
+                    progText.innerText = "ACCESS GRANTED";
+                    setTimeout(() => {
+                        localStorage.setItem('plezer_admin_session', res.user.email);
+                        closeAuthModal();
+                        applyAuthState({ email: res.user.email });
+                    }, 220);
                 })
-                .catch((err) => {
-                    showCyberPopup("LOGIN FAILED", err.message, "error");
+                .catch(() => {
+                    showLoginError("❌ Galat Email ya Password! Access Denied.");
                 });
         }
 
-        // Load Live Stock Data
-        database.ref('stock').on('value', snapshot => {
-            const tbody = document.getElementById('stock-body');
-            tbody.innerHTML = '';
-            const data = snapshot.val();
-            liveStockSnapshot = data || {};
-            if (data) {
-                Object.keys(data).forEach(styleNo => {
-                    const item = data[styleNo];
-                    let sizesHtml = '';
-                    if (item.colors) {
-                        Object.keys(item.colors).forEach(color => {
-                            const badgeClass = color === 'WHITE' ? 'badge-white' : 'badge-asstd';
-                            sizesHtml += `<div style="margin-bottom:6px;"><span class="${badgeClass}">${color}</span> `;
-                            Object.keys(item.colors[color]).forEach(size => {
-                                sizesHtml += `<span class="size-pill"><b>${size}:</b> ${item.colors[color][size]} pcs</span>`;
-                            });
-                            sizesHtml += `</div>`;
-                        });
-                    }
-                    tbody.innerHTML += `<tr>
-                        <td style="font-family:'Orbitron'; color:var(--cyber-blue); font-weight:700;">${styleNo}</td>
-                        <td style="font-weight:700; color:#fff;">${item.itemName || 'N/A'}</td>
-                        <td>${sizesHtml}</td>
-                    </tr>`;
-                });
+        const savedAdmin = localStorage.getItem('plezer_admin_session');
+        if (savedAdmin) {
+            applyAuthState({ email: savedAdmin });
+        } else {
+            applyAuthState(null);
+        }
+
+        /* 3. 5 GEMINI API KEYS VAULT (DOTS MASKED + REMOVE BUTTON) */
+        function renderApiSlots() {
+            const container = document.getElementById('api-slots-container');
+            container.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const rawKey = (geminiApiKeys[i] || '').trim();
+                const hasKey = rawKey !== '';
+                const maskedDots = hasKey ? '•'.repeat(Math.min(Math.max(rawKey.length, 20), 28)) : '';
+
+                const row = document.createElement('div');
+                row.className = `api-slot-row ${hasKey ? 'saved-slot' : ''}`;
+                row.innerHTML = `
+                    <span class="slot-label">SLOT ${i + 1}</span>
+                    <input
+                        type="password"
+                        id="api-key-${i}"
+                        data-saved-key="${rawKey}"
+                        value="${maskedDots}"
+                        placeholder="Paste Gemini API Key ${i + 1}..."
+                        onfocus="if(this.dataset.savedKey && this.value.includes('•')) { this.value = ''; }"
+                        onblur="if(this.value.trim() === '' && this.dataset.savedKey) { this.value = '•'.repeat(24); }"
+                    >
+                    ${hasKey ? `<span class="slot-saved-tag">✅ SAVED</span>` : ''}
+                    <button type="button" class="slot-clear-btn" title="Remove Key" onclick="removeSingleApiKey(${i})">✕</button>
+                `;
+                container.appendChild(row);
+            }
+        }
+
+        database.ref('settings/geminiApiKeys').on('value', snap => {
+            const val = snap.val();
+            if (Array.isArray(val) && val.length === 5) {
+                geminiApiKeys = val;
             } else {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#aaa;">No stock entries yet.</td></tr>';
+                geminiApiKeys = ["", "", "", "", ""];
+            }
+            renderApiSlots();
+            const count = geminiApiKeys.filter(k => (k || '').trim() !== '').length;
+            const statusLbl = document.getElementById('keys-status-label');
+            if (count > 0) {
+                statusLbl.innerText = `✅ ${count}/5 Slots Saved`;
+                statusLbl.style.color = "var(--neon-green)";
+            } else {
+                statusLbl.innerText = "⚠️ No API Keys Saved";
+                statusLbl.style.color = "var(--neon-gold)";
             }
         });
 
-        function loadSecurityLogs() {
-            database.ref('security_logs').limitToLast(15).on('value', snapshot => {
-                const logsContainer = document.getElementById('logs-container');
-                logsContainer.innerHTML = '';
-                const logs = snapshot.val();
-                if (logs) {
-                    Object.values(logs).reverse().forEach(log => {
-                        logsContainer.innerHTML += `<div><span style="color:#00f3ff;">[${log.timestamp}]</span> IP: ${log.ip} | Batt: ${log.batt}<br><span style="color:#fff;">> ${log.action}</span></div><hr style="border:0; border-top:1px dashed #333; margin: 6px 0;">`;
-                    });
+        function saveAllApiKeys() {
+            if (!currentAdminUser) return;
+            const updatedKeys = [];
+            for (let i = 0; i < 5; i++) {
+                const inputEl = document.getElementById(`api-key-${i}`);
+                const typed = inputEl.value.trim();
+                if (typed === '' || typed.includes('•')) {
+                    updatedKeys.push((inputEl.dataset.savedKey || '').trim());
                 } else {
-                    logsContainer.innerHTML = 'No logs yet.';
+                    updatedKeys.push(typed);
+                }
+            }
+            database.ref('settings/geminiApiKeys').set(updatedKeys)
+                .then(() => {
+                    alert("✅ Sabhi API Keys सुरक्षित रूप से सेव हो गई हैं!");
+                })
+                .catch(e => alert("Error: " + e.message));
+        }
+
+        function removeSingleApiKey(slotIndex) {
+            if (!currentAdminUser) return;
+            const updatedKeys = [...geminiApiKeys];
+            updatedKeys[slotIndex] = "";
+            database.ref('settings/geminiApiKeys').set(updatedKeys);
+        }
+
+        /* 4. STOCK TABLE & ADMIN ADD/MINUS CONTROLS */
+        database.ref('stock').on('value', snap => {
+            const tbody = document.getElementById('stock-body');
+            const badge = document.getElementById('stock-count-badge');
+            tbody.innerHTML = '';
+            const data = snap.val() || {};
+            liveStockSnapshot = data;
+
+            const styles = Object.keys(data);
+            badge.innerText = `${styles.length} Items`;
+            const btnDisplay = currentAdminUser ? 'inline-block' : 'none';
+
+            if (styles.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#88ccee;">No stock entries yet.</td></tr>';
+                return;
+            }
+
+            styles.forEach(styleNo => {
+                const item = data[styleNo];
+                let detailsHtml = '';
+                if (item.colors) {
+                    Object.keys(item.colors).forEach(color => {
+                        const cls = color === 'WHITE' ? 'badge-white' : 'badge-asstd';
+                        detailsHtml += `<div style="margin-bottom:6px;"><span class="${cls}">${color}</span> `;
+                        Object.keys(item.colors[color]).forEach(size => {
+                            const qty = item.colors[color][size];
+                            detailsHtml += `<span class="size-pill">
+                                <button class="quick-qty-btn btn-danger" style="display:${btnDisplay};" onclick="adjustStock('${styleNo}','${item.itemName || ''}','${color}','${size}',-1,false)">-</button>
+                                <b>${size}:</b> ${qty} pcs
+                                <button class="quick-qty-btn btn-green" style="display:${btnDisplay};" onclick="adjustStock('${styleNo}','${item.itemName || ''}','${color}','${size}',1,false)">+</button>
+                            </span>`;
+                        });
+                        detailsHtml += `</div>`;
+                    });
+                }
+                tbody.innerHTML += `<tr>
+                    <td style="font-family:'Orbitron'; color:var(--cyber-blue); font-weight:700;">${styleNo}</td>
+                    <td style="font-weight:700; color:#fff;">${item.itemName || 'ITEM'}</td>
+                    <td>${detailsHtml}</td>
+                </tr>`;
+            });
+        });
+
+        function handleManualStock(mode) {
+            if (!currentAdminUser) return;
+            const styleNo = document.getElementById('ctrl-style').value.trim().toUpperCase();
+            const rawName = document.getElementById('ctrl-name').value.trim().toUpperCase();
+            const color = document.getElementById('ctrl-color').value;
+            const size = document.getElementById('ctrl-size').value.trim().toUpperCase();
+            const qty = Math.abs(parseInt(document.getElementById('ctrl-qty').value, 10));
+
+            if (!styleNo || !size || isNaN(qty) || qty <= 0) {
+                alert("⚠️ Style No, Size aur Quantity sahi se bharein.");
+                return;
+            }
+
+            const existing = liveStockSnapshot[styleNo];
+            if (mode === 'MINUS' && !existing) {
+                alert("⚠️ Yeh Style No stock mein maujood nahi hai.");
+                return;
+            }
+
+            const finalName = rawName || existing?.itemName || "GARMENT ITEM";
+            const delta = mode === 'ADD' ? qty : -qty;
+            adjustStock(styleNo, finalName, color, size, delta, false);
+            document.getElementById('ctrl-qty').value = '';
+        }
+
+        function adjustStock(styleNo, itemName, color, size, qtyDelta, notifyChat) {
+            if (!currentAdminUser) {
+                if (notifyChat) addChatMessage('ai', 'Pehle aap admin login kar le.', true);
+                return;
+            }
+            const ref = database.ref(`stock/${styleNo}/colors/${color}/${size}`);
+            ref.once('value').then(snap => {
+                const current = snap.val() || 0;
+                const updated = current + qtyDelta;
+
+                if (updated < 0) {
+                    if (notifyChat) {
+                        addChatMessage('ai', `⚠️ Stock kam hai. Sirf ${current} pcs available hain.`, true);
+                    } else {
+                        alert(`⚠️ Stock kam hai! Sirf ${current} pcs available hain.`);
+                    }
+                    return;
+                }
+
+                ref.set(updated);
+                database.ref(`stock/${styleNo}/itemName`).set(itemName);
+
+                const mode = qtyDelta > 0 ? 'ADD' : 'MINUS';
+                const tag = qtyDelta > 0 ? 'STOCK ADDED (+)' : 'STOCK MINUS (-)';
+                logStockChange(mode, `[${tag}] ${Math.abs(qtyDelta)} pcs | Style ${styleNo} (${itemName}) - ${color} Size ${size} | Total: ${updated} pcs`);
+
+                if (notifyChat) {
+                    addChatMessage('ai', `✅ Done! Style ${styleNo} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`, true);
                 }
             });
         }
 
-        /* 4. VOICE RECOGNITION */
+        function filterStock() {
+            const q = document.getElementById('master-search').value.toLowerCase();
+            const rows = document.getElementById('stock-body').getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = rows[i].innerText.toLowerCase().includes(q) ? '' : 'none';
+            }
+        }
+
+        /* 5. STOCK ADD / MINUS LOGS LISTENER + DELETE CONTROLS */
+        database.ref('stock_activity_logs').limitToLast(40).on('value', snap => {
+            const box = document.getElementById('logs-container');
+            box.innerHTML = '';
+            const logs = snap.val();
+            if (!logs) {
+                box.innerHTML = '<div style="color:#88ccee; text-align:center; padding:10px;">Abhi tak koi stock add ya minus nahi kiya gaya hai.</div>';
+                return;
+            }
+
+            const entries = Object.entries(logs).reverse();
+            entries.forEach(([key, log]) => {
+                const isMinus = log.mode === 'MINUS';
+                box.innerHTML += `
+                    <div class="log-card-item ${isMinus ? 'minus-log' : ''}">
+                        <div>
+                            <div style="color:var(--cyber-blue); margin-bottom:3px;">
+                                📅 <b>${log.date || ''}</b> | ⏰ <b>${log.time || ''}</b>
+                            </div>
+                            <div style="color:var(--neon-gold); margin-bottom:4px;">
+                                🌐 IP: <b>${log.ip || 'N/A'}</b> | 📱 Device: <b>${log.device || 'Unknown'}</b> | 🔋 Batt: <b>${log.batt || 'N/A'}</b>
+                            </div>
+                            <div style="color:${isMinus ? '#ff80ab' : '#00ff88'}; font-weight:bold;">
+                                > ${log.action}
+                            </div>
+                        </div>
+                        <button class="single-log-del" title="Delete Log" onclick="deleteSingleStockLog('${key}')">🗑️</button>
+                    </div>
+                `;
+            });
+        });
+
+        function deleteSingleStockLog(logKey) {
+            if (!currentAdminUser) return;
+            database.ref('stock_activity_logs/' + logKey).remove();
+        }
+
+        function clearAllStockLogs() {
+            if (!currentAdminUser) return;
+            if (confirm("Kya aap sabhi Stock Logs delete karna chahte hain?")) {
+                database.ref('stock_activity_logs').remove();
+            }
+        }
+
+        /* 6. RAX AI PARTICLE ORB */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 160; canvas.height = 160;
+
+        let particles = [];
+        const particleCount = 300;
+        let orbMode = 'text';
+        let angleY = 0; let angleX = 0;
+
+        function getTextCoords(text) {
+            const tc = document.createElement('canvas');
+            const tctx = tc.getContext('2d');
+            tc.width = canvas.width; tc.height = canvas.height;
+            tctx.fillStyle = '#fff';
+            tctx.font = '900 42px Orbitron, sans-serif';
+            tctx.textAlign = 'center'; tctx.textBaseline = 'middle';
+            tctx.fillText(text, tc.width / 2, tc.height / 2);
+            const data = tctx.getImageData(0, 0, tc.width, tc.height).data;
+            const pts = [];
+            for (let y = 0; y < tc.height; y += 2) {
+                for (let x = 0; x < tc.width; x += 2) {
+                    if (data[(y * tc.width + x) * 4 + 3] > 128) {
+                        pts.push({ x: x - tc.width / 2, y: y - tc.height / 2, z: (Math.random() - 0.5) * 10 });
+                    }
+                }
+            }
+            return pts;
+        }
+
+        const rCoords = getTextCoords("RAX");
+        for (let i = 0; i < particleCount; i++) {
+            const phi = Math.acos(-1 + (2 * i) / particleCount);
+            const theta = Math.sqrt(particleCount * Math.PI) * phi;
+            const tc = rCoords[i % rCoords.length] || { x: 0, y: 0, z: 0 };
+            const palette = ['#00f3ff', '#bd00ff', '#ff007f', '#00ff88'];
+            particles.push({
+                x: (Math.random() - 0.5) * 140, y: (Math.random() - 0.5) * 140, z: (Math.random() - 0.5) * 140,
+                tx: tc.x, ty: tc.y, tz: tc.z,
+                sx: 56 * Math.cos(theta) * Math.sin(phi),
+                sy: 56 * Math.sin(theta) * Math.sin(phi),
+                sz: 56 * Math.cos(phi),
+                color: palette[i % palette.length],
+                size: Math.random() * 1.4 + 0.9
+            });
+        }
+        setTimeout(() => { orbMode = 'sphere'; }, 2400);
+
+        function toggleRexDrawer() {
+            const drawer = document.getElementById('rex-ai-drawer');
+            const open = drawer.style.display !== 'block';
+            drawer.style.display = open ? 'block' : 'none';
+            if (open) {
+                orbMode = 'text';
+                setTimeout(() => { orbMode = 'sphere'; }, 2000);
+            }
+        }
+
+        function animateOrb() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = canvas.width / 2; const cy = canvas.height / 2;
+            if (orbMode === 'sphere') {
+                angleY += 0.025;
+                angleX = Math.sin(angleY * 0.5) * 0.25;
+            } else {
+                angleY *= 0.88; angleX *= 0.88;
+            }
+            const cosY = Math.cos(angleY), sinY = Math.sin(angleY);
+            const cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+
+            particles.forEach(p => {
+                const tx = orbMode === 'text' ? p.tx : p.sx;
+                const ty = orbMode === 'text' ? p.ty : p.sy;
+                const tz = orbMode === 'text' ? p.tz : p.sz;
+                p.x += (tx - p.x) * 0.1;
+                p.y += (ty - p.y) * 0.1;
+                p.z += (tz - p.z) * 0.1;
+
+                const x1 = p.x * cosY - p.z * sinY;
+                const z1 = p.z * cosY + p.x * sinY;
+                const y2 = p.y * cosX - z1 * sinX;
+                const z2 = z1 * cosX + p.y * sinX;
+
+                const scale = 200 / (270 + z2);
+                ctx.beginPath();
+                ctx.arc(cx + x1 * scale, cy + y2 * scale, p.size * scale, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+            });
+            requestAnimationFrame(animateOrb);
+        }
+        animateOrb();
+
+        /* 7. RAX AI VOICE, CHAT & 5-KEY FAILOVER */
+        let voiceEnabled = true;
+
+        function toggleVoiceOutput() {
+            voiceEnabled = !voiceEnabled;
+            document.getElementById('voice-toggle-btn').innerText = voiceEnabled ? '🔊' : '🔇';
+            if (!voiceEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+
+        function speakText(text) {
+            if (!voiceEnabled || !('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const clean = text.replace(/[✅❌⚠️📦🎤⚡🗑️]/g, '').trim();
+            const u = new SpeechSynthesisUtterance(clean);
+            u.lang = 'hi-IN';
+            u.rate = 1.02;
+            window.speechSynthesis.speak(u);
+        }
+
+        function addChatMessage(sender, text, speak = false) {
+            const box = document.getElementById('chat-history');
+            const div = document.createElement('div');
+            div.className = sender === 'user' ? 'msg-user' : (sender === 'status' ? 'msg-status' : 'msg-ai');
+            div.innerText = text;
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
+            if (sender === 'ai' && speak) speakText(text);
+            return div;
+        }
+
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition;
         if (SpeechRecognition) {
             recognition = new SpeechRecognition();
             recognition.lang = 'en-IN';
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                document.getElementById('user-input').value = transcript;
+            recognition.onresult = (e) => {
+                document.getElementById('user-input').value = e.results[0][0].transcript;
                 processCommand();
-            };
-            recognition.onerror = (e) => {
-                addChatMessage('error', `⚠️ Mic Error: ${e.error}`);
             };
         }
 
         function startListening() {
             if (recognition) {
                 recognition.start();
-                addChatMessage('ai', '🎤 Listening...', false);
-            } else {
-                addChatMessage('error', '⚠️ Voice mic is browser mein supported nahi hai.');
+                addChatMessage('status', '🎤 Sun raha hoon...', false);
             }
         }
 
-        /* 5. MULTI-MODEL AUTO-FALLBACK GEMINI BRAIN + ERROR DISPLAY */
-        const MODEL_FALLBACK_CHAIN = [
-            "gemini-2.5-flash",
-            "gemini-2.5-pro",
-            "gemini-2.0-flash",
-            "gemini-2.0-flash-lite",
-            "gemini-flash-latest"
-        ];
+        async function runGeminiFailover(userQuery) {
+            const validKeys = geminiApiKeys.map((k, idx) => ({ key: (k || '').trim(), idx })).filter(x => x.key !== '');
+            if (validKeys.length === 0) {
+                return { error: "Koi Gemini API Key set nahi hai. Admin Login karke API Keys Vault mein key dalein." };
+            }
 
-        async function askGeminiBrain(userMessage) {
-            if (!geminiApiKey) return { error: "API Key set nahi hai (Admin Panel mein Save Key karein)." };
-
-            const systemPrompt = `You are RAX AI, a godown stock assistant for Plezer Collection undergarments.
-Strict rules:
-1. If user asks who you are, what your work/role is, or about yourself, reply ONLY: "Main ek RAX AI hoon aur main stock maintain karta hoon."
-2. You must understand natural Hindi, Hinglish, and English commands to ADD stock, MINUS/DISPATCH stock, or CHECK stock.
-3. Colors are strictly "WHITE" or "ASSTD" (default to "ASSTD" if not mentioned).
+            const prompt = `You are RAX AI, stock assistant for Plezer Collection undergarments.
+Rules:
+1. If user asks who you are or what you do, reply: "Main RAX AI hoon aur main Plezer Collection ka stock maintain karta hoon."
+2. Understand Hindi, Hinglish, and English commands for ADD stock, MINUS/DISPATCH stock, CHECK stock, or general greeting.
+3. Colors are strictly "WHITE" or "ASSTD" (default "ASSTD" if not specified).
 4. Sizes can be numbers (75, 80, 85, 90, 95, 100, 105) or letters (S, M, L, XL, XXL).
-5. Current live stock JSON: ${JSON.stringify(liveStockSnapshot)}
-6. Return ONLY valid JSON (no markdown, no backticks) in this exact format:
+5. Live stock JSON: ${JSON.stringify(liveStockSnapshot)}
+6. Respond ONLY with raw valid JSON (no markdown, no backticks):
 {
   "intent": "ADD" | "MINUS" | "CHECK" | "CHAT",
   "styleNo": "string or empty",
@@ -940,260 +1304,98 @@ Strict rules:
   "color": "WHITE" | "ASSTD",
   "size": "string or empty",
   "qty": number,
-  "reply": "short natural Hinglish response"
-}`;
+  "reply": "helpful short Hinglish response"
+}
 
-            let lastError = "Unknown API Error";
+User: ${userQuery}`;
 
-            // Try each model in fallback chain automatically
-            for (const modelName of MODEL_FALLBACK_CHAIN) {
-                try {
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiApiKey}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{
-                                parts: [{ text: systemPrompt + "\n\nUser Command: " + userMessage }]
-                            }]
-                        })
-                    });
+            for (const kObj of validKeys) {
+                activeKeyIndex = kObj.idx;
+                for (const model of MODEL_FALLBACK_CHAIN) {
+                    try {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${kObj.key}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                        });
+                        const data = await res.json();
+                        if (!res.ok || data.error) continue;
 
-                    const data = await res.json();
+                        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (!text) continue;
 
-                    if (!res.ok || data.error) {
-                        lastError = `[${modelName}] ${data?.error?.message || res.statusText}`;
-                        continue; // Automatically fallback to next model
-                    }
+                        const lbl = document.getElementById('active-model-display');
+                        if (lbl) lbl.innerText = `Model: ${model} (Slot ${kObj.idx + 1})`;
 
-                    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (!rawText) {
-                        lastError = `[${modelName}] Empty response`;
+                        return { data: JSON.parse(text.replace(/```json|```/g, '').trim()) };
+                    } catch (e) {
                         continue;
                     }
-
-                    const labelEl = document.getElementById('active-model-label');
-                    if (labelEl) labelEl.innerText = `Active Model: ${modelName}`;
-
-                    const cleanedJson = rawText.replace(/```json|```/g, '').trim();
-                    return { data: JSON.parse(cleanedJson), model: modelName };
-                } catch (e) {
-                    lastError = `[${modelName}] ${e.message}`;
                 }
             }
-
-            return { error: lastError };
+            return { error: "Sabhi API Keys abhi busy hain ya limit poori ho gayi hai. Thodi der baad try karein." };
         }
 
         async function processCommand() {
             const inputEl = document.getElementById('user-input');
-            const input = inputEl.value.trim();
-            if (!input) return;
+            const query = inputEl.value.trim();
+            if (!query) return;
             inputEl.value = '';
 
-            addChatMessage('user', input, false);
+            addChatMessage('user', query, false);
 
-            // Handle pending new style Item Name
             if (sessionStorage.getItem('pending_new_style')) {
-                const pending = JSON.parse(sessionStorage.getItem('pending_new_style'));
-                sessionStorage.removeItem('pending_new_style');
-                updateDatabaseStock(
-                    pending.styleNo,
-                    input.toUpperCase(),
-                    pending.color,
-                    pending.size,
-                    pending.action === 'add' ? pending.qty : -pending.qty
-                );
-                return;
-            }
-
-            const lower = input.toLowerCase().replace(/[?!.]/g, '').trim();
-
-            // Strict RAX AI Identity Check
-            const isAboutAI = (
-                lower.includes('kya kam') || lower.includes('kya kaam') ||
-                lower.includes('kaam kya') || lower.includes('kam kya') ||
-                lower.includes('kaun ho') || lower.includes('kon ho') ||
-                lower.includes('tum kaun') || lower.includes('tum kon') ||
-                lower.includes('apne bare') || lower.includes('apne baare') ||
-                lower.includes('who are you') || lower.includes('what do you do') ||
-                lower.includes('your work')
-            );
-
-            if (isAboutAI && !lower.includes('style')) {
-                addChatMessage('ai', 'Main ek RAX AI hoon aur main stock maintain karta hoon.', true);
-                return;
-            }
-
-            // Try Gemini Auto-Fallback Chain if API key is configured
-            if (geminiApiKey) {
-                const aiResult = await askGeminiBrain(input);
-
-                if (aiResult.error) {
-                    // Display clear error on screen as requested
-                    addChatMessage('error', `⚠️ API Error: ${aiResult.error}`);
-                } else if (aiResult.data && aiResult.data.intent) {
-                    const aiPlan = aiResult.data;
-
-                    if (aiPlan.intent === 'CHAT') {
-                        addChatMessage('ai', aiPlan.reply, true);
-                        return;
-                    }
-
-                    if ((aiPlan.intent === 'ADD' || aiPlan.intent === 'MINUS') && aiPlan.styleNo) {
-                        if (!currentAdminUser) {
-                            addChatMessage('ai', '❌ Pehle Admin Login karein.', true);
-                            showCyberPopup("ADMIN REQUIRED", "Pehle Admin Login karein.", "error");
-                            return;
-                        }
-                        if (!aiPlan.qty || aiPlan.qty <= 0) {
-                            addChatMessage('ai', '⚠️ Quantity batayein.', true);
-                            return;
-                        }
-                        const styleNo = String(aiPlan.styleNo).toUpperCase();
-                        const color = aiPlan.color === 'WHITE' ? 'WHITE' : 'ASSTD';
-                        const size = String(aiPlan.size || 'M').toUpperCase();
-                        const existing = liveStockSnapshot[styleNo];
-
-                        if (!existing && !aiPlan.itemName) {
-                            addChatMessage('ai', `Style ${styleNo} ka Item Name batayein:`, true);
-                            sessionStorage.setItem('pending_new_style', JSON.stringify({
-                                styleNo, color, size, qty: aiPlan.qty, action: aiPlan.intent === 'ADD' ? 'add' : 'minus'
-                            }));
-                            return;
-                        }
-
-                        const itemName = existing?.itemName || String(aiPlan.itemName).toUpperCase();
-                        updateDatabaseStock(styleNo, itemName, color, size, aiPlan.intent === 'ADD' ? aiPlan.qty : -aiPlan.qty);
-                        return;
-                    }
-
-                    if (aiPlan.intent === 'CHECK') {
-                        addChatMessage('ai', aiPlan.reply, true);
-                        return;
-                    }
-                }
-            }
-
-            // Local Built-in Parser (Always works as final backup even if API has an error)
-            const greetings = ['hi', 'hello', 'hey', 'hii', 'helo', 'namaste', 'salam', 'assalamualaikum'];
-            if (greetings.includes(lower)) {
-                addChatMessage('ai', 'Hey! Bataiye kaunsa stock check ya update karna hai?', true);
-                return;
-            }
-
-            const words = input.split(/\s+/);
-            let styleNo = "";
-            for (let i = 0; i < words.length; i++) {
-                if (words[i].toLowerCase() === 'style' && i + 1 < words.length) {
-                    styleNo = words[i + 1].toUpperCase();
-                    break;
-                }
-            }
-
-            let color = "ASSTD";
-            if (lower.includes('white')) color = "WHITE";
-            else if (lower.includes('asstd') || lower.includes('assorted')) color = "ASSTD";
-
-            let qty = 0;
-            const matchQty = input.match(/(\d+)\s*(pcs|piece|pieces|quantity|qty)/i);
-            if (matchQty) qty = parseInt(matchQty[1]);
-
-            let size = "M";
-            const matchSize = input.match(/size\s*([a-zA-Z0-9]+)/i) || input.match(/([a-zA-Z0-9]+)\s*size/i);
-            if (matchSize) size = matchSize[1].toUpperCase();
-
-            const isAdd = lower.includes('add') || lower.includes('aya') || lower.includes('aaya') || lower.includes('plus');
-            const isMinus = lower.includes('minus') || lower.includes('nikal') || lower.includes('sale') || lower.includes('kam');
-
-            if (!styleNo) {
-                addChatMessage('ai', 'Style number aur details batayein.', true);
-                return;
-            }
-
-            const styleRef = database.ref('stock/' + styleNo);
-            const snapshot = await styleRef.once('value');
-            const styleData = snapshot.val();
-
-            if (isAdd || isMinus) {
                 if (!currentAdminUser) {
-                    addChatMessage('ai', '❌ Pehle Admin Login karein.', true);
-                    showCyberPopup("ADMIN REQUIRED", "Pehle Admin Login karein.", "error");
+                    sessionStorage.removeItem('pending_new_style');
+                    addChatMessage('ai', 'Pehle aap admin login kar le.', true);
                     return;
                 }
+                const p = JSON.parse(sessionStorage.getItem('pending_new_style'));
+                sessionStorage.removeItem('pending_new_style');
+                adjustStock(p.styleNo, query.toUpperCase(), p.color, p.size, p.action === 'ADD' ? p.qty : -p.qty, true);
+                return;
+            }
 
-                if (qty <= 0) {
-                    addChatMessage('ai', '⚠️ Kitne pcs add ya minus karne hain woh batayein.', true);
+            const statusEl = addChatMessage('status', '⚡ System mein khoja ja raha hai...', false);
+            const result = await runGeminiFailover(query);
+            statusEl.remove();
+
+            if (result.error) {
+                addChatMessage('ai', `⚠️ ${result.error}`, false);
+                return;
+            }
+
+            const plan = result.data;
+            if (!plan || !plan.intent) return;
+
+            if (plan.intent === 'ADD' || plan.intent === 'MINUS') {
+                if (!currentAdminUser) {
+                    addChatMessage('ai', 'Pehle aap admin login kar le.', true);
                     return;
                 }
+                if (!plan.styleNo || !plan.qty || plan.qty <= 0) {
+                    addChatMessage('ai', '⚠️ Style number aur sahi quantity batayein.', true);
+                    return;
+                }
+                const styleNo = String(plan.styleNo).toUpperCase();
+                const color = plan.color === 'WHITE' ? 'WHITE' : 'ASSTD';
+                const size = String(plan.size || 'M').toUpperCase();
+                const existing = liveStockSnapshot[styleNo];
 
-                if (!styleData) {
-                    addChatMessage('ai', `Style ${styleNo} ka Item Name batayein:`, true);
+                if (!existing && !plan.itemName) {
                     sessionStorage.setItem('pending_new_style', JSON.stringify({
-                        styleNo, color, size, qty, action: isAdd ? 'add' : 'minus'
+                        styleNo, color, size, qty: plan.qty, action: plan.intent
                     }));
+                    addChatMessage('ai', `Naya style mila! Style ${styleNo} ka Item Name batayein:`, true);
                     return;
                 }
 
-                updateDatabaseStock(styleNo, styleData.itemName || "ITEM", color, size, isAdd ? qty : -qty);
-            } else {
-                if (!styleData) {
-                    addChatMessage('ai', `Style ${styleNo} stock mein nahi hai.`, true);
-                } else {
-                    let reply = `Style ${styleNo} (${styleData.itemName}):\n`;
-                    if (styleData.colors) {
-                        for (const [c, sizes] of Object.entries(styleData.colors)) {
-                            reply += `${c}: `;
-                            for (const [s, q] of Object.entries(sizes)) {
-                                reply += `${s} (${q} pcs) `;
-                            }
-                            reply += `\n`;
-                        }
-                    }
-                    addChatMessage('ai', reply.trim(), true);
-                }
+                const finalName = existing?.itemName || String(plan.itemName).toUpperCase();
+                adjustStock(styleNo, finalName, color, size, plan.intent === 'ADD' ? plan.qty : -plan.qty, true);
+                return;
             }
-        }
 
-        function updateDatabaseStock(styleNo, itemName, color, size, qtyChange) {
-            const sizeRef = database.ref(`stock/${styleNo}/colors/${color}/${size}`);
-            sizeRef.once('value').then(snap => {
-                const currentQty = snap.val() || 0;
-                const newQty = currentQty + qtyChange;
-
-                if (newQty < 0) {
-                    addChatMessage('ai', `⚠️ Stock kam hai. Sirf ${currentQty} pcs available hain.`, true);
-                    showCyberPopup("LOW STOCK", `Sirf ${currentQty} pcs available hain.`, "error");
-                    return;
-                }
-
-                sizeRef.set(newQty);
-                database.ref(`stock/${styleNo}/itemName`).set(itemName);
-
-                const logRef = database.ref('security_logs').push();
-                logRef.set({
-                    timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-                    ip: clientIP,
-                    batt: deviceBatteryLevel,
-                    action: `[${qtyChange > 0 ? 'ADD' : 'MINUS'}] ${Math.abs(qtyChange)} pcs | Style ${styleNo} (${itemName}) - ${color} Size ${size} | Total: ${newQty}`
-                });
-
-                const statusMsg = `Style ${styleNo} (${color}, ${size}) ${qtyChange > 0 ? 'add ho gaya' : 'minus ho gaya'}. Total ${newQty} pcs hain.`;
-                addChatMessage('ai', `✅ ${statusMsg}`, true);
-                showCyberPopup(
-                    qtyChange > 0 ? "STOCK ADDED ✅" : "STOCK MINUS 📉",
-                    statusMsg,
-                    qtyChange > 0 ? "success" : "warning"
-                );
-            });
-        }
-
-        function filterStock() {
-            const query = document.getElementById('master-search').value.toLowerCase();
-            const rows = document.getElementById('stock-body').getElementsByTagName('tr');
-            for (let i = 0; i < rows.length; i++) {
-                const text = rows[i].innerText.toLowerCase();
-                rows[i].style.display = text.includes(query) ? '' : 'none';
-            }
+            addChatMessage('ai', plan.reply, true);
         }
     </script>
 </body>
