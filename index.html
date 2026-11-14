@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
-    <title>Plezer Collection</title>
+    <title>Plezer Collection — Stock Management</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -23,19 +23,24 @@
         const database = firebase.database();
         const auth = firebase.auth();
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Clean, Modern & Easy-to-Read Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             color-scheme: dark;
-            --bg-dark: #04060e;
-            --cyber-blue: #00f3ff;
-            --neon-purple: #bd00ff;
-            --neon-pink: #ff007f;
-            --neon-green: #00ff88;
-            --neon-gold: #ffcc00;
-            --glass-bg: rgba(10, 14, 34, 0.94);
-            --glass-border: rgba(0, 243, 255, 0.32);
-            --text-color: #e6fbff;
+            --bg-main: #0c101b;
+            --card-bg: #151b2b;
+            --card-elevated: #1d253a;
+            --border-soft: rgba(255, 255, 255, 0.12);
+            --gold-accent: #fbbf24;
+            --gold-soft: rgba(251, 191, 36, 0.16);
+            --emerald: #10b981;
+            --emerald-soft: rgba(16, 185, 129, 0.18);
+            --sky-accent: #38bdf8;
+            --rose-accent: #f43f5e;
+            --violet-accent: #a78bfa;
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
         }
 
         * { box-sizing: border-box; }
@@ -43,126 +48,96 @@
         html, body {
             margin: 0;
             padding: 0 0 120px 0;
-            background-color: #04060e;
-            background-image: radial-gradient(circle at 50% 12%, #11183b 0%, #04060e 82%);
-            color: var(--text-color);
-            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-main);
+            background-image:
+                radial-gradient(circle at 15% 10%, rgba(251, 191, 36, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(56, 189, 248, 0.08) 0%, transparent 45%);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        .ambient-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(115px);
-            z-index: -1;
-            opacity: 0.38;
-        }
-        .orb-1 { width: 300px; height: 300px; background: var(--cyber-blue); top: 8%; left: 5%; }
-        .orb-2 { width: 350px; height: 350px; background: var(--neon-purple); bottom: 8%; right: 5%; }
-
-        /* Tall, Wide & Bright Neon Blinking Showroom Header */
+        /* Clean, Crisp & Balanced Showroom Header (No Stretching or Clipping) */
         header {
             text-align: center;
-            padding: 36px 8px 38px 8px;
-            background: linear-gradient(180deg, rgba(5, 8, 22, 0.98) 0%, rgba(11, 16, 40, 0.96) 100%);
-            border-bottom: 3px solid #00f3ff;
+            padding: 20px 14px;
+            background: rgba(13, 17, 29, 0.96);
+            border-bottom: 2px solid rgba(251, 191, 36, 0.45);
+            backdrop-filter: blur(14px);
             position: sticky;
             top: 0;
             z-index: 100;
-            animation: headerBorderBlink 3.2s infinite alternate;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.55);
         }
 
         header h1 {
             margin: 0;
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(23px, 6.2vw, 44px);
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(22px, 5.8vw, 34px);
             font-weight: 900;
+            letter-spacing: 2.5px;
+            line-height: 1.2;
+            background: linear-gradient(90deg, #ffffff 0%, #fde68a 45%, #fbbf24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .header-sub {
+            margin-top: 4px;
+            font-size: 11px;
+            font-weight: 700;
             letter-spacing: 2px;
-            line-height: 1;
-            display: inline-block;
-            color: #ffffff;
-            transform: scaleY(1.85);
-            animation: brightNeonBlink 3.2s infinite alternate;
+            color: var(--text-muted);
+            text-transform: uppercase;
         }
 
-        .sig-z {
-            display: inline-block;
-            position: relative;
-            color: #ffffff;
-        }
-        .sig-z::after {
-            content: '';
-            position: absolute;
-            left: -2px;
-            right: -2px;
-            bottom: -3px;
-            height: 3px;
-            background: #ffffff;
-            border-radius: 3px;
-            box-shadow: 0 0 8px #ffffff, 0 0 16px #00f3ff;
-        }
-
-        @keyframes brightNeonBlink {
-            0%, 100% { text-shadow: 0 0 6px #ffffff, 0 0 16px #00f3ff, 0 0 32px #00f3ff, 0 0 54px #0099ff; }
-            25% { text-shadow: 0 0 6px #ffffff, 0 0 16px #ff007f, 0 0 32px #ff007f, 0 0 54px #bd00ff; }
-            50% { text-shadow: 0 0 6px #ffffff, 0 0 16px #ff8800, 0 0 32px #ff5500, 0 0 54px #ffcc00; }
-            75% { text-shadow: 0 0 6px #ffffff, 0 0 16px #00ff88, 0 0 32px #00f3ff, 0 0 54px #bd00ff; }
-        }
-
-        @keyframes headerBorderBlink {
-            0%, 100% { border-bottom-color: #00f3ff; box-shadow: 0 6px 28px rgba(0, 243, 255, 0.45); }
-            33% { border-bottom-color: #ff007f; box-shadow: 0 6px 28px rgba(255, 0, 127, 0.45); }
-            66% { border-bottom-color: #ff8800; box-shadow: 0 6px 28px rgba(255, 136, 0, 0.45); }
-        }
-
-        /* Dark Custom Toast Banner */
+        /* Custom Toast Notification */
         #cyber-toast {
             position: fixed;
-            top: 16px;
+            top: 18px;
             left: 50%;
-            transform: translateX(-50%) translateY(-130%);
-            background: linear-gradient(135deg, #0b112b, #1d0c38);
-            border: 1.5px solid var(--cyber-blue);
-            box-shadow: 0 0 28px rgba(0, 243, 255, 0.55);
+            transform: translateX(-50%) translateY(-140%);
+            background: #1e263d;
+            border: 1.5px solid var(--gold-accent);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
             color: #ffffff;
             padding: 12px 20px;
-            border-radius: 14px;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 15px;
+            border-radius: 12px;
+            font-size: 14px;
             font-weight: 700;
             z-index: 3000;
-            transition: transform 0.28s ease;
+            transition: transform 0.25s ease;
             text-align: center;
             max-width: 90vw;
         }
         #cyber-toast.show { transform: translateX(-50%) translateY(0); }
 
         .main-wrapper {
-            max-width: 920px;
-            margin: 16px auto;
+            max-width: 940px;
+            margin: 18px auto;
             width: 94%;
         }
 
-        .glass-panel {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+        .panel-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-soft);
             border-radius: 18px;
             padding: 18px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(16px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
         }
 
         .panel-header {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             font-size: 14px;
             font-weight: 800;
-            color: var(--cyber-blue);
-            letter-spacing: 1.2px;
-            padding-bottom: 10px;
-            margin-bottom: 14px;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.22);
+            color: #f1f5f9;
+            letter-spacing: 0.8px;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-soft);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -172,40 +147,40 @@
 
         input, select {
             width: 100%;
-            background: #0b1129;
-            border: 1px solid rgba(0, 243, 255, 0.35);
+            background: var(--card-elevated);
+            border: 1px solid rgba(148, 163, 184, 0.28);
             padding: 11px 14px;
             border-radius: 11px;
             color: #ffffff;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 15px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
             font-weight: 600;
             outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        input::placeholder { color: #6f8fb3; }
+        input::placeholder { color: #64748b; }
         input:focus, select:focus {
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 12px rgba(255, 0, 127, 0.45);
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.18);
         }
-        select option { background: #0b1129; color: #ffffff; }
+        select option { background: #1d253a; color: #ffffff; }
 
         button {
-            background: linear-gradient(135deg, var(--cyber-blue), var(--neon-purple));
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
             border: none;
             padding: 11px 18px;
             color: #ffffff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
             font-weight: 700;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.28);
-            transition: all 0.2s;
+            transition: transform 0.15s, filter 0.15s;
         }
-        button:hover { transform: translateY(-1px); filter: brightness(1.12); }
-        .btn-green { background: linear-gradient(135deg, #00c853, #00f3ff); color: #04060e; }
-        .btn-danger { background: linear-gradient(135deg, #ff1744, #b71c1c); color: #ffffff; }
-        .btn-mic { background: linear-gradient(135deg, #ff007f, #ff5500); color: #ffffff; }
+        button:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        .btn-green { background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; }
+        .btn-danger { background: linear-gradient(135deg, #e11d48, #be123c); color: #ffffff; }
+        .btn-mic { background: linear-gradient(135deg, #d97706, #ea580c); color: #ffffff; }
 
         /* Admin-Only Panels */
         .admin-only-panel {
@@ -217,72 +192,68 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Stock Control Grid & Stacked Style Box */
+        /* Stock Control Grid */
         .stock-form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             align-items: start;
         }
         .style-stack-box {
             display: flex;
             flex-direction: column;
-            gap: 7px;
-            background: rgba(0, 243, 255, 0.04);
-            border: 1px solid rgba(0, 243, 255, 0.22);
+            gap: 8px;
+            background: rgba(251, 191, 36, 0.06);
+            border: 1px solid rgba(251, 191, 36, 0.28);
             padding: 8px;
             border-radius: 12px;
         }
         .style-stack-box select {
-            border-color: var(--neon-gold);
-            color: var(--neon-gold);
+            border-color: rgba(251, 191, 36, 0.5);
+            color: #fde68a;
         }
         .stock-action-btns { display: flex; gap: 10px; }
-        .stock-action-btns button { flex: 1; padding: 12px; font-size: 13px; }
+        .stock-action-btns button { flex: 1; padding: 12px; font-size: 14px; }
 
         /* BRAND-WISE SEPARATE INVENTORY CARDS */
         .brand-section-card {
-            background: #070b1d;
-            border: 1.5px solid rgba(0, 243, 255, 0.35);
+            background: #111625;
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 16px;
             margin-bottom: 18px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.75);
         }
         .brand-section-card:last-child { margin-bottom: 0; }
 
         .brand-banner-header {
-            padding: 14px 16px;
-            background: linear-gradient(90deg, #0f1c47 0%, #260d47 50%, #0f1c47 100%);
-            border-bottom: 1.5px solid rgba(0, 243, 255, 0.32);
+            padding: 13px 16px;
+            background: linear-gradient(90deg, #1e293b 0%, #27223b 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 10px;
         }
         .brand-big-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(18px, 4.6vw, 24px);
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(17px, 4.4vw, 22px);
             font-weight: 900;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             color: #ffffff;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.85), 0 0 22px rgba(189, 0, 255, 0.7);
             text-transform: uppercase;
         }
-        .brand-jockey .brand-big-title { text-shadow: 0 0 10px #ff007f, 0 0 22px #ff5500; }
-        .brand-van .brand-big-title { text-shadow: 0 0 10px #00f3ff, 0 0 22px #0088ff; }
-        .brand-polo .brand-big-title { text-shadow: 0 0 10px #ffcc00, 0 0 22px #ff6a00; }
-        .brand-park .brand-big-title { text-shadow: 0 0 10px #00ff88, 0 0 22px #00f3ff; }
+        .brand-jockey .brand-big-title { color: #fda4af; }
+        .brand-van .brand-big-title { color: #7dd3fc; }
+        .brand-polo .brand-big-title { color: #fde047; }
+        .brand-park .brand-big-title { color: #6ee7b7; }
 
         .brand-item-pill {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
-            color: var(--neon-gold);
-            background: rgba(255, 204, 0, 0.12);
-            border: 1px solid rgba(255, 204, 0, 0.45);
-            padding: 4px 10px;
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
             border-radius: 20px;
             white-space: nowrap;
         }
@@ -291,121 +262,146 @@
         table { width: 100%; border-collapse: collapse; }
         th, td {
             text-align: left;
-            padding: 12px 14px;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.14);
+            padding: 13px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             vertical-align: middle;
         }
         th {
-            background: rgba(12, 20, 48, 0.95);
-            color: var(--cyber-blue);
-            font-family: 'Orbitron', sans-serif;
+            background: #182035;
+            color: var(--text-muted);
             font-size: 11px;
+            font-weight: 800;
             letter-spacing: 0.8px;
             text-transform: uppercase;
         }
-        tbody tr { background: rgba(8, 12, 30, 0.85); transition: background 0.2s; }
         tbody tr:last-child td { border-bottom: none; }
-        tbody tr:hover { background: rgba(0, 243, 255, 0.08); }
+        tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
 
-        .style-code-cell {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--cyber-blue);
-            font-weight: 900;
-            font-size: 15px;
-            text-shadow: 0 0 8px rgba(0, 243, 255, 0.45);
+        /* Distinct Gold Badge for Style No (Clearly separated from Header & Item Name) */
+        .style-code-badge {
+            display: inline-block;
+            font-family: 'Montserrat', sans-serif;
+            background: var(--gold-soft);
+            color: var(--gold-accent);
+            border: 1px solid rgba(251, 191, 36, 0.45);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 0.6px;
         }
         .item-name-cell {
             font-weight: 700;
-            color: #ffffff;
-            font-size: 16px;
+            color: #f1f5f9;
+            font-size: 15px;
         }
 
+        /* Color Group Row */
+        .color-group-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .color-group-row:last-child { margin-bottom: 0; }
+
         .badge-white {
-            background: rgba(0, 243, 255, 0.16);
-            color: #00f3ff;
-            border: 1px solid #00f3ff;
-            padding: 2px 9px;
+            background: rgba(56, 189, 248, 0.16);
+            color: #7dd3fc;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            padding: 3px 10px;
             border-radius: 6px;
             font-size: 12px;
-            font-weight: 700;
-            display: inline-block;
-            margin: 2px 5px 2px 0;
+            font-weight: 800;
+            letter-spacing: 0.5px;
         }
         .badge-asstd {
-            background: rgba(255, 0, 127, 0.18);
-            color: #ff66b2;
-            border: 1px solid #ff007f;
-            padding: 2px 9px;
+            background: rgba(244, 63, 94, 0.16);
+            color: #fda4af;
+            border: 1px solid rgba(244, 63, 94, 0.45);
+            padding: 3px 10px;
             border-radius: 6px;
             font-size: 12px;
-            font-weight: 700;
-            display: inline-block;
-            margin: 2px 5px 2px 0;
+            font-weight: 800;
+            letter-spacing: 0.5px;
         }
-        .size-pill {
-            background: #101838;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            padding: 4px 9px;
-            border-radius: 8px;
-            margin: 3px 6px 3px 0;
-            font-size: 14px;
-            color: #e6fbff;
+
+        /* Clear, Large & Separated Size vs Pieces Pill */
+        .size-qty-card {
+            background: #1c243b;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            padding: 5px 9px;
+            border-radius: 10px;
             display: inline-flex;
             align-items: center;
-            gap: 7px;
+            gap: 8px;
         }
-        .size-pill b { color: var(--neon-gold); }
-        .quick-qty-btn {
+        .size-label-tag {
+            background: rgba(167, 139, 250, 0.2);
+            color: #ddd6fe;
+            border: 1px solid rgba(167, 139, 250, 0.45);
             padding: 2px 8px;
+            border-radius: 6px;
             font-size: 13px;
-            border-radius: 5px;
-            font-family: monospace;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .qty-value-tag {
+            color: #34d399;
+            font-size: 14px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .quick-qty-btn {
+            padding: 3px 9px;
+            font-size: 14px;
+            border-radius: 6px;
             font-weight: 900;
-            box-shadow: none;
             display: none;
+            line-height: 1.1;
         }
         .delete-item-btn {
-            background: rgba(255, 23, 68, 0.22);
-            border: 1px solid #ff1744;
-            color: #ff8a80;
-            padding: 6px 10px;
-            font-size: 11px;
+            background: rgba(244, 63, 94, 0.16);
+            border: 1px solid rgba(244, 63, 94, 0.45);
+            color: #fda4af;
+            padding: 6px 11px;
+            font-size: 12px;
             border-radius: 8px;
-            box-shadow: none;
             display: none;
             white-space: nowrap;
         }
-        .delete-item-btn:hover { background: #ff1744; color: #ffffff; }
+        .delete-item-btn:hover { background: #e11d48; color: #ffffff; }
 
         /* 5 API Keys Vault Slots */
         .api-slot-row {
             display: flex;
             align-items: center;
             gap: 8px;
-            background: #090e24;
+            background: #111625;
             padding: 8px 10px;
             border-radius: 10px;
-            border: 1px solid rgba(0, 243, 255, 0.22);
+            border: 1px solid var(--border-soft);
             margin-bottom: 10px;
         }
         .api-slot-row.saved-slot {
-            border-color: var(--neon-green);
-            background: rgba(0, 255, 136, 0.08);
+            border-color: rgba(16, 185, 129, 0.5);
+            background: rgba(16, 185, 129, 0.08);
         }
         .slot-label {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            color: var(--cyber-blue);
-            min-width: 60px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--sky-accent);
+            min-width: 58px;
         }
         .slot-saved-tag {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 10px;
-            color: var(--neon-green);
-            background: rgba(0, 255, 136, 0.14);
-            border: 1px solid var(--neon-green);
-            padding: 2px 6px;
-            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.16);
+            border: 1px solid rgba(16, 185, 129, 0.45);
+            padding: 2px 7px;
+            border-radius: 6px;
             white-space: nowrap;
         }
         .api-slot-row input {
@@ -416,48 +412,59 @@
             padding: 8px 10px;
         }
         .slot-clear-btn {
-            background: rgba(255, 23, 68, 0.22);
-            border: 1px solid #ff1744;
-            color: #ff8a80;
+            background: rgba(244, 63, 94, 0.18);
+            border: 1px solid rgba(244, 63, 94, 0.45);
+            color: #fda4af;
             padding: 7px 10px;
             font-size: 12px;
             border-radius: 8px;
-            box-shadow: none;
             flex-shrink: 0;
         }
 
-        /* Stock & IP Activity Logs */
+        /* Clean Stock Logs Panel */
         #logs-container {
-            font-family: monospace;
-            background: #050816;
-            border: 1px solid rgba(189, 0, 255, 0.35);
+            background: #0f1422;
+            border: 1px solid var(--border-soft);
             padding: 12px;
             border-radius: 12px;
-            max-height: 270px;
+            max-height: 290px;
             overflow-y: auto;
-            font-size: 12px;
-            color: #00ff88;
+            font-size: 13px;
         }
         .log-card-item {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             gap: 10px;
-            padding: 9px;
-            border-radius: 8px;
-            background: #0b1129;
-            border-left: 3px solid var(--cyber-blue);
-            margin-bottom: 8px;
+            padding: 11px 12px;
+            border-radius: 10px;
+            background: #171e31;
+            border-left: 4px solid var(--emerald);
+            margin-bottom: 9px;
         }
-        .log-card-item.minus-log { border-left-color: var(--neon-pink); }
+        .log-card-item:last-child { margin-bottom: 0; }
+        .log-card-item.minus-log { border-left-color: var(--rose-accent); }
+        .log-meta-line {
+            color: #cbd5e1;
+            font-size: 12.5px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            line-height: 1.45;
+        }
+        .log-meta-line b { color: #ffffff; }
+        .log-action-line {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #34d399;
+        }
+        .log-card-item.minus-log .log-action-line { color: #fda4af; }
         .single-log-del {
-            background: rgba(255, 23, 68, 0.2);
-            border: 1px solid #ff1744;
-            color: #ff8a80;
-            padding: 4px 8px;
-            font-size: 11px;
-            border-radius: 6px;
-            box-shadow: none;
+            background: rgba(244, 63, 94, 0.16);
+            border: 1px solid rgba(244, 63, 94, 0.45);
+            color: #fda4af;
+            padding: 5px 9px;
+            font-size: 12px;
+            border-radius: 7px;
             flex-shrink: 0;
         }
 
@@ -470,20 +477,18 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: #0a0f26;
-            border: 1.5px solid var(--neon-purple);
+            background: #1b2338;
+            border: 1.5px solid rgba(251, 191, 36, 0.55);
             color: #ffffff;
             padding: 10px 16px;
             border-radius: 30px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            box-shadow: 0 0 18px rgba(189, 0, 255, 0.45);
+            font-size: 12.5px;
+            font-weight: 800;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
             cursor: pointer;
         }
         #bottom-admin-launcher.logged-in {
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 18px rgba(255, 0, 127, 0.5);
+            border-color: rgba(244, 63, 94, 0.65);
         }
 
         /* System Access Modal */
@@ -491,16 +496,16 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 6, 16, 0.94);
+            background: rgba(9, 13, 22, 0.9);
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(10px);
         }
         .modal-card {
-            background: linear-gradient(145deg, #0d1330, #1f0b3a);
-            border: 2px solid var(--cyber-blue);
-            box-shadow: 0 0 40px rgba(0, 243, 255, 0.45);
+            background: #161d30;
+            border: 1.5px solid rgba(251, 191, 36, 0.45);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
             padding: 24px;
             border-radius: 20px;
             width: 90%;
@@ -509,33 +514,31 @@
         }
         .sys-node-tag {
             display: inline-block;
-            font-family: 'Orbitron', sans-serif;
             font-size: 10px;
-            color: var(--neon-green);
-            border: 1px solid var(--neon-green);
+            font-weight: 800;
+            color: var(--gold-accent);
+            border: 1px solid rgba(251, 191, 36, 0.45);
             padding: 3px 10px;
             border-radius: 20px;
             margin-bottom: 10px;
         }
         .modal-card h3 {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             margin: 0 0 4px 0;
             color: #ffffff;
             font-size: 20px;
-            letter-spacing: 1.5px;
         }
         .modal-sub {
             font-size: 11px;
-            color: #88ccee;
-            font-family: 'Orbitron', sans-serif;
+            color: var(--text-muted);
             margin-bottom: 16px;
             letter-spacing: 1px;
         }
         .modal-card input { margin-bottom: 12px; }
         .error-display {
-            background: rgba(255, 0, 50, 0.22);
-            border: 1.5px solid #ff1744;
-            color: #ff8a80;
+            background: rgba(244, 63, 94, 0.18);
+            border: 1px solid #f43f5e;
+            color: #fecdd3;
             padding: 10px;
             border-radius: 10px;
             font-size: 13px;
@@ -547,15 +550,15 @@
         .login-progress-wrap { display: none; margin-bottom: 12px; }
         .login-progress-bar {
             width: 100%;
-            height: 8px;
-            background: rgba(255,255,255,0.1);
+            height: 7px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             overflow: hidden;
         }
         .login-progress-fill {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, var(--cyber-blue), var(--neon-green));
+            background: linear-gradient(90deg, var(--gold-accent), var(--emerald));
             transition: width 0.25s ease;
         }
 
@@ -572,22 +575,21 @@
             user-select: none;
         }
         #particle-canvas {
-            width: 80px;
-            height: 80px;
+            width: 78px;
+            height: 78px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(14, 22, 54, 0.94) 40%, rgba(0, 243, 255, 0.16) 100%);
-            border: 1.5px solid rgba(0, 243, 255, 0.55);
-            box-shadow: 0 0 22px rgba(0, 243, 255, 0.55), 0 0 35px rgba(189, 0, 255, 0.4);
+            background: radial-gradient(circle, #18223c 40%, rgba(251, 191, 36, 0.15) 100%);
+            border: 1.5px solid rgba(251, 191, 36, 0.55);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65);
         }
         .rex-orb-label {
             margin-top: 4px;
-            font-family: 'Orbitron', sans-serif;
             font-size: 10px;
-            font-weight: 900;
-            letter-spacing: 1px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
             color: #ffffff;
-            background: #060a1a;
-            border: 1px solid var(--cyber-blue);
+            background: #182035;
+            border: 1px solid rgba(251, 191, 36, 0.45);
             padding: 2px 10px;
             border-radius: 20px;
         }
@@ -596,46 +598,42 @@
         #rex-ai-drawer {
             display: none;
             position: fixed;
-            bottom: 118px;
+            bottom: 115px;
             right: 16px;
             width: 350px;
             max-width: 92vw;
-            background: linear-gradient(145deg, #0a0f26, #1a0a30);
-            border: 1.5px solid var(--cyber-blue);
-            box-shadow: 0 0 35px rgba(0, 243, 255, 0.45), 0 0 20px rgba(189, 0, 255, 0.4);
+            background: #151c2f;
+            border: 1.5px solid rgba(251, 191, 36, 0.45);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.75);
             border-radius: 18px;
             padding: 14px;
             z-index: 1600;
-            backdrop-filter: blur(18px);
         }
         .drawer-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+            border-bottom: 1px solid var(--border-soft);
             padding-bottom: 8px;
             margin-bottom: 10px;
         }
         .drawer-title {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             font-size: 14px;
             font-weight: 900;
-            background: linear-gradient(90deg, var(--cyber-blue), var(--neon-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--gold-accent);
         }
         .drawer-icon-btn {
-            background: #121a3d;
-            border: 1px solid rgba(0, 243, 255, 0.35);
+            background: #222c47;
+            border: 1px solid var(--border-soft);
             color: #ffffff;
-            padding: 3px 8px;
+            padding: 4px 9px;
             font-size: 12px;
             border-radius: 6px;
-            box-shadow: none;
         }
         #chat-history {
-            background: #050816;
-            border: 1px solid rgba(0, 243, 255, 0.22);
+            background: #0e1322;
+            border: 1px solid var(--border-soft);
             border-radius: 12px;
             padding: 10px;
             height: 175px;
@@ -647,71 +645,67 @@
         }
         .msg-user {
             align-self: flex-end;
-            background: linear-gradient(135deg, rgba(189, 0, 255, 0.45), rgba(255, 0, 127, 0.45));
-            border: 1px solid rgba(255, 0, 127, 0.6);
+            background: #2563eb;
             color: #ffffff;
-            padding: 7px 11px;
+            padding: 8px 12px;
             border-radius: 12px 12px 2px 12px;
-            font-size: 14px;
+            font-size: 13.5px;
             max-width: 85%;
             word-wrap: break-word;
         }
         .msg-ai {
             align-self: flex-start;
-            background: rgba(0, 243, 255, 0.14);
-            border-left: 3px solid var(--cyber-blue);
-            color: #e6fbff;
-            padding: 7px 11px;
+            background: #1c253d;
+            border-left: 3px solid var(--gold-accent);
+            color: #f1f5f9;
+            padding: 8px 12px;
             border-radius: 12px 12px 12px 2px;
-            font-size: 14px;
+            font-size: 13.5px;
             max-width: 92%;
             white-space: pre-line;
             word-wrap: break-word;
         }
         .msg-status {
             align-self: center;
-            color: var(--neon-gold);
+            color: var(--gold-accent);
             font-size: 12px;
-            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
         }
         .drawer-controls { display: flex; gap: 8px; margin-top: 8px; }
-        .drawer-controls button { flex: 1; padding: 9px 10px; }
+        .drawer-controls button { flex: 1; padding: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="ambient-orb orb-1"></div>
-    <div class="ambient-orb orb-2"></div>
-
-    <!-- Dark Cyber Notification Toast -->
     <div id="cyber-toast"></div>
 
-    <!-- Tall, Wide & Bright Blinking Neon Header -->
+    <!-- Clean, Balanced Showroom Header -->
     <header>
-        <h1>PLE<span class="sig-z">Z</span>ER COLLECTION</h1>
+        <h1>PLEZER COLLECTION</h1>
+        <div class="header-sub">Live Showroom &amp; Godown Inventory</div>
     </header>
 
     <div class="main-wrapper">
 
         <!-- 1. Brand-Separated Live Godown Inventory -->
-        <div class="glass-panel">
+        <div class="panel-card">
             <div style="margin-bottom: 14px;">
                 <input type="text" id="master-search" placeholder="Search Brand, Style No, Item Name, Color or Size..." onkeyup="filterStock()">
             </div>
             <div class="panel-header">
                 <span>LIVE GODOWN INVENTORY</span>
-                <span id="stock-count-badge" style="font-size:12px; color:var(--neon-green);">0 Items</span>
+                <span id="stock-count-badge" style="font-size:12px; color:var(--emerald); font-weight:800;">0 Styles</span>
             </div>
             <div id="brand-inventory-container">
-                <div style="text-align:center; color:#88ccee; padding:20px;">Loading live brand stock...</div>
+                <div style="text-align:center; color:#94a3b8; padding:20px;">Loading live brand stock...</div>
             </div>
         </div>
 
-        <!-- 2. ADMIN PANEL 1: Stock Add / Minus Control (Brand + Saved Styles Dropdown + New Style Box) -->
-        <div id="admin-stock-panel" class="glass-panel admin-only-panel">
+        <!-- 2. ADMIN PANEL 1: Stock Add / Minus Control -->
+        <div id="admin-stock-panel" class="panel-card admin-only-panel">
             <div class="panel-header">
                 <span>📦 STOCK ADD / MINUS CONTROL</span>
-                <span style="font-size:11px; color:var(--neon-green);">ADMIN ONLY</span>
+                <span style="font-size:11px; color:var(--emerald);">ADMIN ONLY</span>
             </div>
             <div class="stock-form-grid">
                 <div>
@@ -725,7 +719,7 @@
                     <input type="text" id="ctrl-custom-brand" placeholder="Enter Brand Name" style="display:none; margin-top:7px;" oninput="refreshSavedStylesDropdown()">
                 </div>
 
-                <!-- Saved Style Dropdown on Top + New Style Input Box Right Below -->
+                <!-- Saved Style Dropdown + New Style Box -->
                 <div class="style-stack-box">
                     <select id="ctrl-existing-style" onchange="onExistingStyleSelected()">
                         <option value="">-- Saved Styles (0) --</option>
@@ -738,8 +732,8 @@
                     <option value="ASSTD">ASSTD</option>
                     <option value="WHITE">WHITE</option>
                 </select>
-                <input type="text" id="ctrl-size" placeholder="Size (e.g. 85 / L)">
-                <input type="number" id="ctrl-qty" placeholder="Quantity">
+                <input type="text" id="ctrl-size" placeholder="Size (e.g. S / M / L / 85)">
+                <input type="number" id="ctrl-qty" placeholder="Quantity (Pieces)">
             </div>
             <div class="stock-action-btns">
                 <button class="btn-green" onclick="handleManualStock('ADD')">+ Add Stock</button>
@@ -747,23 +741,23 @@
             </div>
         </div>
 
-        <!-- 3. ADMIN PANEL 2: Separate 5 Gemini API Keys Vault (Hidden Until Admin Login) -->
-        <div id="admin-api-panel" class="glass-panel admin-only-panel">
+        <!-- 3. ADMIN PANEL 2: Separate 5 Gemini API Keys Vault -->
+        <div id="admin-api-panel" class="panel-card admin-only-panel">
             <div class="panel-header">
                 <span>🔑 GEMINI API KEYS VAULT (5 SLOTS)</span>
-                <span id="keys-status-label" style="font-size:11px; color:var(--neon-gold);">Loading...</span>
+                <span id="keys-status-label" style="font-size:11px; color:var(--gold-accent);">Loading...</span>
             </div>
             <div id="api-slots-container"></div>
             <button class="btn-green" style="width:100%; padding:12px; font-size:13px;" onclick="saveAllApiKeys()">Save All 5 API Keys</button>
         </div>
 
-        <!-- 4. ADMIN PANEL 3: Stock Update Logs Only (Hidden Until Admin Login) -->
-        <div id="admin-logs-panel" class="glass-panel admin-only-panel">
+        <!-- 4. ADMIN PANEL 3: Clean Stock Activity Logs -->
+        <div id="admin-logs-panel" class="panel-card admin-only-panel">
             <div class="panel-header">
-                <span>🛡️ STOCK ADD / MINUS LOGS</span>
+                <span>🛡️ STOCK UPDATE LOGS</span>
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <span id="active-model-display" style="font-size:10px; color:#88ccee; font-family:monospace;">Engine: Ready</span>
-                    <button class="btn-danger" style="padding:5px 10px; font-size:10px;" onclick="clearAllStockLogs()">🗑️ Delete All</button>
+                    <span id="active-model-display" style="font-size:11px; color:#94a3b8;">Engine: Ready</span>
+                    <button class="btn-danger" style="padding:5px 10px; font-size:11px;" onclick="clearAllStockLogs()">🗑️ Delete All</button>
                 </div>
             </div>
             <div id="logs-container">No stock activity logs yet.</div>
@@ -777,18 +771,18 @@
     <!-- System Access Login Modal -->
     <div class="modal-overlay" id="auth-modal">
         <div class="modal-card">
-            <div class="sys-node-tag">NODE // PLEZER-SEC</div>
-            <h3>SYSTEM ACCESS</h3>
-            <div class="modal-sub">ENCRYPTED ADMIN TERMINAL</div>
+            <div class="sys-node-tag">PLEZER ADMIN ACCESS</div>
+            <h3>ADMIN LOGIN</h3>
+            <div class="modal-sub">STOCK MANAGEMENT CONTROL</div>
             <div class="error-display" id="login-error-box"></div>
             <input type="email" id="admin-email" placeholder="Admin Email" autocomplete="email">
             <input type="password" id="admin-password" placeholder="Security Password" autocomplete="current-password" onkeypress="if(event.key==='Enter') executeLogin()">
             <div class="login-progress-wrap" id="login-progress-wrap">
-                <div style="font-family:'Orbitron'; font-size:11px; color:var(--neon-green); margin-bottom:5px;" id="login-progress-text">VERIFYING ACCESS...</div>
+                <div style="font-size:11px; font-weight:700; color:var(--emerald); margin-bottom:5px;" id="login-progress-text">VERIFYING ACCESS...</div>
                 <div class="login-progress-bar"><div class="login-progress-fill" id="login-progress-fill"></div></div>
             </div>
-            <button onclick="executeLogin()" style="width: 100%; margin-bottom: 10px; padding: 12px; font-size: 13px;">INITIALIZE LOGIN</button>
-            <button onclick="closeAuthModal()" style="width: 100%; background: #141c40; border: 1px solid rgba(0,243,255,0.3); padding: 10px;">Cancel</button>
+            <button onclick="executeLogin()" style="width: 100%; margin-bottom: 10px; padding: 12px; font-size: 13px;">Login Now</button>
+            <button onclick="closeAuthModal()" style="width: 100%; background: #232d47; border: 1px solid var(--border-soft); padding: 10px;">Cancel</button>
         </div>
     </div>
 
@@ -801,7 +795,7 @@
     <!-- RAX AI Chat Drawer -->
     <div id="rex-ai-drawer">
         <div class="drawer-header">
-            <span class="drawer-title">RAX AI CORE</span>
+            <span class="drawer-title">RAX AI ASSISTANT</span>
             <div style="display:flex; gap:6px;">
                 <button id="voice-toggle-btn" class="drawer-icon-btn" onclick="toggleVoiceOutput()" title="Voice On/Off">🔊</button>
                 <button class="drawer-icon-btn" onclick="toggleRexDrawer()">✕</button>
@@ -810,7 +804,7 @@
         <div id="chat-history">
             <div class="msg-ai">Namaste! Main RAX AI hoon. Jockey, Van Heusen, U.S. Polo Assn., ya Park Avenue ka stock check ya update karna ho to boliye!</div>
         </div>
-        <input type="text" id="user-input" placeholder="Jaise: Jockey IC32 ASSTD L 15 add karo..." onkeypress="if(event.key==='Enter') processCommand()">
+        <input type="text" id="user-input" placeholder="Jaise: Jockey IC32 size S 5 pcs add karo..." onkeypress="if(event.key==='Enter') processCommand()">
         <div class="drawer-controls">
             <button onclick="processCommand()">Bhejen</button>
             <button class="btn-mic" onclick="startListening()">🎤 Bolkar Puchhen</button>
@@ -818,13 +812,14 @@
     </div>
 
     <script>
-        /* 1. GLOBALS, BRAND NORMALIZER, DARK TOAST, DEVICE & IP */
+        /* 1. GLOBALS, FULL DEVICE MODEL DETECTION (FIXES 'K' BUG), IP & BATTERY */
         let currentAdminUser = null;
         let liveBrandStock = {};
         let geminiApiKeys = ["", "", "", "", ""];
         let activeKeyIndex = 0;
         let deviceBatteryLevel = "N/A";
         let clientIP = "Detecting...";
+        let clientDeviceName = "Detecting...";
 
         const PRIORITY_BRANDS = ["JOCKEY", "VAN HEUSEN", "U.S. POLO ASSN.", "PARK AVENUE"];
         const MODEL_FALLBACK_CHAIN = [
@@ -833,6 +828,83 @@
             "gemini-2.0-flash",
             "gemini-2.0-flash-lite"
         ];
+
+        /* Full Device Name Resolver (Uses High-Entropy Client Hints so Android never shows just 'K') */
+        async function resolveFullDeviceName() {
+            try {
+                if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+                    const hints = await navigator.userAgentData.getHighEntropyValues([
+                        "model",
+                        "platform",
+                        "platformVersion"
+                    ]);
+                    if (hints.model && hints.model.trim().length > 1) {
+                        clientDeviceName = `${hints.platform || "Android"} (${hints.model.trim()})`;
+                        return;
+                    }
+                    if (hints.platform) {
+                        const isMobile = navigator.userAgentData.mobile;
+                        clientDeviceName = isMobile ? `${hints.platform} Smartphone` : `${hints.platform} Computer`;
+                        return;
+                    }
+                }
+            } catch (e) {}
+
+            const ua = navigator.userAgent;
+            const androidMatch = ua.match(/Android\s[\d.]+;\s([^;)]+)/i);
+            if (androidMatch && androidMatch[1]) {
+                const rawModel = androidMatch[1].replace(/Build\/.*/i, '').trim();
+                if (rawModel.length > 2 && rawModel.toUpperCase() !== 'K') {
+                    clientDeviceName = rawModel;
+                    return;
+                }
+                clientDeviceName = "Android Smartphone";
+                return;
+            }
+            if (/iPhone/i.test(ua)) { clientDeviceName = "Apple iPhone"; return; }
+            if (/iPad/i.test(ua)) { clientDeviceName = "Apple iPad"; return; }
+            if (/Macintosh|Mac OS X/i.test(ua)) { clientDeviceName = "Apple MacBook"; return; }
+            if (/Windows NT/i.test(ua)) { clientDeviceName = "Windows PC"; return; }
+            clientDeviceName = navigator.platform || "Mobile Device";
+        }
+        resolveFullDeviceName();
+
+        if ('getBattery' in navigator) {
+            navigator.getBattery().then(b => {
+                deviceBatteryLevel = Math.round(b.level * 100) + "%";
+                b.addEventListener('levelchange', () => {
+                    deviceBatteryLevel = Math.round(b.level * 100) + "%";
+                });
+            });
+        }
+
+        fetch('https://api.ipify.org?format=json')
+            .then(r => r.json())
+            .then(d => { clientIP = d.ip; })
+            .catch(() => { clientIP = "Mobile Network"; });
+
+        /* Clean Stock Activity Logger */
+        function logStockChange(mode, summaryText) {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-IN', {
+                timeZone: 'Asia/Kolkata',
+                day: '2-digit', month: '2-digit', year: 'numeric'
+            });
+            const timeStr = now.toLocaleTimeString('en-IN', {
+                timeZone: 'Asia/Kolkata',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+
+            database.ref('stock_activity_logs').push({
+                mode: mode,
+                date: dateStr,
+                time: timeStr,
+                ip: clientIP,
+                device: clientDeviceName,
+                batt: deviceBatteryLevel,
+                action: summaryText
+            }).catch(() => {});
+        }
 
         function normalizeBrandName(rawBrand) {
             const b = String(rawBrand || "JOCKEY").trim().toUpperCase();
@@ -855,7 +927,6 @@
             return normalizeBrandName(sel);
         }
 
-        /* Populate Saved Styles Dropdown + Sync with New Style Input Box */
         function refreshSavedStylesDropdown() {
             const brand = getActiveSelectedBrand();
             const existingSel = document.getElementById('ctrl-existing-style');
@@ -923,62 +994,10 @@
         function showCyberToast(msg, isError = false) {
             const toast = document.getElementById('cyber-toast');
             toast.innerText = msg;
-            toast.style.borderColor = isError ? '#ff1744' : '#00f3ff';
-            toast.style.boxShadow = isError ? '0 0 28px rgba(255, 23, 68, 0.6)' : '0 0 28px rgba(0, 243, 255, 0.55)';
+            toast.style.borderColor = isError ? '#f43f5e' : '#fbbf24';
             toast.classList.add('show');
             clearTimeout(window._toastTimer);
             window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
-        }
-
-        function detectDeviceName() {
-            const ua = navigator.userAgent;
-            const androidMatch = ua.match(/Android\s[\d.]+;\s([^;)]+)/i);
-            if (androidMatch && androidMatch[1]) {
-                return androidMatch[1].replace(/Build\/.*/i, '').trim();
-            }
-            if (/iPhone/i.test(ua)) return "Apple iPhone";
-            if (/iPad/i.test(ua)) return "Apple iPad";
-            if (/Macintosh|Mac OS X/i.test(ua)) return "MacBook / Mac";
-            if (/Windows NT/i.test(ua)) return "Windows PC";
-            return navigator.platform || "Mobile Device";
-        }
-        const clientDeviceName = detectDeviceName();
-
-        if ('getBattery' in navigator) {
-            navigator.getBattery().then(b => {
-                deviceBatteryLevel = Math.round(b.level * 100) + "%";
-                b.addEventListener('levelchange', () => {
-                    deviceBatteryLevel = Math.round(b.level * 100) + "%";
-                });
-            });
-        }
-
-        fetch('https://api.ipify.org?format=json')
-            .then(r => r.json())
-            .then(d => { clientIP = d.ip; })
-            .catch(() => { clientIP = "Local/Mobile"; });
-
-        /* Logs ONLY Stock Add / Minus / Delete events */
-        function logStockChange(mode, actionText) {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('en-IN', {
-                timeZone: 'Asia/Kolkata',
-                day: '2-digit', month: '2-digit', year: 'numeric'
-            });
-            const timeStr = now.toLocaleTimeString('en-IN', {
-                timeZone: 'Asia/Kolkata',
-                hour: '2-digit', minute: '2-digit', second: '2-digit'
-            });
-
-            database.ref('stock_activity_logs').push({
-                mode: mode,
-                date: dateStr,
-                time: timeStr,
-                ip: clientIP,
-                device: clientDeviceName,
-                batt: deviceBatteryLevel,
-                action: actionText
-            }).catch(() => {});
         }
 
         /* 2. ADMIN AUTHENTICATION & STRICT PANEL VISIBILITY */
@@ -1097,7 +1116,7 @@
             applyAuthState(null);
         }
 
-        /* 3. 5 GEMINI API KEYS VAULT (DOTS MASKED + REMOVE BUTTON) */
+        /* 3. 5 GEMINI API KEYS VAULT */
         function renderApiSlots() {
             const container = document.getElementById('api-slots-container');
             container.innerHTML = '';
@@ -1140,10 +1159,10 @@
             const statusLbl = document.getElementById('keys-status-label');
             if (count > 0) {
                 statusLbl.innerText = `✅ ${count}/5 Slots Saved`;
-                statusLbl.style.color = "var(--neon-green)";
+                statusLbl.style.color = "var(--emerald)";
             } else {
                 statusLbl.innerText = "⚠️ No API Keys Saved";
-                statusLbl.style.color = "var(--neon-gold)";
+                statusLbl.style.color = "var(--gold-accent)";
             }
         });
 
@@ -1174,7 +1193,7 @@
             showCyberToast(`🗑️ Slot ${slotIndex + 1} API Key हटा दी गई`);
         }
 
-        /* 4. BRAND-SEPARATED LIVE GODOWN INVENTORY + SAVED STYLES SYNC */
+        /* 4. BRAND-SEPARATED LIVE GODOWN INVENTORY (DISTINCT STYLE BADGE & SIZE/QTY CARDS) */
         database.ref('stock').on('value', snap => {
             const container = document.getElementById('brand-inventory-container');
             const badge = document.getElementById('stock-count-badge');
@@ -1219,7 +1238,7 @@
 
             const activeBrandNames = Object.keys(grouped);
             if (activeBrandNames.length === 0) {
-                container.innerHTML = '<div style="text-align:center; color:#88ccee; padding:22px;">No stock entries yet.</div>';
+                container.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:22px;">No stock entries yet.</div>';
                 return;
             }
 
@@ -1256,12 +1275,13 @@
                     if (item.colors) {
                         Object.keys(item.colors).forEach(color => {
                             const cls = color === 'WHITE' ? 'badge-white' : 'badge-asstd';
-                            detailsHtml += `<div style="margin-bottom:6px;"><span class="${cls}">${color}</span> `;
+                            detailsHtml += `<div class="color-group-row"><span class="${cls}">${color}</span>`;
                             Object.keys(item.colors[color]).forEach(size => {
                                 const qty = item.colors[color][size];
-                                detailsHtml += `<span class="size-pill">
+                                detailsHtml += `<span class="size-qty-card">
                                     <button class="quick-qty-btn btn-danger" style="display:${btnDisplay};" onclick="adjustStock('${safeBrand}','${styleNo}','${safeName}','${color}','${size}',-1,false,${legacyFlag})">-</button>
-                                    <b>${size}:</b> ${qty} pcs
+                                    <span class="size-label-tag">Size: ${size}</span>
+                                    <span class="qty-value-tag">${qty} pcs</span>
                                     <button class="quick-qty-btn btn-green" style="display:${btnDisplay};" onclick="adjustStock('${safeBrand}','${styleNo}','${safeName}','${color}','${size}',1,false,${legacyFlag})">+</button>
                                 </span>`;
                             });
@@ -1270,7 +1290,7 @@
                     }
 
                     rowsHtml += `<tr class="stock-data-row" data-search="${(brandName + ' ' + styleNo + ' ' + item.itemName + ' ' + detailsHtml.replace(/<[^>]+>/g, ' ')).toLowerCase()}">
-                        <td class="style-code-cell">${styleNo}</td>
+                        <td><span class="style-code-badge">${styleNo}</span></td>
                         <td class="item-name-cell">${item.itemName || 'ITEM'}</td>
                         <td>${detailsHtml}</td>
                         <td class="action-col-cell" style="display:${cellDisplay}; text-align:right;">
@@ -1291,7 +1311,7 @@
                                     <tr>
                                         <th>Style No</th>
                                         <th>Item Name</th>
-                                        <th>Available Colors & Sizes</th>
+                                        <th>Color • Size • Pieces</th>
                                         <th class="action-col-header" style="display:${cellDisplay}; text-align:right;">Action</th>
                                     </tr>
                                 </thead>
@@ -1313,7 +1333,7 @@
             const path = getStockFirebasePath(brandName, styleNo, isLegacy);
             database.ref(path).remove()
                 .then(() => {
-                    logStockChange('MINUS', `[ITEM DELETED] ${brandName} | Style ${styleNo} (${itemName}) ko inventory se poora delete kiya gaya.`);
+                    logStockChange('MINUS', `Deleted: ${brandName} Style ${styleNo} (${itemName})`);
                     showCyberToast(`🗑️ ${brandName} - Style ${styleNo} delete ho gaya!`);
                 })
                 .catch(e => showCyberToast("Error: " + e.message, true));
@@ -1385,13 +1405,13 @@
                 database.ref(`${basePath}/brand`).set(cleanBrand);
 
                 const mode = qtyDelta > 0 ? 'ADD' : 'MINUS';
-                const tag = qtyDelta > 0 ? 'STOCK ADDED (+)' : 'STOCK MINUS (-)';
-                logStockChange(mode, `[${tag}] ${cleanBrand} | ${Math.abs(qtyDelta)} pcs | Style ${cleanStyle} (${itemName}) - ${color} Size ${size} | Total: ${updated} pcs`);
+                const sign = qtyDelta > 0 ? `+${Math.abs(qtyDelta)} pcs Added` : `-${Math.abs(qtyDelta)} pcs Minus`;
+                logStockChange(mode, `${sign} | ${cleanBrand} • Style ${cleanStyle} (${itemName}) • ${color} • Size ${size} • Total: ${updated} pcs`);
 
                 if (notifyChat) {
                     addChatMessage('ai', `✅ Done! ${cleanBrand} - Style ${cleanStyle} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`, true);
                 } else {
-                    showCyberToast(`✅ ${cleanBrand} | Style ${cleanStyle} (${color} ${size}): ${updated} pcs`);
+                    showCyberToast(`✅ ${cleanBrand} | Style ${cleanStyle} (${color} • Size ${size}): ${updated} pcs`);
                 }
             });
         }
@@ -1411,31 +1431,30 @@
             });
         }
 
-        /* 5. STOCK ADD / MINUS LOGS LISTENER + DELETE CONTROLS */
+        /* 5. CLEAN STOCK LOGS LISTENER (DATE, TIME, IP, FULL DEVICE NAME, BATTERY & PIECES ONLY) */
         database.ref('stock_activity_logs').limitToLast(40).on('value', snap => {
             const box = document.getElementById('logs-container');
             box.innerHTML = '';
             const logs = snap.val();
             if (!logs) {
-                box.innerHTML = '<div style="color:#88ccee; text-align:center; padding:10px;">Abhi tak koi stock add ya minus nahi kiya gaya hai.</div>';
+                box.innerHTML = '<div style="color:#94a3b8; text-align:center; padding:12px;">Abhi tak koi stock add ya minus nahi kiya gaya hai.</div>';
                 return;
             }
 
             const entries = Object.entries(logs).reverse();
             entries.forEach(([key, log]) => {
                 const isMinus = log.mode === 'MINUS';
+                const cleanAction = String(log.action || '').replace(/^\[(?:STOCK ADDED \(\+\)|STOCK MINUS \(-\)|ITEM DELETED)\]\s*/i, '');
+                const safeDevice = (log.device && log.device.length > 1) ? log.device : 'Android Smartphone';
+
                 box.innerHTML += `
                     <div class="log-card-item ${isMinus ? 'minus-log' : ''}">
                         <div>
-                            <div style="color:var(--cyber-blue); margin-bottom:3px;">
-                                📅 <b>${log.date || ''}</b> | ⏰ <b>${log.time || ''}</b>
+                            <div class="log-meta-line">
+                                📅 Date: <b>${log.date || ''}</b> &nbsp;|&nbsp; ⏰ Time: <b>${log.time || ''}</b><br>
+                                🌐 IP: <b>${log.ip || 'N/A'}</b> &nbsp;|&nbsp; 📱 Device: <b>${safeDevice}</b> &nbsp;|&nbsp; 🔋 Battery: <b>${log.batt || 'N/A'}</b>
                             </div>
-                            <div style="color:var(--neon-gold); margin-bottom:4px;">
-                                🌐 IP: <b>${log.ip || 'N/A'}</b> | 📱 Device: <b>${log.device || 'Unknown'}</b> | 🔋 Batt: <b>${log.batt || 'N/A'}</b>
-                            </div>
-                            <div style="color:${isMinus ? '#ff80ab' : '#00ff88'}; font-weight:bold;">
-                                > ${log.action}
-                            </div>
+                            <div class="log-action-line">${cleanAction}</div>
                         </div>
                         <button class="single-log-del" title="Delete Log" onclick="deleteSingleStockLog('${key}')">🗑️</button>
                     </div>
@@ -1461,7 +1480,7 @@
         canvas.width = 160; canvas.height = 160;
 
         let particles = [];
-        const particleCount = 300;
+        const particleCount = 260;
         let orbMode = 'text';
         let angleY = 0; let angleX = 0;
 
@@ -1470,7 +1489,7 @@
             const tctx = tc.getContext('2d');
             tc.width = canvas.width; tc.height = canvas.height;
             tctx.fillStyle = '#fff';
-            tctx.font = '900 42px Orbitron, sans-serif';
+            tctx.font = '900 42px Montserrat, sans-serif';
             tctx.textAlign = 'center'; tctx.textBaseline = 'middle';
             tctx.fillText(text, tc.width / 2, tc.height / 2);
             const data = tctx.getImageData(0, 0, tc.width, tc.height).data;
@@ -1490,7 +1509,7 @@
             const phi = Math.acos(-1 + (2 * i) / particleCount);
             const theta = Math.sqrt(particleCount * Math.PI) * phi;
             const tc = rCoords[i % rCoords.length] || { x: 0, y: 0, z: 0 };
-            const palette = ['#00f3ff', '#bd00ff', '#ff007f', '#00ff88'];
+            const palette = ['#fbbf24', '#38bdf8', '#10b981', '#f43f5e'];
             particles.push({
                 x: (Math.random() - 0.5) * 140, y: (Math.random() - 0.5) * 140, z: (Math.random() - 0.5) * 140,
                 tx: tc.x, ty: tc.y, tz: tc.z,
@@ -1548,7 +1567,7 @@
         }
         animateOrb();
 
-        /* 7. RAX AI VOICE, CHAT & FULL OFFLINE + ONLINE COMMAND ENGINE */
+        /* 7. RAX AI VOICE, CHAT & COMMAND ENGINE */
         let voiceEnabled = true;
 
         function toggleVoiceOutput() {
@@ -1606,41 +1625,32 @@
             return null;
         }
 
-        /* Instant Smart Local Parser (Handles ADD, MINUS, CHECK & CHAT even if API key fails/busy) */
         function localSmartCommandParser(q) {
             const raw = q.trim();
             const lower = raw.toLowerCase();
 
-            // 1. Detect Brand
             let brand = "JOCKEY";
             if (lower.includes("van") || lower.includes("heusen") || lower.includes("husen")) brand = "VAN HEUSEN";
             else if (lower.includes("polo") || lower.includes("uspa")) brand = "U.S. POLO ASSN.";
             else if (lower.includes("park") || lower.includes("avenue")) brand = "PARK AVENUE";
             else if (lower.includes("jockey") || lower.includes("jocky")) brand = "JOCKEY";
 
-            // 2. Detect ADD or MINUS intent
             const isAdd = /\b(add|plus|jod|jodo|dal|daal|daldo|daaldo|entry|in)\b/i.test(lower);
             const isMinus = /\b(minus|less|nikal|nikalo|ghata|ghatao|dispatch|sale|sold|out|kam)\b/i.test(lower);
 
             if (isAdd || isMinus) {
                 const intent = isMinus ? "MINUS" : "ADD";
-
-                // Color
                 const color = /\bwhite\b/i.test(lower) ? "WHITE" : "ASSTD";
 
-                // Quantity (look for "5 peace", "5 piece", "5 pcs", "5 pis", or standalone number before add/minus)
                 let qty = 0;
                 const qtyWithUnit = lower.match(/(\d+)\s*(?:pcs?|pieces?|peaces?|pis|pic|pack|box|nos?)\b/i);
                 if (qtyWithUnit) {
                     qty = parseInt(qtyWithUnit[1], 10);
                 } else {
                     const nums = lower.match(/\b(\d+)\b/g);
-                    if (nums && nums.length > 0) {
-                        qty = parseInt(nums[nums.length - 1], 10);
-                    }
+                    if (nums && nums.length > 0) qty = parseInt(nums[nums.length - 1], 10);
                 }
 
-                // Style Number (handles "IC 32", "IC32", "style number 8035", "style 901")
                 let styleNo = "";
                 const alphaNumStyle = raw.match(/\b([a-zA-Z]{1,4})\s*[-]?\s*(\d{2,5}[a-zA-Z]?)\b/);
                 const explicitStyle = raw.match(/style\s*(?:no|number)?\s*[:\-]?\s*([a-zA-Z0-9\-]+)/i);
@@ -1653,7 +1663,6 @@
                     if (allNums && allNums.length > 0) styleNo = allNums[0];
                 }
 
-                // Size (handles "size S", "size L", "size 85", or standalone S/M/L/XL/XXL/75..110)
                 let size = "";
                 const sizeMatch = raw.match(/\bsize\s*(?:no|number)?\s*[:\-]?\s*(xxl|xl|xs|s|m|l|75|80|85|90|95|100|105|110)\b/i);
                 if (sizeMatch) {
@@ -1663,7 +1672,6 @@
                     if (tokenSize) size = tokenSize[1].toUpperCase();
                 }
 
-                // Optional Item Name
                 let itemName = "";
                 const knownItems = ["TRUNK", "BRIEF", "VEST", "BOXER", "TRACK", "TSHIRT", "T-SHIRT", "SHORTS", "BRA", "PANTY", "SOCKS", "THERMAL"];
                 for (const ki of knownItems) {
@@ -1674,20 +1682,10 @@
                 }
 
                 if (styleNo && qty > 0) {
-                    return {
-                        intent,
-                        brand,
-                        styleNo,
-                        itemName,
-                        color,
-                        size: size || "M",
-                        qty,
-                        reply: ""
-                    };
+                    return { intent, brand, styleNo, itemName, color, size: size || "M", qty, reply: "" };
                 }
             }
 
-            // 3. Greeting / Identity
             if (lower.includes('kaun') || lower.includes('kya kar') || lower.includes('who are you') || lower.includes('help') || lower.includes('namaste') || lower.includes('hello') || lower.includes('hey')) {
                 return {
                     intent: "CHAT",
@@ -1695,7 +1693,6 @@
                 };
             }
 
-            // 4. Stock Check by Brand or Style
             const brands = Object.keys(liveBrandStock);
             for (const b of brands) {
                 for (const s of Object.keys(liveBrandStock[b])) {
@@ -1704,7 +1701,7 @@
                         let summary = `${b} - Style ${s} (${item.itemName}):\n`;
                         if (item.colors) {
                             Object.keys(item.colors).forEach(c => {
-                                const sizes = Object.entries(item.colors[c]).map(([sz, qt]) => `${sz}: ${qt} pcs`).join(', ');
+                                const sizes = Object.entries(item.colors[c]).map(([sz, qt]) => `Size ${sz}: ${qt} pcs`).join(', ');
                                 summary += `• ${c}: ${sizes}\n`;
                             });
                         }
@@ -1778,7 +1775,6 @@ User: ${userQuery}`;
                 }
             }
 
-            // Instant Smart Local Command Engine fallback (Never fails on valid stock/chat commands)
             const localPlan = localSmartCommandParser(userQuery);
             if (localPlan) {
                 const lbl = document.getElementById('active-model-display');
@@ -1786,7 +1782,7 @@ User: ${userQuery}`;
                 return { data: localPlan };
             }
 
-            return { error: "Samajh nahi aaya. Jaise bolein: 'Jockey IC32 size S 5 pcs add karo' ya API Key Slot 1 check karein." };
+            return { error: "Samajh nahi aaya. Jaise bolein: 'Jockey IC32 size S 5 pcs add karo'." };
         }
 
         async function processCommand() {
