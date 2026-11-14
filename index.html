@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
     <title>Plezer Collection</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -25,23 +26,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #050711;
+            color-scheme: dark;
+            --bg-dark: #04060e;
             --cyber-blue: #00f3ff;
             --neon-purple: #bd00ff;
             --neon-pink: #ff007f;
             --neon-green: #00ff88;
             --neon-gold: #ffcc00;
-            --glass-bg: rgba(12, 16, 38, 0.9);
-            --glass-border: rgba(0, 243, 255, 0.28);
+            --glass-bg: rgba(10, 14, 34, 0.94);
+            --glass-border: rgba(0, 243, 255, 0.32);
             --text-color: #e6fbff;
         }
 
         * { box-sizing: border-box; }
 
-        body {
+        html, body {
             margin: 0;
-            padding: 0 0 115px 0;
-            background: radial-gradient(circle at 50% 15%, #141b41 0%, var(--bg-dark) 80%);
+            padding: 0 0 120px 0;
+            background-color: #04060e;
+            background-image: radial-gradient(circle at 50% 12%, #11183b 0%, #04060e 82%);
             color: var(--text-color);
             font-family: 'Rajdhani', sans-serif;
             min-height: 100vh;
@@ -53,16 +56,16 @@
             border-radius: 50%;
             filter: blur(115px);
             z-index: -1;
-            opacity: 0.4;
+            opacity: 0.38;
         }
         .orb-1 { width: 300px; height: 300px; background: var(--cyber-blue); top: 8%; left: 5%; }
         .orb-2 { width: 350px; height: 350px; background: var(--neon-purple); bottom: 8%; right: 5%; }
 
-        /* Full-Height & Full-Width Bright Neon Blinking Showroom Header */
+        /* Tall, Wide & Bright Neon Blinking Showroom Header */
         header {
             text-align: center;
             padding: 36px 8px 38px 8px;
-            background: linear-gradient(180deg, rgba(6, 9, 24, 0.98) 0%, rgba(12, 18, 44, 0.96) 100%);
+            background: linear-gradient(180deg, rgba(5, 8, 22, 0.98) 0%, rgba(11, 16, 40, 0.96) 100%);
             border-bottom: 3px solid #00f3ff;
             position: sticky;
             top: 0;
@@ -101,54 +104,39 @@
         }
 
         @keyframes brightNeonBlink {
-            0%, 100% {
-                color: #ffffff;
-                text-shadow:
-                    0 0 6px #ffffff,
-                    0 0 16px #00f3ff,
-                    0 0 32px #00f3ff,
-                    0 0 54px #0099ff;
-            }
-            25% {
-                color: #ffffff;
-                text-shadow:
-                    0 0 6px #ffffff,
-                    0 0 16px #ff007f,
-                    0 0 32px #ff007f,
-                    0 0 54px #bd00ff;
-            }
-            50% {
-                color: #ffffff;
-                text-shadow:
-                    0 0 6px #ffffff,
-                    0 0 16px #ff8800,
-                    0 0 32px #ff5500,
-                    0 0 54px #ffcc00;
-            }
-            75% {
-                color: #ffffff;
-                text-shadow:
-                    0 0 6px #ffffff,
-                    0 0 16px #00ff88,
-                    0 0 32px #00f3ff,
-                    0 0 54px #bd00ff;
-            }
+            0%, 100% { text-shadow: 0 0 6px #ffffff, 0 0 16px #00f3ff, 0 0 32px #00f3ff, 0 0 54px #0099ff; }
+            25% { text-shadow: 0 0 6px #ffffff, 0 0 16px #ff007f, 0 0 32px #ff007f, 0 0 54px #bd00ff; }
+            50% { text-shadow: 0 0 6px #ffffff, 0 0 16px #ff8800, 0 0 32px #ff5500, 0 0 54px #ffcc00; }
+            75% { text-shadow: 0 0 6px #ffffff, 0 0 16px #00ff88, 0 0 32px #00f3ff, 0 0 54px #bd00ff; }
         }
 
         @keyframes headerBorderBlink {
-            0%, 100% {
-                border-bottom-color: #00f3ff;
-                box-shadow: 0 6px 28px rgba(0, 243, 255, 0.45);
-            }
-            33% {
-                border-bottom-color: #ff007f;
-                box-shadow: 0 6px 28px rgba(255, 0, 127, 0.45);
-            }
-            66% {
-                border-bottom-color: #ff8800;
-                box-shadow: 0 6px 28px rgba(255, 136, 0, 0.45);
-            }
+            0%, 100% { border-bottom-color: #00f3ff; box-shadow: 0 6px 28px rgba(0, 243, 255, 0.45); }
+            33% { border-bottom-color: #ff007f; box-shadow: 0 6px 28px rgba(255, 0, 127, 0.45); }
+            66% { border-bottom-color: #ff8800; box-shadow: 0 6px 28px rgba(255, 136, 0, 0.45); }
         }
+
+        /* Dark Custom Toast Banner */
+        #cyber-toast {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-130%);
+            background: linear-gradient(135deg, #0b112b, #1d0c38);
+            border: 1.5px solid var(--cyber-blue);
+            box-shadow: 0 0 28px rgba(0, 243, 255, 0.55);
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            z-index: 3000;
+            transition: transform 0.28s ease;
+            text-align: center;
+            max-width: 90vw;
+        }
+        #cyber-toast.show { transform: translateX(-50%) translateY(0); }
 
         .main-wrapper {
             max-width: 920px;
@@ -162,19 +150,19 @@
             border-radius: 18px;
             padding: 18px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(16px);
         }
 
         .panel-header {
             font-family: 'Orbitron', sans-serif;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--cyber-blue);
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             padding-bottom: 10px;
             margin-bottom: 14px;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.22);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -184,26 +172,28 @@
 
         input, select {
             width: 100%;
-            background: rgba(15, 22, 48, 0.92);
+            background: #0b1129;
             border: 1px solid rgba(0, 243, 255, 0.35);
             padding: 11px 14px;
             border-radius: 11px;
-            color: #fff;
+            color: #ffffff;
             font-family: 'Rajdhani', sans-serif;
             font-size: 15px;
             font-weight: 600;
             outline: none;
         }
+        input::placeholder { color: #6f8fb3; }
         input:focus, select:focus {
             border-color: var(--neon-pink);
-            box-shadow: 0 0 12px rgba(255, 0, 127, 0.4);
+            box-shadow: 0 0 12px rgba(255, 0, 127, 0.45);
         }
+        select option { background: #0b1129; color: #ffffff; }
 
         button {
             background: linear-gradient(135deg, var(--cyber-blue), var(--neon-purple));
             border: none;
             padding: 11px 18px;
-            color: #fff;
+            color: #ffffff;
             font-family: 'Orbitron', sans-serif;
             font-size: 12px;
             font-weight: 700;
@@ -213,11 +203,11 @@
             transition: all 0.2s;
         }
         button:hover { transform: translateY(-1px); filter: brightness(1.12); }
-        .btn-green { background: linear-gradient(135deg, #00c853, #00f3ff); color: #050711; }
-        .btn-danger { background: linear-gradient(135deg, #ff1744, #d50000); color: #fff; }
-        .btn-mic { background: linear-gradient(135deg, #ff007f, #ff5500); }
+        .btn-green { background: linear-gradient(135deg, #00c853, #00f3ff); color: #04060e; }
+        .btn-danger { background: linear-gradient(135deg, #ff1744, #b71c1c); color: #ffffff; }
+        .btn-mic { background: linear-gradient(135deg, #ff007f, #ff5500); color: #ffffff; }
 
-        /* Admin-Only Panels (Strictly Hidden Before Login) */
+        /* Admin-Only Panels */
         .admin-only-panel {
             display: none;
             animation: slideUp 0.25s ease-out;
@@ -227,96 +217,172 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Stock Control Grid */
+        /* Stock Control Grid & Stacked Style Box */
         .stock-form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 10px;
             margin-bottom: 12px;
+            align-items: start;
         }
-        .stock-action-btns {
+        .style-stack-box {
             display: flex;
+            flex-direction: column;
+            gap: 7px;
+            background: rgba(0, 243, 255, 0.04);
+            border: 1px solid rgba(0, 243, 255, 0.22);
+            padding: 8px;
+            border-radius: 12px;
+        }
+        .style-stack-box select {
+            border-color: var(--neon-gold);
+            color: var(--neon-gold);
+        }
+        .stock-action-btns { display: flex; gap: 10px; }
+        .stock-action-btns button { flex: 1; padding: 12px; font-size: 13px; }
+
+        /* BRAND-WISE SEPARATE INVENTORY CARDS */
+        .brand-section-card {
+            background: #070b1d;
+            border: 1.5px solid rgba(0, 243, 255, 0.35);
+            border-radius: 16px;
+            margin-bottom: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.75);
+        }
+        .brand-section-card:last-child { margin-bottom: 0; }
+
+        .brand-banner-header {
+            padding: 14px 16px;
+            background: linear-gradient(90deg, #0f1c47 0%, #260d47 50%, #0f1c47 100%);
+            border-bottom: 1.5px solid rgba(0, 243, 255, 0.32);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             gap: 10px;
         }
-        .stock-action-btns button {
-            flex: 1;
-            padding: 12px;
-            font-size: 13px;
+        .brand-big-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(18px, 4.6vw, 24px);
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.85), 0 0 22px rgba(189, 0, 255, 0.7);
+            text-transform: uppercase;
+        }
+        .brand-jockey .brand-big-title { text-shadow: 0 0 10px #ff007f, 0 0 22px #ff5500; }
+        .brand-van .brand-big-title { text-shadow: 0 0 10px #00f3ff, 0 0 22px #0088ff; }
+        .brand-polo .brand-big-title { text-shadow: 0 0 10px #ffcc00, 0 0 22px #ff6a00; }
+        .brand-park .brand-big-title { text-shadow: 0 0 10px #00ff88, 0 0 22px #00f3ff; }
+
+        .brand-item-pill {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--neon-gold);
+            background: rgba(255, 204, 0, 0.12);
+            border: 1px solid rgba(255, 204, 0, 0.45);
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
         }
 
-        /* Stock Table */
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 243, 255, 0.2);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
         th, td {
             text-align: left;
             padding: 12px 14px;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.12);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.14);
+            vertical-align: middle;
         }
         th {
-            background: linear-gradient(90deg, rgba(0, 243, 255, 0.18), rgba(189, 0, 255, 0.18));
-            color: #fff;
+            background: rgba(12, 20, 48, 0.95);
+            color: var(--cyber-blue);
             font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
+            font-size: 11px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
         }
-        tr:hover { background: rgba(0, 243, 255, 0.04); }
+        tbody tr { background: rgba(8, 12, 30, 0.85); transition: background 0.2s; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: rgba(0, 243, 255, 0.08); }
+
+        .style-code-cell {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cyber-blue);
+            font-weight: 900;
+            font-size: 15px;
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.45);
+        }
+        .item-name-cell {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 16px;
+        }
 
         .badge-white {
-            background: rgba(0, 243, 255, 0.2);
+            background: rgba(0, 243, 255, 0.16);
             color: #00f3ff;
             border: 1px solid #00f3ff;
-            padding: 2px 8px;
+            padding: 2px 9px;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 700;
             display: inline-block;
-            margin: 2px 4px 2px 0;
+            margin: 2px 5px 2px 0;
         }
         .badge-asstd {
-            background: rgba(255, 0, 127, 0.2);
+            background: rgba(255, 0, 127, 0.18);
             color: #ff66b2;
             border: 1px solid #ff007f;
-            padding: 2px 8px;
+            padding: 2px 9px;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 700;
             display: inline-block;
-            margin: 2px 4px 2px 0;
+            margin: 2px 5px 2px 0;
         }
         .size-pill {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin: 2px 5px 2px 0;
+            background: #101838;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 4px 9px;
+            border-radius: 8px;
+            margin: 3px 6px 3px 0;
             font-size: 14px;
-            color: #fff;
+            color: #e6fbff;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
         }
+        .size-pill b { color: var(--neon-gold); }
         .quick-qty-btn {
-            padding: 2px 7px;
+            padding: 2px 8px;
             font-size: 13px;
-            border-radius: 4px;
+            border-radius: 5px;
             font-family: monospace;
             font-weight: 900;
             box-shadow: none;
             display: none;
         }
+        .delete-item-btn {
+            background: rgba(255, 23, 68, 0.22);
+            border: 1px solid #ff1744;
+            color: #ff8a80;
+            padding: 6px 10px;
+            font-size: 11px;
+            border-radius: 8px;
+            box-shadow: none;
+            display: none;
+            white-space: nowrap;
+        }
+        .delete-item-btn:hover { background: #ff1744; color: #ffffff; }
 
         /* 5 API Keys Vault Slots */
         .api-slot-row {
             display: flex;
             align-items: center;
             gap: 8px;
-            background: rgba(0, 243, 255, 0.05);
+            background: #090e24;
             padding: 8px 10px;
             border-radius: 10px;
             border: 1px solid rgba(0, 243, 255, 0.22);
@@ -363,7 +429,7 @@
         /* Stock & IP Activity Logs */
         #logs-container {
             font-family: monospace;
-            background: rgba(4, 7, 18, 0.95);
+            background: #050816;
             border: 1px solid rgba(189, 0, 255, 0.35);
             padding: 12px;
             border-radius: 12px;
@@ -377,15 +443,13 @@
             justify-content: space-between;
             align-items: flex-start;
             gap: 10px;
-            padding: 8px;
+            padding: 9px;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.03);
+            background: #0b1129;
             border-left: 3px solid var(--cyber-blue);
             margin-bottom: 8px;
         }
-        .log-card-item.minus-log {
-            border-left-color: var(--neon-pink);
-        }
+        .log-card-item.minus-log { border-left-color: var(--neon-pink); }
         .single-log-del {
             background: rgba(255, 23, 68, 0.2);
             border: 1px solid #ff1744;
@@ -406,9 +470,9 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: rgba(10, 15, 38, 0.95);
+            background: #0a0f26;
             border: 1.5px solid var(--neon-purple);
-            color: #fff;
+            color: #ffffff;
             padding: 10px 16px;
             border-radius: 30px;
             font-family: 'Orbitron', sans-serif;
@@ -427,14 +491,14 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 6, 16, 0.93);
+            background: rgba(4, 6, 16, 0.94);
             z-index: 2000;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(12px);
         }
         .modal-card {
-            background: linear-gradient(145deg, rgba(14, 20, 48, 0.98), rgba(32, 12, 58, 0.98));
+            background: linear-gradient(145deg, #0d1330, #1f0b3a);
             border: 2px solid var(--cyber-blue);
             box-shadow: 0 0 40px rgba(0, 243, 255, 0.45);
             padding: 24px;
@@ -456,7 +520,7 @@
         .modal-card h3 {
             font-family: 'Orbitron', sans-serif;
             margin: 0 0 4px 0;
-            color: #fff;
+            color: #ffffff;
             font-size: 20px;
             letter-spacing: 1.5px;
         }
@@ -480,10 +544,7 @@
             display: none;
             text-align: left;
         }
-        .login-progress-wrap {
-            display: none;
-            margin-bottom: 12px;
-        }
+        .login-progress-wrap { display: none; margin-bottom: 12px; }
         .login-progress-bar {
             width: 100%;
             height: 8px;
@@ -524,8 +585,8 @@
             font-size: 10px;
             font-weight: 900;
             letter-spacing: 1px;
-            color: #fff;
-            background: rgba(6, 10, 26, 0.92);
+            color: #ffffff;
+            background: #060a1a;
             border: 1px solid var(--cyber-blue);
             padding: 2px 10px;
             border-radius: 20px;
@@ -539,7 +600,7 @@
             right: 16px;
             width: 350px;
             max-width: 92vw;
-            background: linear-gradient(145deg, rgba(10, 15, 38, 0.98), rgba(26, 10, 48, 0.98));
+            background: linear-gradient(145deg, #0a0f26, #1a0a30);
             border: 1.5px solid var(--cyber-blue);
             box-shadow: 0 0 35px rgba(0, 243, 255, 0.45), 0 0 20px rgba(189, 0, 255, 0.4);
             border-radius: 18px;
@@ -564,20 +625,20 @@
             -webkit-text-fill-color: transparent;
         }
         .drawer-icon-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            color: #fff;
+            background: #121a3d;
+            border: 1px solid rgba(0, 243, 255, 0.35);
+            color: #ffffff;
             padding: 3px 8px;
             font-size: 12px;
             border-radius: 6px;
             box-shadow: none;
         }
         #chat-history {
-            background: rgba(4, 7, 18, 0.8);
-            border: 1px solid rgba(0, 243, 255, 0.18);
+            background: #050816;
+            border: 1px solid rgba(0, 243, 255, 0.22);
             border-radius: 12px;
             padding: 10px;
-            height: 170px;
+            height: 175px;
             overflow-y: auto;
             margin-bottom: 10px;
             display: flex;
@@ -586,9 +647,9 @@
         }
         .msg-user {
             align-self: flex-end;
-            background: linear-gradient(135deg, rgba(189, 0, 255, 0.35), rgba(255, 0, 127, 0.35));
-            border: 1px solid rgba(255, 0, 127, 0.5);
-            color: #fff;
+            background: linear-gradient(135deg, rgba(189, 0, 255, 0.45), rgba(255, 0, 127, 0.45));
+            border: 1px solid rgba(255, 0, 127, 0.6);
+            color: #ffffff;
             padding: 7px 11px;
             border-radius: 12px 12px 2px 12px;
             font-size: 14px;
@@ -597,7 +658,7 @@
         }
         .msg-ai {
             align-self: flex-start;
-            background: rgba(0, 243, 255, 0.12);
+            background: rgba(0, 243, 255, 0.14);
             border-left: 3px solid var(--cyber-blue);
             color: #e6fbff;
             padding: 7px 11px;
@@ -622,6 +683,9 @@
     <div class="ambient-orb orb-1"></div>
     <div class="ambient-orb orb-2"></div>
 
+    <!-- Dark Cyber Notification Toast -->
+    <div id="cyber-toast"></div>
+
     <!-- Tall, Wide & Bright Blinking Neon Header -->
     <header>
         <h1>PLE<span class="sig-z">Z</span>ER COLLECTION</h1>
@@ -629,45 +693,52 @@
 
     <div class="main-wrapper">
 
-        <!-- 1. Live Stock Inventory -->
+        <!-- 1. Brand-Separated Live Godown Inventory -->
         <div class="glass-panel">
             <div style="margin-bottom: 14px;">
-                <input type="text" id="master-search" placeholder="Search Style No, Item Name, Color or Size..." onkeyup="filterStock()">
+                <input type="text" id="master-search" placeholder="Search Brand, Style No, Item Name, Color or Size..." onkeyup="filterStock()">
             </div>
             <div class="panel-header">
                 <span>LIVE GODOWN INVENTORY</span>
-                <span id="stock-count-badge" style="font-size:11px; color:#88ccee;">0 Items</span>
+                <span id="stock-count-badge" style="font-size:12px; color:var(--neon-green);">0 Items</span>
             </div>
-            <div class="table-wrapper">
-                <table id="stock-table">
-                    <thead>
-                        <tr>
-                            <th>Style No</th>
-                            <th>Item Name</th>
-                            <th>Available Colors & Sizes</th>
-                        </tr>
-                    </thead>
-                    <tbody id="stock-body">
-                        <tr><td colspan="3" style="text-align:center; color:#88ccee;">Loading live stock...</td></tr>
-                    </tbody>
-                </table>
+            <div id="brand-inventory-container">
+                <div style="text-align:center; color:#88ccee; padding:20px;">Loading live brand stock...</div>
             </div>
         </div>
 
-        <!-- 2. ADMIN PANEL 1: Stock Add / Minus Control (Hidden Until Admin Login) -->
+        <!-- 2. ADMIN PANEL 1: Stock Add / Minus Control (Brand + Saved Styles Dropdown + New Style Box) -->
         <div id="admin-stock-panel" class="glass-panel admin-only-panel">
             <div class="panel-header">
                 <span>📦 STOCK ADD / MINUS CONTROL</span>
                 <span style="font-size:11px; color:var(--neon-green);">ADMIN ONLY</span>
             </div>
             <div class="stock-form-grid">
-                <input type="text" id="ctrl-style" placeholder="Style No (e.g. 901)">
+                <div>
+                    <select id="ctrl-brand" onchange="onBrandSelectChange()">
+                        <option value="JOCKEY">JOCKEY</option>
+                        <option value="VAN HEUSEN">VAN HEUSEN</option>
+                        <option value="U.S. POLO ASSN.">U.S. POLO ASSN.</option>
+                        <option value="PARK AVENUE">PARK AVENUE</option>
+                        <option value="CUSTOM">+ OTHER BRAND...</option>
+                    </select>
+                    <input type="text" id="ctrl-custom-brand" placeholder="Enter Brand Name" style="display:none; margin-top:7px;" oninput="refreshSavedStylesDropdown()">
+                </div>
+
+                <!-- Saved Style Dropdown on Top + New Style Input Box Right Below -->
+                <div class="style-stack-box">
+                    <select id="ctrl-existing-style" onchange="onExistingStyleSelected()">
+                        <option value="">-- Saved Styles (0) --</option>
+                    </select>
+                    <input type="text" id="ctrl-style" placeholder="Ya New Style No (e.g. IC32)" oninput="onNewStyleTyped()">
+                </div>
+
                 <input type="text" id="ctrl-name" placeholder="Item Name (e.g. Trunk)">
                 <select id="ctrl-color">
                     <option value="ASSTD">ASSTD</option>
                     <option value="WHITE">WHITE</option>
                 </select>
-                <input type="text" id="ctrl-size" placeholder="Size (e.g. 85 / M)">
+                <input type="text" id="ctrl-size" placeholder="Size (e.g. 85 / L)">
                 <input type="number" id="ctrl-qty" placeholder="Quantity">
             </div>
             <div class="stock-action-btns">
@@ -717,7 +788,7 @@
                 <div class="login-progress-bar"><div class="login-progress-fill" id="login-progress-fill"></div></div>
             </div>
             <button onclick="executeLogin()" style="width: 100%; margin-bottom: 10px; padding: 12px; font-size: 13px;">INITIALIZE LOGIN</button>
-            <button onclick="closeAuthModal()" style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); padding: 10px;">Cancel</button>
+            <button onclick="closeAuthModal()" style="width: 100%; background: #141c40; border: 1px solid rgba(0,243,255,0.3); padding: 10px;">Cancel</button>
         </div>
     </div>
 
@@ -737,9 +808,9 @@
             </div>
         </div>
         <div id="chat-history">
-            <div class="msg-ai">Namaste! Main RAX AI hoon. Boliye, kaunsa stock check ya update karna hai?</div>
+            <div class="msg-ai">Namaste! Main RAX AI hoon. Jockey, Van Heusen, U.S. Polo Assn., ya Park Avenue ka stock check ya update karna ho to boliye!</div>
         </div>
-        <input type="text" id="user-input" placeholder="Yahan apna sawal likhein..." onkeypress="if(event.key==='Enter') processCommand()">
+        <input type="text" id="user-input" placeholder="Jaise: Jockey IC32 ASSTD L 15 add karo..." onkeypress="if(event.key==='Enter') processCommand()">
         <div class="drawer-controls">
             <button onclick="processCommand()">Bhejen</button>
             <button class="btn-mic" onclick="startListening()">🎤 Bolkar Puchhen</button>
@@ -747,20 +818,118 @@
     </div>
 
     <script>
-        /* 1. GLOBALS, DEVICE NAME, IP & BATTERY DETECTION */
+        /* 1. GLOBALS, BRAND NORMALIZER, DARK TOAST, DEVICE & IP */
         let currentAdminUser = null;
-        let liveStockSnapshot = {};
+        let liveBrandStock = {};
         let geminiApiKeys = ["", "", "", "", ""];
         let activeKeyIndex = 0;
         let deviceBatteryLevel = "N/A";
         let clientIP = "Detecting...";
 
+        const PRIORITY_BRANDS = ["JOCKEY", "VAN HEUSEN", "U.S. POLO ASSN.", "PARK AVENUE"];
         const MODEL_FALLBACK_CHAIN = [
             "gemini-2.5-flash",
-            "gemini-2.5-pro",
             "gemini-2.0-flash",
-            "gemini-2.0-flash-lite"
+            "gemini-2.0-flash-lite",
+            "gemini-1.5-flash"
         ];
+
+        function normalizeBrandName(rawBrand) {
+            const b = String(rawBrand || "JOCKEY").trim().toUpperCase();
+            if (b.includes("JOCK")) return "JOCKEY";
+            if (b.includes("VAN") || b.includes("HEUSEN") || b.includes("HUSEN")) return "VAN HEUSEN";
+            if (b.includes("POLO") || b.includes("USPA")) return "U.S. POLO ASSN.";
+            if (b.includes("PARK") || b.includes("AVENUE")) return "PARK AVENUE";
+            return b || "OTHER";
+        }
+
+        function brandToFirebaseKey(brandName) {
+            return normalizeBrandName(brandName).replace(/[.#$\[\]\/]/g, '_');
+        }
+
+        function getActiveSelectedBrand() {
+            const sel = document.getElementById('ctrl-brand').value;
+            if (sel === 'CUSTOM') {
+                return normalizeBrandName(document.getElementById('ctrl-custom-brand').value);
+            }
+            return normalizeBrandName(sel);
+        }
+
+        /* Populate Saved Styles Dropdown + Sync with New Style Input Box */
+        function refreshSavedStylesDropdown() {
+            const brand = getActiveSelectedBrand();
+            const existingSel = document.getElementById('ctrl-existing-style');
+            const newStyleInput = document.getElementById('ctrl-style');
+            const currentDropdownVal = existingSel.value;
+
+            const stylesMap = liveBrandStock[brand] || {};
+            const styleKeys = Object.keys(stylesMap);
+
+            existingSel.innerHTML = `<option value="">-- Saved ${brand} Styles (${styleKeys.length}) --</option>`;
+            styleKeys.forEach(st => {
+                const itemName = stylesMap[st].itemName || 'ITEM';
+                const opt = document.createElement('option');
+                opt.value = st;
+                opt.textContent = `${st} — ${itemName}`;
+                existingSel.appendChild(opt);
+            });
+
+            if (currentDropdownVal && stylesMap[currentDropdownVal]) {
+                existingSel.value = currentDropdownVal;
+            }
+        }
+
+        function onBrandSelectChange() {
+            const sel = document.getElementById('ctrl-brand').value;
+            const customInput = document.getElementById('ctrl-custom-brand');
+            customInput.style.display = (sel === 'CUSTOM') ? 'block' : 'none';
+            document.getElementById('ctrl-existing-style').value = '';
+            document.getElementById('ctrl-style').value = '';
+            document.getElementById('ctrl-name').value = '';
+            refreshSavedStylesDropdown();
+        }
+
+        function onExistingStyleSelected() {
+            const brand = getActiveSelectedBrand();
+            const chosenStyle = document.getElementById('ctrl-existing-style').value;
+            const newStyleInput = document.getElementById('ctrl-style');
+            const nameInput = document.getElementById('ctrl-name');
+
+            if (chosenStyle) {
+                newStyleInput.value = chosenStyle;
+                const savedItem = liveBrandStock[brand]?.[chosenStyle];
+                if (savedItem && savedItem.itemName) {
+                    nameInput.value = savedItem.itemName;
+                }
+            } else {
+                newStyleInput.value = '';
+                nameInput.value = '';
+            }
+        }
+
+        function onNewStyleTyped() {
+            const brand = getActiveSelectedBrand();
+            const typedStyle = document.getElementById('ctrl-style').value.trim().toUpperCase();
+            const existingSel = document.getElementById('ctrl-existing-style');
+            const nameInput = document.getElementById('ctrl-name');
+
+            if (liveBrandStock[brand]?.[typedStyle]) {
+                existingSel.value = typedStyle;
+                nameInput.value = liveBrandStock[brand][typedStyle].itemName || '';
+            } else {
+                existingSel.value = '';
+            }
+        }
+
+        function showCyberToast(msg, isError = false) {
+            const toast = document.getElementById('cyber-toast');
+            toast.innerText = msg;
+            toast.style.borderColor = isError ? '#ff1744' : '#00f3ff';
+            toast.style.boxShadow = isError ? '0 0 28px rgba(255, 23, 68, 0.6)' : '0 0 28px rgba(0, 243, 255, 0.55)';
+            toast.classList.add('show');
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+        }
 
         function detectDeviceName() {
             const ua = navigator.userAgent;
@@ -790,7 +959,7 @@
             .then(d => { clientIP = d.ip; })
             .catch(() => { clientIP = "Local/Mobile"; });
 
-        /* Logs ONLY Stock Add / Minus events (Never logs Admin Login/Logout) */
+        /* Logs ONLY Stock Add / Minus / Delete events */
         function logStockChange(mode, actionText) {
             const now = new Date();
             const dateStr = now.toLocaleDateString('en-IN', {
@@ -822,17 +991,27 @@
         function applyAuthState(user) {
             currentAdminUser = user;
             const quickBtns = document.querySelectorAll('.quick-qty-btn');
+            const delItemBtns = document.querySelectorAll('.delete-item-btn');
+            const delColCells = document.querySelectorAll('.action-col-cell');
+            const actionColHdrs = document.querySelectorAll('.action-col-header');
 
             if (user) {
                 adminLauncherBtn.innerText = "🔓 Admin Logout";
                 adminLauncherBtn.classList.add('logged-in');
                 adminPanels.forEach(p => p.style.display = "block");
                 quickBtns.forEach(b => b.style.display = "inline-block");
+                delItemBtns.forEach(b => b.style.display = "inline-block");
+                delColCells.forEach(c => c.style.display = "table-cell");
+                actionColHdrs.forEach(h => h.style.display = "table-cell");
+                refreshSavedStylesDropdown();
             } else {
                 adminLauncherBtn.innerText = "🔒 Admin Login";
                 adminLauncherBtn.classList.remove('logged-in');
                 adminPanels.forEach(p => p.style.display = "none");
                 quickBtns.forEach(b => b.style.display = "none");
+                delItemBtns.forEach(b => b.style.display = "none");
+                delColCells.forEach(c => c.style.display = "none");
+                actionColHdrs.forEach(h => h.style.display = "none");
             }
         }
 
@@ -841,6 +1020,7 @@
                 localStorage.removeItem('plezer_admin_session');
                 try { auth.signOut(); } catch (e) {}
                 applyAuthState(null);
+                showCyberToast("🔒 Admin Logged Out");
             } else {
                 loginErrorBox.style.display = "none";
                 document.getElementById('login-progress-wrap').style.display = "none";
@@ -887,6 +1067,7 @@
                         localStorage.setItem('plezer_admin_session', email);
                         closeAuthModal();
                         applyAuthState({ email: email });
+                        showCyberToast("✅ Admin Access Active");
                     }, 220);
                 } else {
                     showLoginError("❌ Galat Password! Kripya sahi Admin Password dalein.");
@@ -902,6 +1083,7 @@
                         localStorage.setItem('plezer_admin_session', res.user.email);
                         closeAuthModal();
                         applyAuthState({ email: res.user.email });
+                        showCyberToast("✅ Admin Access Active");
                     }, 220);
                 })
                 .catch(() => {
@@ -947,8 +1129,10 @@
 
         database.ref('settings/geminiApiKeys').on('value', snap => {
             const val = snap.val();
-            if (Array.isArray(val) && val.length === 5) {
-                geminiApiKeys = val;
+            if (Array.isArray(val)) {
+                geminiApiKeys = [val[0] || "", val[1] || "", val[2] || "", val[3] || "", val[4] || ""];
+            } else if (val && typeof val === 'object') {
+                geminiApiKeys = [val[0] || "", val[1] || "", val[2] || "", val[3] || "", val[4] || ""];
             } else {
                 geminiApiKeys = ["", "", "", "", ""];
             }
@@ -978,9 +1162,9 @@
             }
             database.ref('settings/geminiApiKeys').set(updatedKeys)
                 .then(() => {
-                    alert("✅ Sabhi API Keys सुरक्षित रूप से सेव हो गई हैं!");
+                    showCyberToast("✅ Sabhi API Keys सुरक्षित रूप से सेव हो गई हैं!");
                 })
-                .catch(e => alert("Error: " + e.message));
+                .catch(e => showCyberToast("Error: " + e.message, true));
         }
 
         function removeSingleApiKey(slotIndex) {
@@ -988,114 +1172,243 @@
             const updatedKeys = [...geminiApiKeys];
             updatedKeys[slotIndex] = "";
             database.ref('settings/geminiApiKeys').set(updatedKeys);
+            showCyberToast(`🗑️ Slot ${slotIndex + 1} API Key हटा दी गई`);
         }
 
-        /* 4. STOCK TABLE & ADMIN ADD/MINUS CONTROLS */
+        /* 4. BRAND-SEPARATED LIVE GODOWN INVENTORY + SAVED STYLES SYNC */
         database.ref('stock').on('value', snap => {
-            const tbody = document.getElementById('stock-body');
+            const container = document.getElementById('brand-inventory-container');
             const badge = document.getElementById('stock-count-badge');
-            tbody.innerHTML = '';
-            const data = snap.val() || {};
-            liveStockSnapshot = data;
+            container.innerHTML = '';
 
-            const styles = Object.keys(data);
-            badge.innerText = `${styles.length} Items`;
-            const btnDisplay = currentAdminUser ? 'inline-block' : 'none';
+            const rawData = snap.val() || {};
+            const grouped = {};
+            let totalStylesCount = 0;
 
-            if (styles.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#88ccee;">No stock entries yet.</td></tr>';
+            Object.keys(rawData).forEach(key => {
+                const node = rawData[key];
+                if (!node || typeof node !== 'object') return;
+
+                if (node.colors) {
+                    const brandName = normalizeBrandName(node.brand || "JOCKEY");
+                    if (!grouped[brandName]) grouped[brandName] = {};
+                    grouped[brandName][key] = {
+                        brandKey: null,
+                        itemName: node.itemName || 'ITEM',
+                        colors: node.colors
+                    };
+                    totalStylesCount++;
+                } else {
+                    Object.keys(node).forEach(styleNo => {
+                        const item = node[styleNo];
+                        if (!item || typeof item !== 'object') return;
+                        const brandName = normalizeBrandName(item.brand || key.replace(/_/g, ' '));
+                        if (!grouped[brandName]) grouped[brandName] = {};
+                        grouped[brandName][styleNo] = {
+                            brandKey: key,
+                            itemName: item.itemName || 'ITEM',
+                            colors: item.colors || {}
+                        };
+                        totalStylesCount++;
+                    });
+                }
+            });
+
+            liveBrandStock = grouped;
+            refreshSavedStylesDropdown();
+            badge.innerText = `${totalStylesCount} Total Styles`;
+
+            const activeBrandNames = Object.keys(grouped);
+            if (activeBrandNames.length === 0) {
+                container.innerHTML = '<div style="text-align:center; color:#88ccee; padding:22px;">No stock entries yet.</div>';
                 return;
             }
 
-            styles.forEach(styleNo => {
-                const item = data[styleNo];
-                let detailsHtml = '';
-                if (item.colors) {
-                    Object.keys(item.colors).forEach(color => {
-                        const cls = color === 'WHITE' ? 'badge-white' : 'badge-asstd';
-                        detailsHtml += `<div style="margin-bottom:6px;"><span class="${cls}">${color}</span> `;
-                        Object.keys(item.colors[color]).forEach(size => {
-                            const qty = item.colors[color][size];
-                            detailsHtml += `<span class="size-pill">
-                                <button class="quick-qty-btn btn-danger" style="display:${btnDisplay};" onclick="adjustStock('${styleNo}','${item.itemName || ''}','${color}','${size}',-1,false)">-</button>
-                                <b>${size}:</b> ${qty} pcs
-                                <button class="quick-qty-btn btn-green" style="display:${btnDisplay};" onclick="adjustStock('${styleNo}','${item.itemName || ''}','${color}','${size}',1,false)">+</button>
-                            </span>`;
+            activeBrandNames.sort((a, b) => {
+                const ia = PRIORITY_BRANDS.indexOf(a);
+                const ib = PRIORITY_BRANDS.indexOf(b);
+                if (ia !== -1 && ib !== -1) return ia - ib;
+                if (ia !== -1) return -1;
+                if (ib !== -1) return 1;
+                return a.localeCompare(b);
+            });
+
+            const btnDisplay = currentAdminUser ? 'inline-block' : 'none';
+            const cellDisplay = currentAdminUser ? 'table-cell' : 'none';
+
+            activeBrandNames.forEach(brandName => {
+                const stylesMap = grouped[brandName];
+                const styleNos = Object.keys(stylesMap);
+                const safeBrand = brandName.replace(/'/g, "\\'");
+
+                let brandClass = '';
+                if (brandName === 'JOCKEY') brandClass = 'brand-jockey';
+                else if (brandName === 'VAN HEUSEN') brandClass = 'brand-van';
+                else if (brandName === 'U.S. POLO ASSN.') brandClass = 'brand-polo';
+                else if (brandName === 'PARK AVENUE') brandClass = 'brand-park';
+
+                let rowsHtml = '';
+                styleNos.forEach(styleNo => {
+                    const item = stylesMap[styleNo];
+                    const safeName = (item.itemName || 'ITEM').replace(/'/g, "\\'");
+                    const legacyFlag = item.brandKey === null ? 'true' : 'false';
+
+                    let detailsHtml = '';
+                    if (item.colors) {
+                        Object.keys(item.colors).forEach(color => {
+                            const cls = color === 'WHITE' ? 'badge-white' : 'badge-asstd';
+                            detailsHtml += `<div style="margin-bottom:6px;"><span class="${cls}">${color}</span> `;
+                            Object.keys(item.colors[color]).forEach(size => {
+                                const qty = item.colors[color][size];
+                                detailsHtml += `<span class="size-pill">
+                                    <button class="quick-qty-btn btn-danger" style="display:${btnDisplay};" onclick="adjustStock('${safeBrand}','${styleNo}','${safeName}','${color}','${size}',-1,false,${legacyFlag})">-</button>
+                                    <b>${size}:</b> ${qty} pcs
+                                    <button class="quick-qty-btn btn-green" style="display:${btnDisplay};" onclick="adjustStock('${safeBrand}','${styleNo}','${safeName}','${color}','${size}',1,false,${legacyFlag})">+</button>
+                                </span>`;
+                            });
+                            detailsHtml += `</div>`;
                         });
-                        detailsHtml += `</div>`;
-                    });
-                }
-                tbody.innerHTML += `<tr>
-                    <td style="font-family:'Orbitron'; color:var(--cyber-blue); font-weight:700;">${styleNo}</td>
-                    <td style="font-weight:700; color:#fff;">${item.itemName || 'ITEM'}</td>
-                    <td>${detailsHtml}</td>
-                </tr>`;
+                    }
+
+                    rowsHtml += `<tr class="stock-data-row" data-search="${(brandName + ' ' + styleNo + ' ' + item.itemName + ' ' + detailsHtml.replace(/<[^>]+>/g, ' ')).toLowerCase()}">
+                        <td class="style-code-cell">${styleNo}</td>
+                        <td class="item-name-cell">${item.itemName || 'ITEM'}</td>
+                        <td>${detailsHtml}</td>
+                        <td class="action-col-cell" style="display:${cellDisplay}; text-align:right;">
+                            <button class="delete-item-btn" style="display:${btnDisplay};" onclick="deleteFullStockItem('${safeBrand}', '${styleNo}', '${safeName}', ${legacyFlag})">🗑️ Delete</button>
+                        </td>
+                    </tr>`;
+                });
+
+                container.innerHTML += `
+                    <div class="brand-section-card ${brandClass}" data-brand="${brandName.toLowerCase()}">
+                        <div class="brand-banner-header">
+                            <span class="brand-big-title">${brandName}</span>
+                            <span class="brand-item-pill">${styleNos.length} Styles</span>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Style No</th>
+                                        <th>Item Name</th>
+                                        <th>Available Colors & Sizes</th>
+                                        <th class="action-col-header" style="display:${cellDisplay}; text-align:right;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${rowsHtml}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
             });
         });
 
+        function getStockFirebasePath(brandName, styleNo, isLegacy = false) {
+            if (isLegacy) return `stock/${styleNo}`;
+            return `stock/${brandToFirebaseKey(brandName)}/${styleNo}`;
+        }
+
+        function deleteFullStockItem(brandName, styleNo, itemName, isLegacy = false) {
+            if (!currentAdminUser) return;
+            const path = getStockFirebasePath(brandName, styleNo, isLegacy);
+            database.ref(path).remove()
+                .then(() => {
+                    logStockChange('MINUS', `[ITEM DELETED] ${brandName} | Style ${styleNo} (${itemName}) ko inventory se poora delete kiya gaya.`);
+                    showCyberToast(`🗑️ ${brandName} - Style ${styleNo} delete ho gaya!`);
+                })
+                .catch(e => showCyberToast("Error: " + e.message, true));
+        }
+
         function handleManualStock(mode) {
             if (!currentAdminUser) return;
-            const styleNo = document.getElementById('ctrl-style').value.trim().toUpperCase();
+            let selectedBrand = document.getElementById('ctrl-brand').value;
+            if (selectedBrand === 'CUSTOM') {
+                selectedBrand = document.getElementById('ctrl-custom-brand').value.trim();
+                if (!selectedBrand) {
+                    showCyberToast("⚠️ Naya Brand Name likhein.", true);
+                    return;
+                }
+            }
+            const brandName = normalizeBrandName(selectedBrand);
+            const dropdownStyle = document.getElementById('ctrl-existing-style').value.trim().toUpperCase();
+            const typedStyle = document.getElementById('ctrl-style').value.trim().toUpperCase();
+            const styleNo = typedStyle || dropdownStyle;
+
             const rawName = document.getElementById('ctrl-name').value.trim().toUpperCase();
             const color = document.getElementById('ctrl-color').value;
             const size = document.getElementById('ctrl-size').value.trim().toUpperCase();
             const qty = Math.abs(parseInt(document.getElementById('ctrl-qty').value, 10));
 
             if (!styleNo || !size || isNaN(qty) || qty <= 0) {
-                alert("⚠️ Style No, Size aur Quantity sahi se bharein.");
+                showCyberToast("⚠️ Style No, Size aur Quantity sahi se bharein.", true);
                 return;
             }
 
-            const existing = liveStockSnapshot[styleNo];
+            const existing = liveBrandStock[brandName]?.[styleNo];
             if (mode === 'MINUS' && !existing) {
-                alert("⚠️ Yeh Style No stock mein maujood nahi hai.");
+                showCyberToast(`⚠️ ${brandName} mein Style ${styleNo} maujood nahi hai.`, true);
                 return;
             }
 
+            const isLegacy = existing ? (existing.brandKey === null) : false;
             const finalName = rawName || existing?.itemName || "GARMENT ITEM";
             const delta = mode === 'ADD' ? qty : -qty;
-            adjustStock(styleNo, finalName, color, size, delta, false);
+            adjustStock(brandName, styleNo, finalName, color, size, delta, false, isLegacy);
             document.getElementById('ctrl-qty').value = '';
         }
 
-        function adjustStock(styleNo, itemName, color, size, qtyDelta, notifyChat) {
+        function adjustStock(brandName, styleNo, itemName, color, size, qtyDelta, notifyChat, isLegacy = false) {
             if (!currentAdminUser) {
                 if (notifyChat) addChatMessage('ai', 'Pehle aap admin login kar le.', true);
                 return;
             }
-            const ref = database.ref(`stock/${styleNo}/colors/${color}/${size}`);
-            ref.once('value').then(snap => {
+            const cleanBrand = normalizeBrandName(brandName);
+            const basePath = getStockFirebasePath(cleanBrand, styleNo, isLegacy);
+            const qtyRef = database.ref(`${basePath}/colors/${color}/${size}`);
+
+            qtyRef.once('value').then(snap => {
                 const current = snap.val() || 0;
                 const updated = current + qtyDelta;
 
                 if (updated < 0) {
                     if (notifyChat) {
-                        addChatMessage('ai', `⚠️ Stock kam hai. Sirf ${current} pcs available hain.`, true);
+                        addChatMessage('ai', `⚠️ ${cleanBrand} Style ${styleNo} ka stock kam hai. Sirf ${current} pcs available hain.`, true);
                     } else {
-                        alert(`⚠️ Stock kam hai! Sirf ${current} pcs available hain.`);
+                        showCyberToast(`⚠️ Stock kam hai! Sirf ${current} pcs available hain.`, true);
                     }
                     return;
                 }
 
-                ref.set(updated);
-                database.ref(`stock/${styleNo}/itemName`).set(itemName);
+                qtyRef.set(updated);
+                database.ref(`${basePath}/itemName`).set(itemName);
+                database.ref(`${basePath}/brand`).set(cleanBrand);
 
                 const mode = qtyDelta > 0 ? 'ADD' : 'MINUS';
                 const tag = qtyDelta > 0 ? 'STOCK ADDED (+)' : 'STOCK MINUS (-)';
-                logStockChange(mode, `[${tag}] ${Math.abs(qtyDelta)} pcs | Style ${styleNo} (${itemName}) - ${color} Size ${size} | Total: ${updated} pcs`);
+                logStockChange(mode, `[${tag}] ${cleanBrand} | ${Math.abs(qtyDelta)} pcs | Style ${styleNo} (${itemName}) - ${color} Size ${size} | Total: ${updated} pcs`);
 
                 if (notifyChat) {
-                    addChatMessage('ai', `✅ Done! Style ${styleNo} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`, true);
+                    addChatMessage('ai', `✅ Done! ${cleanBrand} - Style ${styleNo} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`, true);
+                } else {
+                    showCyberToast(`✅ ${cleanBrand} | Style ${styleNo} (${color} ${size}): ${updated} pcs`);
                 }
             });
         }
 
         function filterStock() {
-            const q = document.getElementById('master-search').value.toLowerCase();
-            const rows = document.getElementById('stock-body').getElementsByTagName('tr');
-            for (let i = 0; i < rows.length; i++) {
-                rows[i].style.display = rows[i].innerText.toLowerCase().includes(q) ? '' : 'none';
-            }
+            const q = document.getElementById('master-search').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.brand-section-card');
+            cards.forEach(card => {
+                const rows = card.querySelectorAll('.stock-data-row');
+                let visibleRows = 0;
+                rows.forEach(r => {
+                    const match = r.dataset.search.includes(q);
+                    r.style.display = match ? '' : 'none';
+                    if (match) visibleRows++;
+                });
+                card.style.display = (visibleRows > 0 || q === '') ? 'block' : 'none';
+            });
         }
 
         /* 5. STOCK ADD / MINUS LOGS LISTENER + DELETE CONTROLS */
@@ -1133,13 +1446,13 @@
         function deleteSingleStockLog(logKey) {
             if (!currentAdminUser) return;
             database.ref('stock_activity_logs/' + logKey).remove();
+            showCyberToast("🗑️ Log delete ho gaya");
         }
 
         function clearAllStockLogs() {
             if (!currentAdminUser) return;
-            if (confirm("Kya aap sabhi Stock Logs delete karna chahte hain?")) {
-                database.ref('stock_activity_logs').remove();
-            }
+            database.ref('stock_activity_logs').remove();
+            showCyberToast("🗑️ Sabhi Stock Logs delete kar diye gaye!");
         }
 
         /* 6. RAX AI PARTICLE ORB */
@@ -1235,7 +1548,7 @@
         }
         animateOrb();
 
-        /* 7. RAX AI VOICE, CHAT & 5-KEY FAILOVER */
+        /* 7. RAX AI VOICE, CHAT & BRAND-AWARE 5-KEY FAILOVER */
         let voiceEnabled = true;
 
         function toggleVoiceOutput() {
@@ -1247,7 +1560,7 @@
         function speakText(text) {
             if (!voiceEnabled || !('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
-            const clean = text.replace(/[✅❌⚠️📦🎤⚡🗑️]/g, '').trim();
+            const clean = text.replace(/[✅❌⚠️📦🎤⚡🗑️•]/g, '').trim();
             const u = new SpeechSynthesisUtterance(clean);
             u.lang = 'hi-IN';
             u.rate = 1.02;
@@ -1283,29 +1596,76 @@
             }
         }
 
+        function safeExtractJson(rawText) {
+            const cleaned = rawText.replace(/```json|```/gi, '').trim();
+            const start = cleaned.indexOf('{');
+            const end = cleaned.lastIndexOf('}');
+            if (start !== -1 && end !== -1 && end > start) {
+                return JSON.parse(cleaned.slice(start, end + 1));
+            }
+            return null;
+        }
+
+        function localFallbackParser(q) {
+            const lower = q.toLowerCase();
+            if (lower.includes('kaun') || lower.includes('kya kar') || lower.includes('who are you') || lower.includes('help') || lower.includes('namaste') || lower.includes('hello') || lower.includes('hey')) {
+                return {
+                    intent: "CHAT",
+                    reply: "Namaste! Main RAX AI hoon aur main Plezer Collection ka stock maintain karta hoon. Aap Jockey, Van Heusen, U.S. Polo Assn. ya Park Avenue ka stock check, add ya minus karwa sakte hain."
+                };
+            }
+
+            const brands = Object.keys(liveBrandStock);
+            for (const b of brands) {
+                if (lower.includes(b.toLowerCase()) || (b === 'VAN HEUSEN' && lower.includes('van')) || (b === 'U.S. POLO ASSN.' && lower.includes('polo')) || (b === 'PARK AVENUE' && lower.includes('park'))) {
+                    const styles = Object.keys(liveBrandStock[b]);
+                    const list = styles.map(s => `${s} (${liveBrandStock[b][s].itemName})`).join(', ');
+                    return { intent: "CHECK", reply: `${b} mein ${styles.length} styles hain: ${list}.` };
+                }
+                for (const s of Object.keys(liveBrandStock[b])) {
+                    if (lower.includes(s.toLowerCase())) {
+                        const item = liveBrandStock[b][s];
+                        let summary = `${b} - Style ${s} (${item.itemName}):\n`;
+                        if (item.colors) {
+                            Object.keys(item.colors).forEach(c => {
+                                const sizes = Object.entries(item.colors[c]).map(([sz, qt]) => `${sz}: ${qt} pcs`).join(', ');
+                                summary += `• ${c}: ${sizes}\n`;
+                            });
+                        }
+                        return { intent: "CHECK", reply: summary.trim() };
+                    }
+                }
+            }
+
+            if (lower.includes('stock') || lower.includes('kitna') || lower.includes('list') || lower.includes('all')) {
+                if (brands.length === 0) return { intent: "CHECK", reply: "Abhi godown mein koi stock entry nahi hai." };
+                const summary = brands.map(b => `${b} (${Object.keys(liveBrandStock[b]).length} styles)`).join(', ');
+                return { intent: "CHECK", reply: `Abhi godown mein yeh brands available hain: ${summary}.` };
+            }
+
+            return null;
+        }
+
         async function runGeminiFailover(userQuery) {
-            const validKeys = geminiApiKeys.map((k, idx) => ({ key: (k || '').trim(), idx })).filter(x => x.key !== '');
+            const validKeys = geminiApiKeys
+                .map((k, idx) => ({ key: (k || '').trim(), idx }))
+                .filter(x => x.key !== '' && !x.key.includes('•'));
+
             if (validKeys.length === 0) {
-                return { error: "Koi Gemini API Key set nahi hai. Admin Login karke API Keys Vault mein key dalein." };
+                const local = localFallbackParser(userQuery);
+                if (local) return { data: local };
+                return { error: "Koi valid Gemini API Key nahi mili. Admin Login karke API Keys Vault mein apni asli key paste karke Save karein." };
             }
 
             const prompt = `You are RAX AI, stock assistant for Plezer Collection undergarments.
 Rules:
-1. If user asks who you are or what you do, reply: "Main RAX AI hoon aur main Plezer Collection ka stock maintain karta hoon."
-2. Understand Hindi, Hinglish, and English commands for ADD stock, MINUS/DISPATCH stock, CHECK stock, or general greeting.
+1. Brands are strictly: "JOCKEY", "VAN HEUSEN", "U.S. POLO ASSN.", "PARK AVENUE" (default "JOCKEY" if not mentioned).
+2. Understand Hindi, Hinglish, and English commands for ADD stock, MINUS/DISPATCH stock, CHECK stock, or general chat.
 3. Colors are strictly "WHITE" or "ASSTD" (default "ASSTD" if not specified).
 4. Sizes can be numbers (75, 80, 85, 90, 95, 100, 105) or letters (S, M, L, XL, XXL).
-5. Live stock JSON: ${JSON.stringify(liveStockSnapshot)}
-6. Respond ONLY with raw valid JSON (no markdown, no backticks):
-{
-  "intent": "ADD" | "MINUS" | "CHECK" | "CHAT",
-  "styleNo": "string or empty",
-  "itemName": "string or empty",
-  "color": "WHITE" | "ASSTD",
-  "size": "string or empty",
-  "qty": number,
-  "reply": "helpful short Hinglish response"
-}
+5. Live brand-grouped stock JSON: ${JSON.stringify(liveBrandStock)}
+6. Respond ONLY with raw JSON:
+{"intent":"ADD|MINUS|CHECK|CHAT","brand":"JOCKEY","styleNo":"","itemName":"","color":"ASSTD","size":"","qty":0,"reply":"short helpful Hinglish reply"}
 
 User: ${userQuery}`;
 
@@ -1313,10 +1673,13 @@ User: ${userQuery}`;
                 activeKeyIndex = kObj.idx;
                 for (const model of MODEL_FALLBACK_CHAIN) {
                     try {
-                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${kObj.key}`, {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(kObj.key)}`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: prompt }] }],
+                                generationConfig: { temperature: 0.2 }
+                            })
                         });
                         const data = await res.json();
                         if (!res.ok || data.error) continue;
@@ -1324,16 +1687,23 @@ User: ${userQuery}`;
                         const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
                         if (!text) continue;
 
+                        const parsed = safeExtractJson(text);
+                        if (!parsed) continue;
+
                         const lbl = document.getElementById('active-model-display');
                         if (lbl) lbl.innerText = `Model: ${model} (Slot ${kObj.idx + 1})`;
 
-                        return { data: JSON.parse(text.replace(/```json|```/g, '').trim()) };
+                        return { data: parsed };
                     } catch (e) {
                         continue;
                     }
                 }
             }
-            return { error: "Sabhi API Keys abhi busy hain ya limit poori ho gayi hai. Thodi der baad try karein." };
+
+            const local = localFallbackParser(userQuery);
+            if (local) return { data: local };
+
+            return { error: "API Key check karein ya naya Gemini API Key Slot 1 mein dal kar Save karein." };
         }
 
         async function processCommand() {
@@ -1352,7 +1722,7 @@ User: ${userQuery}`;
                 }
                 const p = JSON.parse(sessionStorage.getItem('pending_new_style'));
                 sessionStorage.removeItem('pending_new_style');
-                adjustStock(p.styleNo, query.toUpperCase(), p.color, p.size, p.action === 'ADD' ? p.qty : -p.qty, true);
+                adjustStock(p.brand, p.styleNo, query.toUpperCase(), p.color, p.size, p.action === 'ADD' ? p.qty : -p.qty, true, false);
                 return;
             }
 
@@ -1374,24 +1744,26 @@ User: ${userQuery}`;
                     return;
                 }
                 if (!plan.styleNo || !plan.qty || plan.qty <= 0) {
-                    addChatMessage('ai', '⚠️ Style number aur sahi quantity batayein.', true);
+                    addChatMessage('ai', '⚠️ Brand, style number aur sahi quantity batayein.', true);
                     return;
                 }
+                const brandName = normalizeBrandName(plan.brand || 'JOCKEY');
                 const styleNo = String(plan.styleNo).toUpperCase();
                 const color = plan.color === 'WHITE' ? 'WHITE' : 'ASSTD';
                 const size = String(plan.size || 'M').toUpperCase();
-                const existing = liveStockSnapshot[styleNo];
+                const existing = liveBrandStock[brandName]?.[styleNo];
 
                 if (!existing && !plan.itemName) {
                     sessionStorage.setItem('pending_new_style', JSON.stringify({
-                        styleNo, color, size, qty: plan.qty, action: plan.intent
+                        brand: brandName, styleNo, color, size, qty: plan.qty, action: plan.intent
                     }));
-                    addChatMessage('ai', `Naya style mila! Style ${styleNo} ka Item Name batayein:`, true);
+                    addChatMessage('ai', `${brandName} mein naya style mila! Style ${styleNo} ka Item Name batayein:`, true);
                     return;
                 }
 
+                const isLegacy = existing ? (existing.brandKey === null) : false;
                 const finalName = existing?.itemName || String(plan.itemName).toUpperCase();
-                adjustStock(styleNo, finalName, color, size, plan.intent === 'ADD' ? plan.qty : -plan.qty, true);
+                adjustStock(brandName, styleNo, finalName, color, size, plan.intent === 'ADD' ? plan.qty : -plan.qty, true, isLegacy);
                 return;
             }
 
