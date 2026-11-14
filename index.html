@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
-    <title>Plezer Collection — Stock Management</title>
+    <title>Plezer Collection</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -23,19 +23,18 @@
         const database = firebase.database();
         const auth = firebase.auth();
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             color-scheme: dark;
-            --bg-main: #0c101b;
-            --card-bg: #151b2b;
-            --card-elevated: #1d253a;
-            --border-soft: rgba(255, 255, 255, 0.12);
-            --gold-accent: #fbbf24;
-            --gold-soft: rgba(251, 191, 36, 0.16);
-            --emerald: #10b981;
-            --sky-accent: #38bdf8;
-            --rose-accent: #f43f5e;
+            --bg-main: #060913;
+            --card-bg: rgba(14, 20, 38, 0.92);
+            --card-elevated: #16203c;
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff007f;
+            --neon-gold: #fbbf24;
+            --neon-emerald: #10b981;
+            --neon-purple: #a855f7;
             --text-primary: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -47,47 +46,133 @@
             padding: 0 0 120px 0;
             background-color: var(--bg-main);
             background-image:
-                radial-gradient(circle at 15% 10%, rgba(251, 191, 36, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 85% 85%, rgba(56, 189, 248, 0.08) 0%, transparent 45%);
+                radial-gradient(circle at 12% 14%, rgba(0, 243, 255, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 88% 25%, rgba(255, 0, 127, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 50% 88%, rgba(251, 191, 36, 0.12) 0%, transparent 50%);
             color: var(--text-primary);
             font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* Clean, Crisp & Balanced Showroom Header */
+        /* Ambient Neon Light Orbs Across the Page */
+        .neon-ambient-light {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(110px);
+            z-index: -1;
+            pointer-events: none;
+            animation: ambientFloat 7s infinite alternate ease-in-out;
+        }
+        .light-1 { width: 280px; height: 280px; background: rgba(0, 243, 255, 0.25); top: 10%; left: -60px; }
+        .light-2 { width: 320px; height: 320px; background: rgba(255, 0, 127, 0.22); bottom: 12%; right: -60px; animation-delay: 2s; }
+        @keyframes ambientFloat {
+            0% { transform: scale(1) translateY(0px); opacity: 0.7; }
+            100% { transform: scale(1.18) translateY(-18px); opacity: 1; }
+        }
+
+        /* Wide, Tall & Glowing Neon Showroom Banner (No Subtitle Below) */
         header {
+            width: 100%;
             text-align: center;
-            padding: 20px 14px;
-            background: rgba(13, 17, 29, 0.96);
-            border-bottom: 2px solid rgba(251, 191, 36, 0.45);
-            backdrop-filter: blur(14px);
+            padding: 28px 10px 30px 10px;
+            background: linear-gradient(180deg, #070b18 0%, #0d142b 55%, #070b18 100%);
+            border-bottom: 3px solid var(--neon-cyan);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.55);
+            overflow: hidden;
+            animation: bannerBorderNeon 3.6s infinite alternate;
+        }
+
+        /* Sweeping Light Beam Effect Inside Banner */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), rgba(0, 243, 255, 0.2), transparent);
+            transform: skewX(-22deg);
+            animation: bannerLightSweep 4.2s infinite ease-in-out;
+            pointer-events: none;
+        }
+        @keyframes bannerLightSweep {
+            0% { left: -100%; }
+            55%, 100% { left: 160%; }
         }
 
         header h1 {
             margin: 0;
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(22px, 5.8vw, 34px);
+            font-size: clamp(25px, 6.6vw, 46px);
             font-weight: 900;
             letter-spacing: 2.5px;
-            line-height: 1.2;
-            background: linear-gradient(90deg, #ffffff 0%, #fde68a 45%, #fbbf24 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            line-height: 1.15;
+            display: inline-block;
+            color: #ffffff;
+            transform: scaleY(1.38);
             text-transform: uppercase;
+            animation: bannerNeonGlow 3.6s infinite alternate;
         }
 
-        .header-sub {
-            margin-top: 4px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            text-transform: uppercase;
+        .sig-z {
+            display: inline-block;
+            position: relative;
+        }
+        .sig-z::after {
+            content: '';
+            position: absolute;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            height: 3.5px;
+            background: #ffffff;
+            border-radius: 3px;
+            box-shadow: 0 0 10px #ffffff, 0 0 18px var(--neon-cyan);
+        }
+
+        @keyframes bannerNeonGlow {
+            0%, 100% {
+                color: #ffffff;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #00f3ff,
+                    0 0 32px #00f3ff,
+                    0 0 55px #0088ff;
+            }
+            33% {
+                color: #fff8eb;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #fbbf24,
+                    0 0 34px #ff6a00,
+                    0 0 58px #ff007f;
+            }
+            66% {
+                color: #ffffff;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #ff007f,
+                    0 0 34px #a855f7,
+                    0 0 58px #00f3ff;
+            }
+        }
+
+        @keyframes bannerBorderNeon {
+            0%, 100% {
+                border-bottom-color: #00f3ff;
+                box-shadow: 0 8px 32px rgba(0, 243, 255, 0.42);
+            }
+            33% {
+                border-bottom-color: #fbbf24;
+                box-shadow: 0 8px 32px rgba(251, 191, 36, 0.42);
+            }
+            66% {
+                border-bottom-color: #ff007f;
+                box-shadow: 0 8px 32px rgba(255, 0, 127, 0.42);
+            }
         }
 
         /* Custom Toast Notification */
@@ -96,9 +181,9 @@
             top: 18px;
             left: 50%;
             transform: translateX(-50%) translateY(-140%);
-            background: #1e263d;
-            border: 1.5px solid var(--gold-accent);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+            background: #131c36;
+            border: 1.5px solid var(--neon-cyan);
+            box-shadow: 0 0 28px rgba(0, 243, 255, 0.55);
             color: #ffffff;
             padding: 12px 20px;
             border-radius: 12px;
@@ -113,28 +198,34 @@
 
         .main-wrapper {
             max-width: 940px;
-            margin: 18px auto;
+            margin: 20px auto;
             width: 94%;
         }
 
+        /* Neon Glowing Glass Cards Across Whole Page */
         .panel-card {
             background: var(--card-bg);
-            border: 1px solid var(--border-soft);
+            border: 1.5px solid rgba(0, 243, 255, 0.28);
             border-radius: 18px;
             padding: 18px;
-            margin-bottom: 20px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+            margin-bottom: 22px;
+            box-shadow:
+                0 12px 35px rgba(0, 0, 0, 0.65),
+                inset 0 0 18px rgba(0, 243, 255, 0.05);
+            backdrop-filter: blur(14px);
+            position: relative;
         }
 
         .panel-header {
             font-family: 'Montserrat', sans-serif;
             font-size: 14px;
-            font-weight: 800;
-            color: #f1f5f9;
-            letter-spacing: 0.8px;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.45);
+            letter-spacing: 1px;
             padding-bottom: 12px;
             margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-soft);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -145,7 +236,7 @@
         input, select {
             width: 100%;
             background: var(--card-elevated);
-            border: 1px solid rgba(148, 163, 184, 0.28);
+            border: 1.5px solid rgba(0, 243, 255, 0.28);
             padding: 11px 14px;
             border-radius: 11px;
             color: #ffffff;
@@ -155,29 +246,30 @@
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-        input::placeholder { color: #64748b; }
+        input::placeholder { color: #7c93b8; }
         input:focus, select:focus {
-            border-color: var(--gold-accent);
-            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.18);
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 14px rgba(255, 0, 127, 0.4);
         }
-        select option { background: #1d253a; color: #ffffff; }
+        select option { background: #16203c; color: #ffffff; }
 
         button {
-            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            background: linear-gradient(135deg, #00c6ff, #7c3aed);
             border: none;
             padding: 11px 18px;
             color: #ffffff;
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 800;
             border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.15s, filter 0.15s;
+            box-shadow: 0 0 14px rgba(0, 198, 255, 0.35);
+            transition: transform 0.15s, filter 0.15s, box-shadow 0.15s;
         }
-        button:hover { transform: translateY(-1px); filter: brightness(1.1); }
-        .btn-green { background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; }
-        .btn-danger { background: linear-gradient(135deg, #e11d48, #be123c); color: #ffffff; }
-        .btn-mic { background: linear-gradient(135deg, #d97706, #ea580c); color: #ffffff; }
+        button:hover { transform: translateY(-1px); filter: brightness(1.12); box-shadow: 0 0 20px rgba(0, 243, 255, 0.55); }
+        .btn-green { background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; box-shadow: 0 0 14px rgba(16, 185, 129, 0.38); }
+        .btn-danger { background: linear-gradient(135deg, #e11d48, #be123c); color: #ffffff; box-shadow: 0 0 14px rgba(225, 29, 72, 0.38); }
+        .btn-mic { background: linear-gradient(135deg, #f59e0b, #ff007f); color: #ffffff; box-shadow: 0 0 14px rgba(255, 0, 127, 0.38); }
 
         /* Admin-Only Panels */
         .admin-only-panel {
@@ -201,32 +293,34 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            background: rgba(251, 191, 36, 0.06);
-            border: 1px solid rgba(251, 191, 36, 0.28);
+            background: rgba(251, 191, 36, 0.07);
+            border: 1.5px solid rgba(251, 191, 36, 0.38);
             padding: 8px;
             border-radius: 12px;
+            box-shadow: 0 0 14px rgba(251, 191, 36, 0.14);
         }
         .style-stack-box select {
-            border-color: rgba(251, 191, 36, 0.5);
+            border-color: rgba(251, 191, 36, 0.55);
             color: #fde68a;
         }
         .stock-action-btns { display: flex; gap: 10px; }
         .stock-action-btns button { flex: 1; padding: 12px; font-size: 14px; }
 
-        /* BRAND-WISE SEPARATE INVENTORY CARDS */
+        /* BRAND-WISE SEPARATE NEON INVENTORY CARDS */
         .brand-section-card {
-            background: #111625;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #0c1224;
+            border: 1.5px solid rgba(0, 243, 255, 0.32);
             border-radius: 16px;
             margin-bottom: 18px;
             overflow: hidden;
+            box-shadow: 0 0 22px rgba(0, 243, 255, 0.12);
         }
         .brand-section-card:last-child { margin-bottom: 0; }
 
         .brand-banner-header {
             padding: 13px 16px;
-            background: linear-gradient(90deg, #1e293b 0%, #27223b 100%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            background: linear-gradient(90deg, #131e3d 0%, #261442 50%, #131e3d 100%);
+            border-bottom: 1.5px solid rgba(0, 243, 255, 0.25);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -236,20 +330,29 @@
             font-family: 'Montserrat', sans-serif;
             font-size: clamp(17px, 4.4vw, 22px);
             font-weight: 900;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.8px;
             color: #ffffff;
+            text-shadow: 0 0 12px rgba(0, 243, 255, 0.75);
             text-transform: uppercase;
         }
-        .brand-jockey .brand-big-title { color: #fda4af; }
-        .brand-van .brand-big-title { color: #7dd3fc; }
-        .brand-polo .brand-big-title { color: #fde047; }
-        .brand-park .brand-big-title { color: #6ee7b7; }
+        .brand-jockey { border-color: rgba(255, 0, 127, 0.45); box-shadow: 0 0 22px rgba(255, 0, 127, 0.14); }
+        .brand-jockey .brand-big-title { color: #fda4af; text-shadow: 0 0 12px #ff007f; }
+
+        .brand-van { border-color: rgba(0, 243, 255, 0.45); box-shadow: 0 0 22px rgba(0, 243, 255, 0.14); }
+        .brand-van .brand-big-title { color: #7dd3fc; text-shadow: 0 0 12px #00f3ff; }
+
+        .brand-polo { border-color: rgba(251, 191, 36, 0.45); box-shadow: 0 0 22px rgba(251, 191, 36, 0.14); }
+        .brand-polo .brand-big-title { color: #fde047; text-shadow: 0 0 12px #fbbf24; }
+
+        .brand-park { border-color: rgba(16, 185, 129, 0.45); box-shadow: 0 0 22px rgba(16, 185, 129, 0.14); }
+        .brand-park .brand-big-title { color: #6ee7b7; text-shadow: 0 0 12px #10b981; }
 
         .brand-item-pill {
             font-size: 12px;
-            font-weight: 700;
-            color: #e2e8f0;
-            background: rgba(255, 255, 255, 0.1);
+            font-weight: 800;
+            color: var(--neon-gold);
+            background: rgba(251, 191, 36, 0.12);
+            border: 1px solid rgba(251, 191, 36, 0.4);
             padding: 4px 12px;
             border-radius: 20px;
             white-space: nowrap;
@@ -264,7 +367,7 @@
             vertical-align: middle;
         }
         th {
-            background: #182035;
+            background: #131b33;
             color: var(--text-muted);
             font-size: 11px;
             font-weight: 800;
@@ -272,14 +375,15 @@
             text-transform: uppercase;
         }
         tbody tr:last-child td { border-bottom: none; }
-        tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+        tbody tr:hover { background: rgba(0, 243, 255, 0.04); }
 
         .style-code-badge {
             display: inline-block;
             font-family: 'Montserrat', sans-serif;
-            background: var(--gold-soft);
-            color: var(--gold-accent);
-            border: 1px solid rgba(251, 191, 36, 0.45);
+            background: rgba(251, 191, 36, 0.16);
+            color: var(--neon-gold);
+            border: 1px solid rgba(251, 191, 36, 0.55);
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.2);
             padding: 5px 10px;
             border-radius: 8px;
             font-weight: 800;
@@ -288,7 +392,7 @@
         }
         .item-name-cell {
             font-weight: 700;
-            color: #f1f5f9;
+            color: #f8fafc;
             font-size: 15px;
         }
 
@@ -302,9 +406,9 @@
         .color-group-row:last-child { margin-bottom: 0; }
 
         .badge-white {
-            background: rgba(56, 189, 248, 0.16);
-            color: #7dd3fc;
-            border: 1px solid rgba(56, 189, 248, 0.45);
+            background: rgba(0, 243, 255, 0.15);
+            color: #67e8f9;
+            border: 1px solid rgba(0, 243, 255, 0.5);
             padding: 3px 10px;
             border-radius: 6px;
             font-size: 12px;
@@ -312,9 +416,9 @@
             letter-spacing: 0.5px;
         }
         .badge-asstd {
-            background: rgba(244, 63, 94, 0.16);
+            background: rgba(255, 0, 127, 0.16);
             color: #fda4af;
-            border: 1px solid rgba(244, 63, 94, 0.45);
+            border: 1px solid rgba(255, 0, 127, 0.5);
             padding: 3px 10px;
             border-radius: 6px;
             font-size: 12px;
@@ -323,8 +427,8 @@
         }
 
         .size-qty-card {
-            background: #1c243b;
-            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: #16203b;
+            border: 1px solid rgba(0, 243, 255, 0.25);
             padding: 5px 9px;
             border-radius: 10px;
             display: inline-flex;
@@ -332,9 +436,9 @@
             gap: 8px;
         }
         .size-label-tag {
-            background: rgba(167, 139, 250, 0.2);
-            color: #ddd6fe;
-            border: 1px solid rgba(167, 139, 250, 0.45);
+            background: rgba(168, 85, 247, 0.22);
+            color: #e9d5ff;
+            border: 1px solid rgba(168, 85, 247, 0.5);
             padding: 2px 8px;
             border-radius: 6px;
             font-size: 13px;
@@ -343,6 +447,7 @@
         }
         .qty-value-tag {
             color: #34d399;
+            text-shadow: 0 0 8px rgba(52, 211, 153, 0.35);
             font-size: 14px;
             font-weight: 800;
             white-space: nowrap;
@@ -354,16 +459,18 @@
             font-weight: 900;
             display: none;
             line-height: 1.1;
+            box-shadow: none;
         }
         .delete-item-btn {
-            background: rgba(244, 63, 94, 0.16);
-            border: 1px solid rgba(244, 63, 94, 0.45);
+            background: rgba(244, 63, 94, 0.18);
+            border: 1px solid rgba(244, 63, 94, 0.5);
             color: #fda4af;
             padding: 6px 11px;
             font-size: 12px;
             border-radius: 8px;
             display: none;
             white-space: nowrap;
+            box-shadow: none;
         }
         .delete-item-btn:hover { background: #e11d48; color: #ffffff; }
 
@@ -372,20 +479,21 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: #111625;
+            background: #0d1326;
             padding: 8px 10px;
             border-radius: 10px;
-            border: 1px solid var(--border-soft);
+            border: 1px solid rgba(0, 243, 255, 0.22);
             margin-bottom: 10px;
         }
         .api-slot-row.saved-slot {
-            border-color: rgba(16, 185, 129, 0.5);
+            border-color: rgba(16, 185, 129, 0.55);
             background: rgba(16, 185, 129, 0.08);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
         }
         .slot-label {
             font-size: 11px;
             font-weight: 800;
-            color: var(--sky-accent);
+            color: var(--neon-cyan);
             min-width: 52px;
         }
         .slot-saved-tag {
@@ -407,17 +515,18 @@
         }
         .slot-clear-btn {
             background: rgba(244, 63, 94, 0.18);
-            border: 1px solid rgba(244, 63, 94, 0.45);
+            border: 1px solid rgba(244, 63, 94, 0.5);
             color: #fda4af;
             padding: 7px 9px;
             font-size: 12px;
             border-radius: 8px;
             flex-shrink: 0;
+            box-shadow: none;
         }
         #api-diagnostic-box {
             display: none;
-            background: #0f1422;
-            border: 1px solid rgba(56, 189, 248, 0.4);
+            background: #0b1020;
+            border: 1px solid rgba(0, 243, 255, 0.4);
             color: #e2e8f0;
             padding: 10px 12px;
             border-radius: 10px;
@@ -428,8 +537,8 @@
 
         /* Clean Stock Logs Panel */
         #logs-container {
-            background: #0f1422;
-            border: 1px solid var(--border-soft);
+            background: #0b1020;
+            border: 1px solid rgba(0, 243, 255, 0.22);
             padding: 12px;
             border-radius: 12px;
             max-height: 290px;
@@ -443,12 +552,12 @@
             gap: 10px;
             padding: 11px 12px;
             border-radius: 10px;
-            background: #171e31;
-            border-left: 4px solid var(--emerald);
+            background: #131b33;
+            border-left: 4px solid var(--neon-emerald);
             margin-bottom: 9px;
         }
         .log-card-item:last-child { margin-bottom: 0; }
-        .log-card-item.minus-log { border-left-color: var(--rose-accent); }
+        .log-card-item.minus-log { border-left-color: var(--neon-pink); }
         .log-meta-line {
             color: #cbd5e1;
             font-size: 12.5px;
@@ -471,6 +580,7 @@
             font-size: 12px;
             border-radius: 7px;
             flex-shrink: 0;
+            box-shadow: none;
         }
 
         /* Bottom-Left Admin Access Button */
@@ -482,18 +592,19 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: #1b2338;
-            border: 1.5px solid rgba(251, 191, 36, 0.55);
+            background: #111830;
+            border: 1.5px solid var(--neon-cyan);
             color: #ffffff;
             padding: 10px 16px;
             border-radius: 30px;
             font-size: 12.5px;
             font-weight: 800;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.35);
             cursor: pointer;
         }
         #bottom-admin-launcher.logged-in {
-            border-color: rgba(244, 63, 94, 0.65);
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
         }
 
         /* System Access Modal */
@@ -501,16 +612,16 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(9, 13, 22, 0.9);
+            background: rgba(6, 9, 19, 0.92);
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
         }
         .modal-card {
-            background: #161d30;
-            border: 1.5px solid rgba(251, 191, 36, 0.45);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+            background: #111830;
+            border: 1.5px solid var(--neon-cyan);
+            box-shadow: 0 0 38px rgba(0, 243, 255, 0.38);
             padding: 24px;
             border-radius: 20px;
             width: 90%;
@@ -521,8 +632,8 @@
             display: inline-block;
             font-size: 10px;
             font-weight: 800;
-            color: var(--gold-accent);
-            border: 1px solid rgba(251, 191, 36, 0.45);
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 243, 255, 0.5);
             padding: 3px 10px;
             border-radius: 20px;
             margin-bottom: 10px;
@@ -563,7 +674,7 @@
         .login-progress-fill {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, var(--gold-accent), var(--emerald));
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-emerald));
             transition: width 0.25s ease;
         }
 
@@ -583,9 +694,9 @@
             width: 78px;
             height: 78px;
             border-radius: 50%;
-            background: radial-gradient(circle, #18223c 40%, rgba(251, 191, 36, 0.15) 100%);
-            border: 1.5px solid rgba(251, 191, 36, 0.55);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65);
+            background: radial-gradient(circle, #131d3b 40%, rgba(0, 243, 255, 0.18) 100%);
+            border: 1.5px solid var(--neon-cyan);
+            box-shadow: 0 0 24px rgba(0, 243, 255, 0.5), 0 0 36px rgba(255, 0, 127, 0.32);
         }
         .rex-orb-label {
             margin-top: 4px;
@@ -593,10 +704,11 @@
             font-weight: 800;
             letter-spacing: 0.8px;
             color: #ffffff;
-            background: #182035;
-            border: 1px solid rgba(251, 191, 36, 0.45);
+            background: #111830;
+            border: 1px solid var(--neon-cyan);
             padding: 2px 10px;
             border-radius: 20px;
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.35);
         }
 
         /* RAX AI Chat Drawer */
@@ -607,9 +719,9 @@
             right: 16px;
             width: 355px;
             max-width: 92vw;
-            background: #151c2f;
-            border: 1.5px solid rgba(251, 191, 36, 0.45);
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.75);
+            background: #10172e;
+            border: 1.5px solid var(--neon-cyan);
+            box-shadow: 0 0 38px rgba(0, 243, 255, 0.42);
             border-radius: 18px;
             padding: 14px;
             z-index: 1600;
@@ -618,7 +730,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-soft);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.22);
             padding-bottom: 8px;
             margin-bottom: 10px;
         }
@@ -626,19 +738,21 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 14px;
             font-weight: 900;
-            color: var(--gold-accent);
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .drawer-icon-btn {
-            background: #222c47;
-            border: 1px solid var(--border-soft);
+            background: #1b2544;
+            border: 1px solid rgba(0, 243, 255, 0.3);
             color: #ffffff;
             padding: 4px 9px;
             font-size: 12px;
             border-radius: 6px;
+            box-shadow: none;
         }
         #chat-history {
-            background: #0e1322;
-            border: 1px solid var(--border-soft);
+            background: #090e1d;
+            border: 1px solid rgba(0, 243, 255, 0.2);
             border-radius: 12px;
             padding: 10px;
             height: 185px;
@@ -650,7 +764,7 @@
         }
         .msg-user {
             align-self: flex-end;
-            background: #2563eb;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             color: #ffffff;
             padding: 8px 12px;
             border-radius: 12px 12px 2px 12px;
@@ -660,8 +774,8 @@
         }
         .msg-ai {
             align-self: flex-start;
-            background: #1c253d;
-            border-left: 3px solid var(--gold-accent);
+            background: #16203d;
+            border-left: 3px solid var(--neon-cyan);
             color: #f1f5f9;
             padding: 8px 12px;
             border-radius: 12px 12px 12px 2px;
@@ -673,7 +787,7 @@
         .msg-err {
             align-self: flex-start;
             background: rgba(244, 63, 94, 0.16);
-            border-left: 3px solid var(--rose-accent);
+            border-left: 3px solid var(--neon-pink);
             color: #fecdd3;
             padding: 8px 12px;
             border-radius: 12px 12px 12px 2px;
@@ -684,7 +798,7 @@
         }
         .msg-status {
             align-self: center;
-            color: var(--gold-accent);
+            color: var(--neon-gold);
             font-size: 12px;
             font-weight: 700;
         }
@@ -694,12 +808,14 @@
 </head>
 <body>
 
+    <div class="neon-ambient-light light-1"></div>
+    <div class="neon-ambient-light light-2"></div>
+
     <div id="cyber-toast"></div>
 
-    <!-- Clean, Balanced Showroom Header -->
+    <!-- Wide, Tall & Glowing Neon Showroom Banner Only -->
     <header>
-        <h1>PLEZER COLLECTION</h1>
-        <div class="header-sub">Live Showroom &amp; Godown Inventory</div>
+        <h1>PLE<span class="sig-z">Z</span>ER COLLECTION</h1>
     </header>
 
     <div class="main-wrapper">
@@ -711,7 +827,7 @@
             </div>
             <div class="panel-header">
                 <span>LIVE GODOWN INVENTORY</span>
-                <span id="stock-count-badge" style="font-size:12px; color:var(--emerald); font-weight:800;">0 Styles</span>
+                <span id="stock-count-badge" style="font-size:12px; color:var(--neon-emerald); font-weight:800;">0 Styles</span>
             </div>
             <div id="brand-inventory-container">
                 <div style="text-align:center; color:#94a3b8; padding:20px;">Loading live brand stock...</div>
@@ -722,7 +838,7 @@
         <div id="admin-stock-panel" class="panel-card admin-only-panel">
             <div class="panel-header">
                 <span>📦 STOCK ADD / MINUS CONTROL</span>
-                <span style="font-size:11px; color:var(--emerald);">ADMIN ONLY</span>
+                <span style="font-size:11px; color:var(--neon-emerald);">ADMIN ONLY</span>
             </div>
             <div class="stock-form-grid">
                 <div>
@@ -762,7 +878,7 @@
         <div id="admin-api-panel" class="panel-card admin-only-panel">
             <div class="panel-header">
                 <span>🔑 GEMINI API KEYS VAULT (5 SLOTS)</span>
-                <span id="keys-status-label" style="font-size:11px; color:var(--gold-accent);">Loading...</span>
+                <span id="keys-status-label" style="font-size:11px; color:var(--neon-gold);">Loading...</span>
             </div>
             <div id="api-slots-container"></div>
             <div id="api-diagnostic-box"></div>
@@ -799,11 +915,11 @@
             <input type="email" id="admin-email" placeholder="Admin Email" autocomplete="email">
             <input type="password" id="admin-password" placeholder="Security Password" autocomplete="current-password" onkeypress="if(event.key==='Enter') executeLogin()">
             <div class="login-progress-wrap" id="login-progress-wrap">
-                <div style="font-size:11px; font-weight:700; color:var(--emerald); margin-bottom:5px;" id="login-progress-text">VERIFYING ACCESS...</div>
+                <div style="font-size:11px; font-weight:700; color:var(--neon-emerald); margin-bottom:5px;" id="login-progress-text">VERIFYING ACCESS...</div>
                 <div class="login-progress-bar"><div class="login-progress-fill" id="login-progress-fill"></div></div>
             </div>
             <button onclick="executeLogin()" style="width: 100%; margin-bottom: 10px; padding: 12px; font-size: 13px;">Login Now</button>
-            <button onclick="closeAuthModal()" style="width: 100%; background: #232d47; border: 1px solid var(--border-soft); padding: 10px;">Cancel</button>
+            <button onclick="closeAuthModal()" style="width: 100%; background: #1d2847; border: 1px solid rgba(0, 243, 255, 0.25); padding: 10px; box-shadow:none;">Cancel</button>
         </div>
     </div>
 
@@ -1017,7 +1133,8 @@
         function showCyberToast(msg, isError = false) {
             const toast = document.getElementById('cyber-toast');
             toast.innerText = msg;
-            toast.style.borderColor = isError ? '#f43f5e' : '#fbbf24';
+            toast.style.borderColor = isError ? '#ff007f' : '#00f3ff';
+            toast.style.boxShadow = isError ? '0 0 28px rgba(255, 0, 127, 0.55)' : '0 0 28px rgba(0, 243, 255, 0.55)';
             toast.classList.add('show');
             clearTimeout(window._toastTimer);
             window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
@@ -1183,10 +1300,10 @@
             const statusLbl = document.getElementById('keys-status-label');
             if (count > 0) {
                 statusLbl.innerText = `✅ ${count}/5 Slots Saved`;
-                statusLbl.style.color = "var(--emerald)";
+                statusLbl.style.color = "var(--neon-emerald)";
             } else {
                 statusLbl.innerText = "⚠️ No API Keys Saved";
-                statusLbl.style.color = "var(--gold-accent)";
+                statusLbl.style.color = "var(--neon-gold)";
             }
         });
 
@@ -1218,7 +1335,6 @@
             showCyberToast(`🗑️ Slot ${slotIndex + 1} API Key हटा दी गई`);
         }
 
-        /* Auto-discovers working Flash/Pro models directly from Google's API for your key */
         async function getModelsForKey(apiKey) {
             if (discoveredActiveModels && discoveredActiveModels.length > 0) {
                 return discoveredActiveModels;
@@ -1232,7 +1348,6 @@
                         .map(m => m.name.replace(/^models\//, ''))
                         .filter(name => /gemini.*(flash|pro)/i.test(name) && !/image|tts|audio|embedding|robotics/i.test(name));
 
-                    // Prefer lite/flash models first for speed & high free quota
                     usable.sort((a, b) => {
                         const score = n => (n.includes('flash-lite') ? 0 : (n.includes('flash') ? 1 : 2));
                         return score(a) - score(b);
@@ -1603,7 +1718,7 @@
             const phi = Math.acos(-1 + (2 * i) / particleCount);
             const theta = Math.sqrt(particleCount * Math.PI) * phi;
             const tc = rCoords[i % rCoords.length] || { x: 0, y: 0, z: 0 };
-            const palette = ['#fbbf24', '#38bdf8', '#10b981', '#f43f5e'];
+            const palette = ['#00f3ff', '#fbbf24', '#10b981', '#ff007f'];
             particles.push({
                 x: (Math.random() - 0.5) * 140, y: (Math.random() - 0.5) * 140, z: (Math.random() - 0.5) * 140,
                 tx: tc.x, ty: tc.y, tz: tc.z,
@@ -1855,7 +1970,6 @@ How to respond:
             addChatMessage('user', query, false);
             chatConversationHistory.push({ role: 'User', text: query });
 
-            // Step A: Waiting for missing Quantity
             if (sessionStorage.getItem('pending_qty_step')) {
                 if (!currentAdminUser) {
                     sessionStorage.removeItem('pending_qty_step');
@@ -1874,7 +1988,6 @@ How to respond:
                 return;
             }
 
-            // Step B: Waiting for missing Item Name on new style
             if (sessionStorage.getItem('pending_new_style')) {
                 if (!currentAdminUser) {
                     sessionStorage.removeItem('pending_new_style');
