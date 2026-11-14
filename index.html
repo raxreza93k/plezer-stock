@@ -58,7 +58,7 @@
             overflow-x: hidden;
         }
 
-        /* Clean, Crisp & Balanced Showroom Header (No Stretching or Clipping) */
+        /* Clean, Crisp & Balanced Showroom Header */
         header {
             text-align: center;
             padding: 20px 14px;
@@ -277,7 +277,6 @@
         tbody tr:last-child td { border-bottom: none; }
         tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
 
-        /* Distinct Gold Badge for Style No (Clearly separated from Header & Item Name) */
         .style-code-badge {
             display: inline-block;
             font-family: 'Montserrat', sans-serif;
@@ -296,7 +295,6 @@
             font-size: 15px;
         }
 
-        /* Color Group Row */
         .color-group-row {
             display: flex;
             flex-wrap: wrap;
@@ -327,7 +325,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Clear, Large & Separated Size vs Pieces Pill */
         .size-qty-card {
             background: #1c243b;
             border: 1px solid rgba(148, 163, 184, 0.25);
@@ -804,7 +801,7 @@
         <div id="chat-history">
             <div class="msg-ai">Namaste! Main RAX AI hoon. Jockey, Van Heusen, U.S. Polo Assn., ya Park Avenue ka stock check ya update karna ho to boliye!</div>
         </div>
-        <input type="text" id="user-input" placeholder="Jaise: Jockey IC32 size S 5 pcs add karo..." onkeypress="if(event.key==='Enter') processCommand()">
+        <input type="text" id="user-input" placeholder="Jaise: US Polo P4 size M 5 pcs add karo..." onkeypress="if(event.key==='Enter') processCommand()">
         <div class="drawer-controls">
             <button onclick="processCommand()">Bhejen</button>
             <button class="btn-mic" onclick="startListening()">🎤 Bolkar Puchhen</button>
@@ -812,7 +809,7 @@
     </div>
 
     <script>
-        /* 1. GLOBALS, FULL DEVICE MODEL DETECTION (FIXES 'K' BUG), IP & BATTERY */
+        /* 1. GLOBALS, FULL DEVICE MODEL DETECTION, IP & BATTERY */
         let currentAdminUser = null;
         let liveBrandStock = {};
         let geminiApiKeys = ["", "", "", "", ""];
@@ -829,7 +826,6 @@
             "gemini-2.0-flash-lite"
         ];
 
-        /* Full Device Name Resolver (Uses High-Entropy Client Hints so Android never shows just 'K') */
         async function resolveFullDeviceName() {
             try {
                 if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
@@ -883,7 +879,6 @@
             .then(d => { clientIP = d.ip; })
             .catch(() => { clientIP = "Mobile Network"; });
 
-        /* Clean Stock Activity Logger */
         function logStockChange(mode, summaryText) {
             const now = new Date();
             const dateStr = now.toLocaleDateString('en-IN', {
@@ -1193,7 +1188,7 @@
             showCyberToast(`🗑️ Slot ${slotIndex + 1} API Key हटा दी गई`);
         }
 
-        /* 4. BRAND-SEPARATED LIVE GODOWN INVENTORY (DISTINCT STYLE BADGE & SIZE/QTY CARDS) */
+        /* 4. BRAND-SEPARATED LIVE GODOWN INVENTORY */
         database.ref('stock').on('value', snap => {
             const container = document.getElementById('brand-inventory-container');
             const badge = document.getElementById('stock-count-badge');
@@ -1431,7 +1426,7 @@
             });
         }
 
-        /* 5. CLEAN STOCK LOGS LISTENER (DATE, TIME, IP, FULL DEVICE NAME, BATTERY & PIECES ONLY) */
+        /* 5. CLEAN STOCK LOGS LISTENER */
         database.ref('stock_activity_logs').limitToLast(40).on('value', snap => {
             const box = document.getElementById('logs-container');
             box.innerHTML = '';
@@ -1567,7 +1562,7 @@
         }
         animateOrb();
 
-        /* 7. RAX AI VOICE, CHAT & COMMAND ENGINE */
+        /* 7. RAX AI VOICE, CHAT & SMART PARSER (HANDLES SHORT STYLES LIKE P4 & MISSING QTY) */
         let voiceEnabled = true;
 
         function toggleVoiceOutput() {
@@ -1625,16 +1620,40 @@
             return null;
         }
 
+        function convertHindiNumbers(str) {
+            const map = {
+                'ek': '1', 'one': '1',
+                'do': '2', 'two': '2',
+                'teen': '3', 'three': '3',
+                'char': '4', 'four': '4',
+                'panch': '5', 'paanch': '5', 'five': '5',
+                'chhe': '6', 'six': '6',
+                'saat': '7', 'seven': '7',
+                'aath': '8', 'eight': '8',
+                'nau': '9', 'nine': '9',
+                'das': '10', 'ten': '10',
+                'pandrah': '15', 'fifteen': '15',
+                'bees': '20', 'twenty': '20',
+                'pachis': '25', 'pachees': '25',
+                'tees': '30', 'thirty': '30',
+                'pachas': '50', 'fifty': '50',
+                'sau': '100', 'hundred': '100'
+            };
+            return str.replace(/\b([a-zA-Z]+)\b/g, w => map[w.toLowerCase()] || w);
+        }
+
         function localSmartCommandParser(q) {
-            const raw = q.trim();
+            const raw = convertHindiNumbers(q.trim());
             const lower = raw.toLowerCase();
 
+            // 1. Detect Brand
             let brand = "JOCKEY";
             if (lower.includes("van") || lower.includes("heusen") || lower.includes("husen")) brand = "VAN HEUSEN";
             else if (lower.includes("polo") || lower.includes("uspa")) brand = "U.S. POLO ASSN.";
             else if (lower.includes("park") || lower.includes("avenue")) brand = "PARK AVENUE";
             else if (lower.includes("jockey") || lower.includes("jocky")) brand = "JOCKEY";
 
+            // 2. Detect ADD or MINUS intent
             const isAdd = /\b(add|plus|jod|jodo|dal|daal|daldo|daaldo|entry|in)\b/i.test(lower);
             const isMinus = /\b(minus|less|nikal|nikalo|ghata|ghatao|dispatch|sale|sold|out|kam)\b/i.test(lower);
 
@@ -1642,27 +1661,21 @@
                 const intent = isMinus ? "MINUS" : "ADD";
                 const color = /\bwhite\b/i.test(lower) ? "WHITE" : "ASSTD";
 
-                let qty = 0;
-                const qtyWithUnit = lower.match(/(\d+)\s*(?:pcs?|pieces?|peaces?|pis|pic|pack|box|nos?)\b/i);
-                if (qtyWithUnit) {
-                    qty = parseInt(qtyWithUnit[1], 10);
-                } else {
-                    const nums = lower.match(/\b(\d+)\b/g);
-                    if (nums && nums.length > 0) qty = parseInt(nums[nums.length - 1], 10);
-                }
-
+                // Style Number (Supports short codes like P4, A1, IC32, IC 32, 8035, 901)
                 let styleNo = "";
-                const alphaNumStyle = raw.match(/\b([a-zA-Z]{1,4})\s*[-]?\s*(\d{2,5}[a-zA-Z]?)\b/);
-                const explicitStyle = raw.match(/style\s*(?:no|number)?\s*[:\-]?\s*([a-zA-Z0-9\-]+)/i);
-                if (alphaNumStyle) {
+                const explicitStyle = raw.match(/style\s*(?:no|number)?\s*[:\-]?\s*([a-zA-Z]{0,4}\s*[-]?\s*\d{1,5}[a-zA-Z]?)/i);
+                const alphaNumStyle = raw.match(/\b([a-zA-Z]{1,4})\s*[-]?\s*(\d{1,5}[a-zA-Z]?)\b/);
+
+                if (explicitStyle) {
+                    styleNo = explicitStyle[1].replace(/\s+/g, '').toUpperCase();
+                } else if (alphaNumStyle) {
                     styleNo = (alphaNumStyle[1] + alphaNumStyle[2]).toUpperCase();
-                } else if (explicitStyle) {
-                    styleNo = explicitStyle[1].toUpperCase();
                 } else {
                     const allNums = raw.match(/\b(\d{3,5})\b/g);
                     if (allNums && allNums.length > 0) styleNo = allNums[0];
                 }
 
+                // Size
                 let size = "";
                 const sizeMatch = raw.match(/\bsize\s*(?:no|number)?\s*[:\-]?\s*(xxl|xl|xs|s|m|l|75|80|85|90|95|100|105|110)\b/i);
                 if (sizeMatch) {
@@ -1672,8 +1685,23 @@
                     if (tokenSize) size = tokenSize[1].toUpperCase();
                 }
 
+                // Quantity (Exclude digits already used inside styleNo)
+                let qty = 0;
+                const withoutStyle = styleNo ? raw.replace(new RegExp(styleNo.split('').join('\\s*'), 'i'), ' ') : raw;
+                const qtyWithUnit = withoutStyle.toLowerCase().match(/(\d+)\s*(?:pcs?|pieces?|peaces?|pis|pic|pack|box|nos?)\b/i);
+                if (qtyWithUnit) {
+                    qty = parseInt(qtyWithUnit[1], 10);
+                } else {
+                    const remainingNums = withoutStyle.match(/\b(\d+)\b/g);
+                    if (remainingNums && remainingNums.length > 0) {
+                        const filtered = remainingNums.filter(n => n !== size);
+                        if (filtered.length > 0) qty = parseInt(filtered[filtered.length - 1], 10);
+                    }
+                }
+
+                // Optional Item Name
                 let itemName = "";
-                const knownItems = ["TRUNK", "BRIEF", "VEST", "BOXER", "TRACK", "TSHIRT", "T-SHIRT", "SHORTS", "BRA", "PANTY", "SOCKS", "THERMAL"];
+                const knownItems = ["TRUNK", "BRIEF", "VEST", "BOXER", "TRACK", "TSHIRT", "T-SHIRT", "SHORTS", "BRA", "PANTY", "SOCKS", "THERMAL", "POLO", "SHIRT"];
                 for (const ki of knownItems) {
                     if (lower.includes(ki.toLowerCase())) {
                         itemName = ki;
@@ -1681,11 +1709,12 @@
                     }
                 }
 
-                if (styleNo && qty > 0) {
+                if (styleNo) {
                     return { intent, brand, styleNo, itemName, color, size: size || "M", qty, reply: "" };
                 }
             }
 
+            // 3. Greeting / Identity
             if (lower.includes('kaun') || lower.includes('kya kar') || lower.includes('who are you') || lower.includes('help') || lower.includes('namaste') || lower.includes('hello') || lower.includes('hey')) {
                 return {
                     intent: "CHAT",
@@ -1693,6 +1722,7 @@
                 };
             }
 
+            // 4. Stock Check by Brand or Style
             const brands = Object.keys(liveBrandStock);
             for (const b of brands) {
                 for (const s of Object.keys(liveBrandStock[b])) {
@@ -1734,11 +1764,12 @@
 Rules:
 1. Brands are strictly: "JOCKEY", "VAN HEUSEN", "U.S. POLO ASSN.", "PARK AVENUE" (default "JOCKEY" if not mentioned).
 2. Understand Hindi, Hinglish, and English commands for ADD stock, MINUS/DISPATCH stock, CHECK stock, or general chat.
-3. Remove spaces in styleNo (e.g. "IC 32" -> "IC32").
+3. Remove spaces in styleNo (e.g. "IC 32" -> "IC32", "P4" -> "P4").
 4. Colors are strictly "WHITE" or "ASSTD" (default "ASSTD" if not specified).
 5. Sizes can be numbers (75, 80, 85, 90, 95, 100, 105) or letters (S, M, L, XL, XXL).
-6. Live brand-grouped stock JSON: ${JSON.stringify(liveBrandStock)}
-7. Respond ONLY with raw JSON:
+6. If user did not mention quantity (qty), set qty to 0.
+7. Live brand-grouped stock JSON: ${JSON.stringify(liveBrandStock)}
+8. Respond ONLY with raw JSON:
 {"intent":"ADD|MINUS|CHECK|CHAT","brand":"JOCKEY","styleNo":"","itemName":"","color":"ASSTD","size":"","qty":0,"reply":"short helpful Hinglish reply"}
 
 User: ${userQuery}`;
@@ -1782,7 +1813,27 @@ User: ${userQuery}`;
                 return { data: localPlan };
             }
 
-            return { error: "Samajh nahi aaya. Jaise bolein: 'Jockey IC32 size S 5 pcs add karo'." };
+            return { error: "Samajh nahi aaya. Jaise bolein: 'US Polo P4 size M 5 pcs add karo'." };
+        }
+
+        function continueStockAction(plan) {
+            const brandName = normalizeBrandName(plan.brand || 'JOCKEY');
+            const styleNo = String(plan.styleNo).toUpperCase().replace(/\s+/g, '');
+            const color = plan.color === 'WHITE' ? 'WHITE' : 'ASSTD';
+            const size = String(plan.size || 'M').toUpperCase();
+            const existing = liveBrandStock[brandName]?.[styleNo];
+
+            if (!existing && !plan.itemName) {
+                sessionStorage.setItem('pending_new_style', JSON.stringify({
+                    brand: brandName, styleNo, color, size, qty: plan.qty, action: plan.intent
+                }));
+                addChatMessage('ai', `${brandName} mein naya style mila! Style ${styleNo} ka Item Name batayein:`, true);
+                return;
+            }
+
+            const isLegacy = existing ? (existing.brandKey === null) : false;
+            const finalName = existing?.itemName || String(plan.itemName).toUpperCase();
+            adjustStock(brandName, styleNo, finalName, color, size, plan.intent === 'ADD' ? plan.qty : -plan.qty, true, isLegacy);
         }
 
         async function processCommand() {
@@ -1793,6 +1844,27 @@ User: ${userQuery}`;
 
             addChatMessage('user', query, false);
 
+            // Step A: Waiting for missing Quantity
+            if (sessionStorage.getItem('pending_qty_step')) {
+                if (!currentAdminUser) {
+                    sessionStorage.removeItem('pending_qty_step');
+                    addChatMessage('ai', 'Pehle aap admin login kar le.', true);
+                    return;
+                }
+                const savedPlan = JSON.parse(sessionStorage.getItem('pending_qty_step'));
+                const converted = convertHindiNumbers(query);
+                const numMatch = converted.match(/(\d+)/);
+                if (!numMatch || parseInt(numMatch[1], 10) <= 0) {
+                    addChatMessage('ai', '⚠️ Kripya sahi pieces ki gिनती (number) batayein, jaise 5 ya 10.', true);
+                    return;
+                }
+                sessionStorage.removeItem('pending_qty_step');
+                savedPlan.qty = parseInt(numMatch[1], 10);
+                continueStockAction(savedPlan);
+                return;
+            }
+
+            // Step B: Waiting for missing Item Name on new style
             if (sessionStorage.getItem('pending_new_style')) {
                 if (!currentAdminUser) {
                     sessionStorage.removeItem('pending_new_style');
@@ -1822,27 +1894,20 @@ User: ${userQuery}`;
                     addChatMessage('ai', 'Pehle aap admin login kar le.', true);
                     return;
                 }
-                if (!plan.styleNo || !plan.qty || plan.qty <= 0) {
-                    addChatMessage('ai', '⚠️ Brand, style number aur sahi quantity batayein.', true);
+                if (!plan.styleNo) {
+                    addChatMessage('ai', '⚠️ Style number bhi batayein, jaise P4 ya IC32.', true);
                     return;
                 }
-                const brandName = normalizeBrandName(plan.brand || 'JOCKEY');
-                const styleNo = String(plan.styleNo).toUpperCase().replace(/\s+/g, '');
-                const color = plan.color === 'WHITE' ? 'WHITE' : 'ASSTD';
-                const size = String(plan.size || 'M').toUpperCase();
-                const existing = liveBrandStock[brandName]?.[styleNo];
-
-                if (!existing && !plan.itemName) {
-                    sessionStorage.setItem('pending_new_style', JSON.stringify({
-                        brand: brandName, styleNo, color, size, qty: plan.qty, action: plan.intent
-                    }));
-                    addChatMessage('ai', `${brandName} mein naya style mila! Style ${styleNo} ka Item Name batayein:`, true);
+                if (!plan.qty || plan.qty <= 0) {
+                    const bName = normalizeBrandName(plan.brand || 'JOCKEY');
+                    const sNo = String(plan.styleNo).toUpperCase().replace(/\s+/g, '');
+                    const sz = String(plan.size || 'M').toUpperCase();
+                    sessionStorage.setItem('pending_qty_step', JSON.stringify(plan));
+                    const verb = plan.intent === 'ADD' ? 'add' : 'minus';
+                    addChatMessage('ai', `${bName} Style ${sNo} (Size ${sz}) mein kitne pieces ${verb} karne hain?`, true);
                     return;
                 }
-
-                const isLegacy = existing ? (existing.brandKey === null) : false;
-                const finalName = existing?.itemName || String(plan.itemName).toUpperCase();
-                adjustStock(brandName, styleNo, finalName, color, size, plan.intent === 'ADD' ? plan.qty : -plan.qty, true, isLegacy);
+                continueStockAction(plan);
                 return;
             }
 
