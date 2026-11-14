@@ -405,15 +405,6 @@
             letter-spacing: 1px;
             padding: 8px 10px;
         }
-        .slot-test-btn {
-            background: rgba(56, 189, 248, 0.16);
-            border: 1px solid rgba(56, 189, 248, 0.45);
-            color: #7dd3fc;
-            padding: 7px 9px;
-            font-size: 11px;
-            border-radius: 8px;
-            flex-shrink: 0;
-        }
         .slot-clear-btn {
             background: rgba(244, 63, 94, 0.18);
             border: 1px solid rgba(244, 63, 94, 0.45);
@@ -852,13 +843,15 @@
         let clientIP = "Detecting...";
         let clientDeviceName = "Detecting...";
         let chatConversationHistory = [];
+        let discoveredActiveModels = null;
 
         const PRIORITY_BRANDS = ["JOCKEY", "VAN HEUSEN", "U.S. POLO ASSN.", "PARK AVENUE"];
-        const MODEL_FALLBACK_CHAIN = [
+        const DEFAULT_MODEL_CHAIN = [
+            "gemini-3.5-flash-lite",
+            "gemini-3.5-flash",
+            "gemini-3-flash-preview",
             "gemini-2.5-flash",
-            "gemini-2.5-pro",
-            "gemini-2.0-flash",
-            "gemini-2.0-flash-lite"
+            "gemini-2.5-pro"
         ];
 
         async function resolveFullDeviceName() {
@@ -1146,7 +1139,7 @@
             applyAuthState(null);
         }
 
-        /* 3. 5 GEMINI API KEYS VAULT + LIVE DIAGNOSTIC TESTER */
+        /* 3. 5 GEMINI API KEYS VAULT + LIVE DIAGNOSTIC & AUTO-MODEL DISCOVERY */
         function renderApiSlots() {
             const container = document.getElementById('api-slots-container');
             container.innerHTML = '';
@@ -1184,6 +1177,7 @@
             } else {
                 geminiApiKeys = ["", "", "", "", ""];
             }
+            discoveredActiveModels = null;
             renderApiSlots();
             const count = geminiApiKeys.filter(k => (k || '').trim() !== '').length;
             const statusLbl = document.getElementById('keys-status-label');
@@ -1210,7 +1204,8 @@
             }
             database.ref('settings/geminiApiKeys').set(updatedKeys)
                 .then(() => {
-                    showCyberToast("✅ Sabhi API Keys save ho gayi! Ab 'Test Keys' dabakar check karein.");
+                    discoveredActiveModels = null;
+                    showCyberToast("✅ Sabhi API Keys save ho gayi!");
                 })
                 .catch(e => showCyberToast("Error: " + e.message, true));
         }
@@ -1221,6 +1216,35 @@
             updatedKeys[slotIndex] = "";
             database.ref('settings/geminiApiKeys').set(updatedKeys);
             showCyberToast(`🗑️ Slot ${slotIndex + 1} API Key हटा दी गई`);
+        }
+
+        /* Auto-discovers working Flash/Pro models directly from Google's API for your key */
+        async function getModelsForKey(apiKey) {
+            if (discoveredActiveModels && discoveredActiveModels.length > 0) {
+                return discoveredActiveModels;
+            }
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
+                const data = await res.json();
+                if (res.ok && Array.isArray(data.models)) {
+                    const usable = data.models
+                        .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes("generateContent"))
+                        .map(m => m.name.replace(/^models\//, ''))
+                        .filter(name => /gemini.*(flash|pro)/i.test(name) && !/image|tts|audio|embedding|robotics/i.test(name));
+
+                    // Prefer lite/flash models first for speed & high free quota
+                    usable.sort((a, b) => {
+                        const score = n => (n.includes('flash-lite') ? 0 : (n.includes('flash') ? 1 : 2));
+                        return score(a) - score(b);
+                    });
+
+                    if (usable.length > 0) {
+                        discoveredActiveModels = usable;
+                        return usable;
+                    }
+                }
+            } catch (e) {}
+            return DEFAULT_MODEL_CHAIN;
         }
 
         async function testAllApiKeys() {
@@ -1239,15 +1263,17 @@
                     reportLines.push(`• <b>Slot ${i + 1}:</b> ❌ Galat Format (Key 'AIza...' se shuru honi chahiye)`);
                     continue;
                 }
+                const models = await getModelsForKey(k);
+                const testModel = models[0] || "gemini-3.5-flash-lite";
                 try {
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(k)}`, {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${testModel}:generateContent?key=${encodeURIComponent(k)}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ contents: [{ parts: [{ text: "Reply OK" }] }] })
                     });
                     const data = await res.json();
                     if (res.ok && data?.candidates?.[0]) {
-                        reportLines.push(`• <b>Slot ${i + 1}:</b> ✅ Working (gemini-2.5-flash Active)`);
+                        reportLines.push(`• <b>Slot ${i + 1}:</b> ✅ Working (${testModel} Active)`);
                     } else {
                         const errMsg = data?.error?.message || `HTTP ${res.status}`;
                         reportLines.push(`• <b>Slot ${i + 1}:</b> ❌ Error — ${errMsg}`);
@@ -1475,7 +1501,9 @@
                 logStockChange(mode, `${sign} | ${cleanBrand} • Style ${cleanStyle} (${itemName}) • ${color} • Size ${size} • Total: ${updated} pcs`);
 
                 if (notifyChat) {
-                    addChatMessage('ai', `✅ Done! ${cleanBrand} - Style ${cleanStyle} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`, true);
+                    const msg = `✅ Done! ${cleanBrand} - Style ${cleanStyle} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`;
+                    chatConversationHistory.push({ role: 'AI', text: msg });
+                    addChatMessage('ai', msg, true);
                 } else {
                     showCyberToast(`✅ ${cleanBrand} | Style ${cleanStyle} (${color} • Size ${size}): ${updated} pcs`);
                 }
@@ -1633,7 +1661,7 @@
         }
         animateOrb();
 
-        /* 7. TRUE UNRESTRICTED GEMINI AI ASSISTANT (ANSWERS ANYTHING + FULL STOCK CONTROL) */
+        /* 7. TRUE UNRESTRICTED GEMINI AI ASSISTANT WITH AUTO-MODEL DISCOVERY */
         let voiceEnabled = true;
 
         function toggleVoiceOutput() {
@@ -1713,7 +1741,7 @@
 
             if (validKeys.length === 0) {
                 return {
-                    error: "❌ Koi Gemini API Key save nahi hai!\n\nThik karne ka tarika:\n1. Admin Login karein\n2. 'GEMINI API KEYS VAULT' mein apni AIzaSy... key paste karein\n3. 'Save All 5 API Keys' button dabayein."
+                    error: "❌ Koi Gemini API Key save nahi hai!\n\nAdmin Login karke 'GEMINI API KEYS VAULT' mein apni AIzaSy... key paste karein aur Save dabayein."
                 };
             }
 
@@ -1745,7 +1773,9 @@ How to respond:
 
             for (const kObj of validKeys) {
                 activeKeyIndex = kObj.idx;
-                for (const model of MODEL_FALLBACK_CHAIN) {
+                const modelChain = await getModelsForKey(kObj.key);
+
+                for (const model of modelChain) {
                     try {
                         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(kObj.key)}`, {
                             method: 'POST',
@@ -1790,7 +1820,7 @@ How to respond:
             }
 
             return {
-                error: `❌ Gemini API se connect nahi ho paya!\n\nAsli Problem:\n${lastDetailedError}\n\nUpay: Admin panel mein '🔍 Test Keys' dabakar check karein ya Google AI Studio se nayi API Key Slot 1 mein save karein.`
+                error: `❌ Gemini API se connect nahi ho paya!\n\nAsli Problem:\n${lastDetailedError}\n\nUpay: Admin panel mein '🔍 Test Keys' dabakar check karein ya nayi API Key Slot 1 mein save karein.`
             };
         }
 
