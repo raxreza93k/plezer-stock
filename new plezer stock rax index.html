@@ -22,7 +22,7 @@
         const database = firebase.database();
         const auth = firebase.auth();
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #050711;
@@ -31,7 +31,7 @@
             --neon-pink: #ff007f;
             --neon-green: #00ff88;
             --neon-gold: #ffcc00;
-            --glass-bg: rgba(12, 16, 38, 0.88);
+            --glass-bg: rgba(12, 16, 38, 0.9);
             --glass-border: rgba(0, 243, 255, 0.28);
             --text-color: #e6fbff;
         }
@@ -53,37 +53,106 @@
             border-radius: 50%;
             filter: blur(115px);
             z-index: -1;
-            opacity: 0.42;
+            opacity: 0.4;
         }
         .orb-1 { width: 300px; height: 300px; background: var(--cyber-blue); top: 8%; left: 5%; }
         .orb-2 { width: 350px; height: 350px; background: var(--neon-purple); bottom: 8%; right: 5%; }
 
-        /* Clean Header */
+        /* Full-Height & Full-Width Bright Neon Blinking Showroom Header */
         header {
             text-align: center;
-            padding: 18px 15px;
-            background: rgba(6, 9, 22, 0.94);
-            border-bottom: 2px solid transparent;
-            border-image: linear-gradient(90deg, var(--cyber-blue), var(--neon-purple), var(--neon-pink)) 1;
-            backdrop-filter: blur(12px);
+            padding: 36px 8px 38px 8px;
+            background: linear-gradient(180deg, rgba(6, 9, 24, 0.98) 0%, rgba(12, 18, 44, 0.96) 100%);
+            border-bottom: 3px solid #00f3ff;
             position: sticky;
             top: 0;
             z-index: 100;
+            animation: headerBorderBlink 3.2s infinite alternate;
         }
+
         header h1 {
             margin: 0;
             font-family: 'Orbitron', sans-serif;
-            font-size: 22px;
+            font-size: clamp(23px, 6.2vw, 44px);
             font-weight: 900;
-            letter-spacing: 2.5px;
-            background: linear-gradient(90deg, #00f3ff, #ffffff, #bd00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            line-height: 1;
+            display: inline-block;
+            color: #ffffff;
+            transform: scaleY(1.85);
+            animation: brightNeonBlink 3.2s infinite alternate;
+        }
+
+        .sig-z {
+            display: inline-block;
+            position: relative;
+            color: #ffffff;
+        }
+        .sig-z::after {
+            content: '';
+            position: absolute;
+            left: -2px;
+            right: -2px;
+            bottom: -3px;
+            height: 3px;
+            background: #ffffff;
+            border-radius: 3px;
+            box-shadow: 0 0 8px #ffffff, 0 0 16px #00f3ff;
+        }
+
+        @keyframes brightNeonBlink {
+            0%, 100% {
+                color: #ffffff;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #00f3ff,
+                    0 0 32px #00f3ff,
+                    0 0 54px #0099ff;
+            }
+            25% {
+                color: #ffffff;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #ff007f,
+                    0 0 32px #ff007f,
+                    0 0 54px #bd00ff;
+            }
+            50% {
+                color: #ffffff;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #ff8800,
+                    0 0 32px #ff5500,
+                    0 0 54px #ffcc00;
+            }
+            75% {
+                color: #ffffff;
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 16px #00ff88,
+                    0 0 32px #00f3ff,
+                    0 0 54px #bd00ff;
+            }
+        }
+
+        @keyframes headerBorderBlink {
+            0%, 100% {
+                border-bottom-color: #00f3ff;
+                box-shadow: 0 6px 28px rgba(0, 243, 255, 0.45);
+            }
+            33% {
+                border-bottom-color: #ff007f;
+                box-shadow: 0 6px 28px rgba(255, 0, 127, 0.45);
+            }
+            66% {
+                border-bottom-color: #ff8800;
+                box-shadow: 0 6px 28px rgba(255, 136, 0, 0.45);
+            }
         }
 
         .main-wrapper {
             max-width: 920px;
-            margin: 18px auto;
+            margin: 16px auto;
             width: 94%;
         }
 
@@ -109,6 +178,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         input, select {
@@ -149,10 +220,10 @@
         /* Admin-Only Panels (Strictly Hidden Before Login) */
         .admin-only-panel {
             display: none;
-            animation: slideUp 0.3s ease-out;
+            animation: slideUp 0.25s ease-out;
         }
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(12px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -244,14 +315,14 @@
         .api-slot-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: rgba(0, 243, 255, 0.05);
-            padding: 8px 12px;
+            padding: 8px 10px;
             border-radius: 10px;
             border: 1px solid rgba(0, 243, 255, 0.22);
             margin-bottom: 10px;
         }
-        .api-slot-row.active-slot {
+        .api-slot-row.saved-slot {
             border-color: var(--neon-green);
             background: rgba(0, 255, 136, 0.08);
         }
@@ -259,29 +330,74 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 11px;
             color: var(--cyber-blue);
-            min-width: 65px;
+            min-width: 60px;
+        }
+        .slot-saved-tag {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--neon-green);
+            background: rgba(0, 255, 136, 0.14);
+            border: 1px solid var(--neon-green);
+            padding: 2px 6px;
+            border-radius: 5px;
+            white-space: nowrap;
         }
         .api-slot-row input {
             margin-bottom: 0;
             font-family: monospace;
-            font-size: 13px;
+            font-size: 14px;
+            letter-spacing: 1.5px;
             padding: 8px 10px;
         }
+        .slot-clear-btn {
+            background: rgba(255, 23, 68, 0.22);
+            border: 1px solid #ff1744;
+            color: #ff8a80;
+            padding: 7px 10px;
+            font-size: 12px;
+            border-radius: 8px;
+            box-shadow: none;
+            flex-shrink: 0;
+        }
 
-        /* Activity & IP Logs */
+        /* Stock & IP Activity Logs */
         #logs-container {
             font-family: monospace;
-            background: rgba(4, 7, 18, 0.94);
+            background: rgba(4, 7, 18, 0.95);
             border: 1px solid rgba(189, 0, 255, 0.35);
             padding: 12px;
             border-radius: 12px;
-            max-height: 240px;
+            max-height: 270px;
             overflow-y: auto;
             font-size: 12px;
             color: #00ff88;
         }
+        .log-card-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--cyber-blue);
+            margin-bottom: 8px;
+        }
+        .log-card-item.minus-log {
+            border-left-color: var(--neon-pink);
+        }
+        .single-log-del {
+            background: rgba(255, 23, 68, 0.2);
+            border: 1px solid #ff1744;
+            color: #ff8a80;
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 6px;
+            box-shadow: none;
+            flex-shrink: 0;
+        }
 
-        /* Bottom-Left Clean Admin Access Button */
+        /* Bottom-Left Admin Access Button */
         #bottom-admin-launcher {
             position: fixed;
             bottom: 22px;
@@ -290,7 +406,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: rgba(10, 15, 38, 0.94);
+            background: rgba(10, 15, 38, 0.95);
             border: 1.5px solid var(--neon-purple);
             color: #fff;
             padding: 10px 16px;
@@ -311,7 +427,7 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 6, 16, 0.92);
+            background: rgba(4, 6, 16, 0.93);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -379,7 +495,7 @@
             width: 0%;
             height: 100%;
             background: linear-gradient(90deg, var(--cyber-blue), var(--neon-green));
-            transition: width 0.3s ease;
+            transition: width 0.25s ease;
         }
 
         /* Floating Bottom-Right RAX AI Orb */
@@ -506,14 +622,14 @@
     <div class="ambient-orb orb-1"></div>
     <div class="ambient-orb orb-2"></div>
 
-    <!-- Clean Header -->
+    <!-- Tall, Wide & Bright Blinking Neon Header -->
     <header>
-        <h1>PLEZER COLLECTION</h1>
+        <h1>PLE<span class="sig-z">Z</span>ER COLLECTION</h1>
     </header>
 
     <div class="main-wrapper">
 
-        <!-- 1. Live Stock Inventory (Public View + Admin Inline +/- Controls) -->
+        <!-- 1. Live Stock Inventory -->
         <div class="glass-panel">
             <div style="margin-bottom: 14px;">
                 <input type="text" id="master-search" placeholder="Search Style No, Item Name, Color or Size..." onkeyup="filterStock()">
@@ -538,7 +654,7 @@
             </div>
         </div>
 
-        <!-- 2. ADMIN PANEL 1: Add / Minus Stock Control (Visible ONLY after Admin Login) -->
+        <!-- 2. ADMIN PANEL 1: Stock Add / Minus Control (Hidden Until Admin Login) -->
         <div id="admin-stock-panel" class="glass-panel admin-only-panel">
             <div class="panel-header">
                 <span>📦 STOCK ADD / MINUS CONTROL</span>
@@ -560,25 +676,26 @@
             </div>
         </div>
 
-        <!-- 3. ADMIN PANEL 2: Separate 5 Gemini API Keys Vault (Visible ONLY after Admin Login) -->
+        <!-- 3. ADMIN PANEL 2: Separate 5 Gemini API Keys Vault (Hidden Until Admin Login) -->
         <div id="admin-api-panel" class="glass-panel admin-only-panel">
             <div class="panel-header">
                 <span>🔑 GEMINI API KEYS VAULT (5 SLOTS)</span>
                 <span id="keys-status-label" style="font-size:11px; color:var(--neon-gold);">Loading...</span>
             </div>
-            <div id="api-slots-container">
-                <!-- 5 slots generated by JS -->
-            </div>
+            <div id="api-slots-container"></div>
             <button class="btn-green" style="width:100%; padding:12px; font-size:13px;" onclick="saveAllApiKeys()">Save All 5 API Keys</button>
         </div>
 
-        <!-- 4. ADMIN PANEL 3: Separate Stock & IP Security Logs (Visible ONLY after Admin Login) -->
+        <!-- 4. ADMIN PANEL 3: Stock Update Logs Only (Hidden Until Admin Login) -->
         <div id="admin-logs-panel" class="glass-panel admin-only-panel">
             <div class="panel-header">
-                <span>🛡️ STOCK & IP ACTIVITY LOGS</span>
-                <span id="active-model-display" style="font-size:11px; color:#88ccee; font-family:monospace;">Engine: Ready</span>
+                <span>🛡️ STOCK ADD / MINUS LOGS</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span id="active-model-display" style="font-size:10px; color:#88ccee; font-family:monospace;">Engine: Ready</span>
+                    <button class="btn-danger" style="padding:5px 10px; font-size:10px;" onclick="clearAllStockLogs()">🗑️ Delete All</button>
+                </div>
             </div>
-            <div id="logs-container">Initializing activity logs...</div>
+            <div id="logs-container">No stock activity logs yet.</div>
         </div>
 
     </div>
@@ -630,7 +747,7 @@
     </div>
 
     <script>
-        /* 1. GLOBALS & DEVICE METRICS */
+        /* 1. GLOBALS, DEVICE NAME, IP & BATTERY DETECTION */
         let currentAdminUser = null;
         let liveStockSnapshot = {};
         let geminiApiKeys = ["", "", "", "", ""];
@@ -638,7 +755,6 @@
         let deviceBatteryLevel = "N/A";
         let clientIP = "Detecting...";
 
-        // Latest & most reliable Gemini models first
         const MODEL_FALLBACK_CHAIN = [
             "gemini-2.5-flash",
             "gemini-2.5-pro",
@@ -646,9 +762,26 @@
             "gemini-2.0-flash-lite"
         ];
 
+        function detectDeviceName() {
+            const ua = navigator.userAgent;
+            const androidMatch = ua.match(/Android\s[\d.]+;\s([^;)]+)/i);
+            if (androidMatch && androidMatch[1]) {
+                return androidMatch[1].replace(/Build\/.*/i, '').trim();
+            }
+            if (/iPhone/i.test(ua)) return "Apple iPhone";
+            if (/iPad/i.test(ua)) return "Apple iPad";
+            if (/Macintosh|Mac OS X/i.test(ua)) return "MacBook / Mac";
+            if (/Windows NT/i.test(ua)) return "Windows PC";
+            return navigator.platform || "Mobile Device";
+        }
+        const clientDeviceName = detectDeviceName();
+
         if ('getBattery' in navigator) {
             navigator.getBattery().then(b => {
                 deviceBatteryLevel = Math.round(b.level * 100) + "%";
+                b.addEventListener('levelchange', () => {
+                    deviceBatteryLevel = Math.round(b.level * 100) + "%";
+                });
             });
         }
 
@@ -657,15 +790,24 @@
             .then(d => { clientIP = d.ip; })
             .catch(() => { clientIP = "Local/Mobile"; });
 
-        function logActivity(actionText) {
-            const istTime = new Date().toLocaleString('en-IN', {
+        /* Logs ONLY Stock Add / Minus events (Never logs Admin Login/Logout) */
+        function logStockChange(mode, actionText) {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-IN', {
                 timeZone: 'Asia/Kolkata',
-                day: '2-digit', month: '2-digit', year: 'numeric',
+                day: '2-digit', month: '2-digit', year: 'numeric'
+            });
+            const timeStr = now.toLocaleTimeString('en-IN', {
+                timeZone: 'Asia/Kolkata',
                 hour: '2-digit', minute: '2-digit', second: '2-digit'
             });
-            database.ref('security_logs').push({
-                timestamp: istTime,
+
+            database.ref('stock_activity_logs').push({
+                mode: mode,
+                date: dateStr,
+                time: timeStr,
                 ip: clientIP,
+                device: clientDeviceName,
                 batt: deviceBatteryLevel,
                 action: actionText
             }).catch(() => {});
@@ -698,7 +840,6 @@
             if (currentAdminUser) {
                 localStorage.removeItem('plezer_admin_session');
                 try { auth.signOut(); } catch (e) {}
-                logActivity(`Admin logged out (${currentAdminUser.email}).`);
                 applyAuthState(null);
             } else {
                 loginErrorBox.style.display = "none";
@@ -734,7 +875,7 @@
             const progFill = document.getElementById('login-progress-fill');
             const progText = document.getElementById('login-progress-text');
             progWrap.style.display = "block";
-            progFill.style.width = "60%";
+            progFill.style.width = "65%";
             progText.innerText = "VERIFYING ACCESS...";
 
             const validAdmins = ["plezerstockrax@gmail.com", "9638195993@gmail.com", "rezaahmad810287@gmail.com"];
@@ -746,11 +887,9 @@
                         localStorage.setItem('plezer_admin_session', email);
                         closeAuthModal();
                         applyAuthState({ email: email });
-                        logActivity(`Admin Login Success (${email})`);
-                    }, 350);
+                    }, 220);
                 } else {
                     showLoginError("❌ Galat Password! Kripya sahi Admin Password dalein.");
-                    logActivity(`Failed login attempt (wrong password) for ${email}`);
                 }
                 return;
             }
@@ -763,16 +902,13 @@
                         localStorage.setItem('plezer_admin_session', res.user.email);
                         closeAuthModal();
                         applyAuthState({ email: res.user.email });
-                        logActivity(`Admin Login Success (${res.user.email})`);
-                    }, 350);
+                    }, 220);
                 })
                 .catch(() => {
                     showLoginError("❌ Galat Email ya Password! Access Denied.");
-                    logActivity(`Failed login attempt for ${email}`);
                 });
         }
 
-        // Restore session on reload
         const savedAdmin = localStorage.getItem('plezer_admin_session');
         if (savedAdmin) {
             applyAuthState({ email: savedAdmin });
@@ -780,17 +916,30 @@
             applyAuthState(null);
         }
 
-        /* 3. 5 GEMINI API KEYS VAULT */
+        /* 3. 5 GEMINI API KEYS VAULT (DOTS MASKED + REMOVE BUTTON) */
         function renderApiSlots() {
             const container = document.getElementById('api-slots-container');
             container.innerHTML = '';
             for (let i = 0; i < 5; i++) {
-                const isActive = i === activeKeyIndex && (geminiApiKeys[i] || '').trim() !== '';
+                const rawKey = (geminiApiKeys[i] || '').trim();
+                const hasKey = rawKey !== '';
+                const maskedDots = hasKey ? '•'.repeat(Math.min(Math.max(rawKey.length, 20), 28)) : '';
+
                 const row = document.createElement('div');
-                row.className = `api-slot-row ${isActive ? 'active-slot' : ''}`;
+                row.className = `api-slot-row ${hasKey ? 'saved-slot' : ''}`;
                 row.innerHTML = `
                     <span class="slot-label">SLOT ${i + 1}</span>
-                    <input type="password" id="api-key-${i}" value="${geminiApiKeys[i] || ''}" placeholder="Paste Gemini API Key ${i + 1}...">
+                    <input
+                        type="password"
+                        id="api-key-${i}"
+                        data-saved-key="${rawKey}"
+                        value="${maskedDots}"
+                        placeholder="Paste Gemini API Key ${i + 1}..."
+                        onfocus="if(this.dataset.savedKey && this.value.includes('•')) { this.value = ''; }"
+                        onblur="if(this.value.trim() === '' && this.dataset.savedKey) { this.value = '•'.repeat(24); }"
+                    >
+                    ${hasKey ? `<span class="slot-saved-tag">✅ SAVED</span>` : ''}
+                    <button type="button" class="slot-clear-btn" title="Remove Key" onclick="removeSingleApiKey(${i})">✕</button>
                 `;
                 container.appendChild(row);
             }
@@ -804,10 +953,10 @@
                 geminiApiKeys = ["", "", "", "", ""];
             }
             renderApiSlots();
-            const count = geminiApiKeys.filter(k => k.trim() !== '').length;
+            const count = geminiApiKeys.filter(k => (k || '').trim() !== '').length;
             const statusLbl = document.getElementById('keys-status-label');
             if (count > 0) {
-                statusLbl.innerText = `✅ ${count}/5 Keys Active`;
+                statusLbl.innerText = `✅ ${count}/5 Slots Saved`;
                 statusLbl.style.color = "var(--neon-green)";
             } else {
                 statusLbl.innerText = "⚠️ No API Keys Saved";
@@ -819,14 +968,26 @@
             if (!currentAdminUser) return;
             const updatedKeys = [];
             for (let i = 0; i < 5; i++) {
-                updatedKeys.push(document.getElementById(`api-key-${i}`).value.trim());
+                const inputEl = document.getElementById(`api-key-${i}`);
+                const typed = inputEl.value.trim();
+                if (typed === '' || typed.includes('•')) {
+                    updatedKeys.push((inputEl.dataset.savedKey || '').trim());
+                } else {
+                    updatedKeys.push(typed);
+                }
             }
             database.ref('settings/geminiApiKeys').set(updatedKeys)
                 .then(() => {
-                    alert("✅ Sabhi 5 API Keys save ho gayi hain!");
-                    logActivity("Admin updated 5 Gemini API Keys.");
+                    alert("✅ Sabhi API Keys सुरक्षित रूप से सेव हो गई हैं!");
                 })
                 .catch(e => alert("Error: " + e.message));
+        }
+
+        function removeSingleApiKey(slotIndex) {
+            if (!currentAdminUser) return;
+            const updatedKeys = [...geminiApiKeys];
+            updatedKeys[slotIndex] = "";
+            database.ref('settings/geminiApiKeys').set(updatedKeys);
         }
 
         /* 4. STOCK TABLE & ADMIN ADD/MINUS CONTROLS */
@@ -919,8 +1080,9 @@
                 ref.set(updated);
                 database.ref(`stock/${styleNo}/itemName`).set(itemName);
 
-                const tag = qtyDelta > 0 ? 'STOCK ADDED' : 'STOCK MINUS';
-                logActivity(`[${tag}] ${Math.abs(qtyDelta)} pcs | Style ${styleNo} (${itemName}) - ${color} Size ${size} | Remaining: ${updated} pcs`);
+                const mode = qtyDelta > 0 ? 'ADD' : 'MINUS';
+                const tag = qtyDelta > 0 ? 'STOCK ADDED (+)' : 'STOCK MINUS (-)';
+                logStockChange(mode, `[${tag}] ${Math.abs(qtyDelta)} pcs | Style ${styleNo} (${itemName}) - ${color} Size ${size} | Total: ${updated} pcs`);
 
                 if (notifyChat) {
                     addChatMessage('ai', `✅ Done! Style ${styleNo} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`, true);
@@ -936,22 +1098,49 @@
             }
         }
 
-        /* 5. ACTIVITY & IP LOGS LISTENER */
-        database.ref('security_logs').limitToLast(25).on('value', snap => {
+        /* 5. STOCK ADD / MINUS LOGS LISTENER + DELETE CONTROLS */
+        database.ref('stock_activity_logs').limitToLast(40).on('value', snap => {
             const box = document.getElementById('logs-container');
             box.innerHTML = '';
             const logs = snap.val();
             if (!logs) {
-                box.innerHTML = 'No activity logs yet.';
+                box.innerHTML = '<div style="color:#88ccee; text-align:center; padding:10px;">Abhi tak koi stock add ya minus nahi kiya gaya hai.</div>';
                 return;
             }
-            Object.values(logs).reverse().forEach(log => {
-                box.innerHTML += `<div style="margin-bottom:8px;">
-                    <span style="color:var(--cyber-blue);">[${log.timestamp}]</span> | IP: <span style="color:var(--neon-gold);">${log.ip}</span> | Batt: ${log.batt}<br>
-                    <span style="color:#fff;">> ${log.action}</span>
-                </div><hr style="border:0; border-top:1px dashed rgba(255,255,255,0.12); margin:6px 0;">`;
+
+            const entries = Object.entries(logs).reverse();
+            entries.forEach(([key, log]) => {
+                const isMinus = log.mode === 'MINUS';
+                box.innerHTML += `
+                    <div class="log-card-item ${isMinus ? 'minus-log' : ''}">
+                        <div>
+                            <div style="color:var(--cyber-blue); margin-bottom:3px;">
+                                📅 <b>${log.date || ''}</b> | ⏰ <b>${log.time || ''}</b>
+                            </div>
+                            <div style="color:var(--neon-gold); margin-bottom:4px;">
+                                🌐 IP: <b>${log.ip || 'N/A'}</b> | 📱 Device: <b>${log.device || 'Unknown'}</b> | 🔋 Batt: <b>${log.batt || 'N/A'}</b>
+                            </div>
+                            <div style="color:${isMinus ? '#ff80ab' : '#00ff88'}; font-weight:bold;">
+                                > ${log.action}
+                            </div>
+                        </div>
+                        <button class="single-log-del" title="Delete Log" onclick="deleteSingleStockLog('${key}')">🗑️</button>
+                    </div>
+                `;
             });
         });
+
+        function deleteSingleStockLog(logKey) {
+            if (!currentAdminUser) return;
+            database.ref('stock_activity_logs/' + logKey).remove();
+        }
+
+        function clearAllStockLogs() {
+            if (!currentAdminUser) return;
+            if (confirm("Kya aap sabhi Stock Logs delete karna chahte hain?")) {
+                database.ref('stock_activity_logs').remove();
+            }
+        }
 
         /* 6. RAX AI PARTICLE ORB */
         const canvas = document.getElementById('particle-canvas');
@@ -1058,7 +1247,7 @@
         function speakText(text) {
             if (!voiceEnabled || !('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
-            const clean = text.replace(/[✅❌⚠️📦🎤⚡]/g, '').trim();
+            const clean = text.replace(/[✅❌⚠️📦🎤⚡🗑️]/g, '').trim();
             const u = new SpeechSynthesisUtterance(clean);
             u.lang = 'hi-IN';
             u.rate = 1.02;
@@ -1095,7 +1284,7 @@
         }
 
         async function runGeminiFailover(userQuery) {
-            const validKeys = geminiApiKeys.map((k, idx) => ({ key: k.trim(), idx })).filter(x => x.key !== '');
+            const validKeys = geminiApiKeys.map((k, idx) => ({ key: (k || '').trim(), idx })).filter(x => x.key !== '');
             if (validKeys.length === 0) {
                 return { error: "Koi Gemini API Key set nahi hai. Admin Login karke API Keys Vault mein key dalein." };
             }
@@ -1122,7 +1311,6 @@ User: ${userQuery}`;
 
             for (const kObj of validKeys) {
                 activeKeyIndex = kObj.idx;
-                renderApiSlots();
                 for (const model of MODEL_FALLBACK_CHAIN) {
                     try {
                         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${kObj.key}`, {
