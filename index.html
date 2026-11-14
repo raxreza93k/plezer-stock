@@ -23,7 +23,6 @@
         const database = firebase.database();
         const auth = firebase.auth();
     </script>
-    <!-- Clean, Modern & Easy-to-Read Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -35,10 +34,8 @@
             --gold-accent: #fbbf24;
             --gold-soft: rgba(251, 191, 36, 0.16);
             --emerald: #10b981;
-            --emerald-soft: rgba(16, 185, 129, 0.18);
             --sky-accent: #38bdf8;
             --rose-accent: #f43f5e;
-            --violet-accent: #a78bfa;
             --text-primary: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -374,7 +371,7 @@
         .api-slot-row {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background: #111625;
             padding: 8px 10px;
             border-radius: 10px;
@@ -386,36 +383,56 @@
             background: rgba(16, 185, 129, 0.08);
         }
         .slot-label {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             color: var(--sky-accent);
-            min-width: 58px;
+            min-width: 52px;
         }
         .slot-saved-tag {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             color: #34d399;
             background: rgba(16, 185, 129, 0.16);
             border: 1px solid rgba(16, 185, 129, 0.45);
-            padding: 2px 7px;
+            padding: 2px 6px;
             border-radius: 6px;
             white-space: nowrap;
         }
         .api-slot-row input {
             margin-bottom: 0;
             font-family: monospace;
-            font-size: 14px;
-            letter-spacing: 1.5px;
+            font-size: 13px;
+            letter-spacing: 1px;
             padding: 8px 10px;
+        }
+        .slot-test-btn {
+            background: rgba(56, 189, 248, 0.16);
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            color: #7dd3fc;
+            padding: 7px 9px;
+            font-size: 11px;
+            border-radius: 8px;
+            flex-shrink: 0;
         }
         .slot-clear-btn {
             background: rgba(244, 63, 94, 0.18);
             border: 1px solid rgba(244, 63, 94, 0.45);
             color: #fda4af;
-            padding: 7px 10px;
+            padding: 7px 9px;
             font-size: 12px;
             border-radius: 8px;
             flex-shrink: 0;
+        }
+        #api-diagnostic-box {
+            display: none;
+            background: #0f1422;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #e2e8f0;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 12.5px;
+            margin-bottom: 12px;
+            line-height: 1.45;
         }
 
         /* Clean Stock Logs Panel */
@@ -597,7 +614,7 @@
             position: fixed;
             bottom: 115px;
             right: 16px;
-            width: 350px;
+            width: 355px;
             max-width: 92vw;
             background: #151c2f;
             border: 1.5px solid rgba(251, 191, 36, 0.45);
@@ -633,7 +650,7 @@
             border: 1px solid var(--border-soft);
             border-radius: 12px;
             padding: 10px;
-            height: 175px;
+            height: 185px;
             overflow-y: auto;
             margin-bottom: 10px;
             display: flex;
@@ -659,6 +676,18 @@
             border-radius: 12px 12px 12px 2px;
             font-size: 13.5px;
             max-width: 92%;
+            white-space: pre-line;
+            word-wrap: break-word;
+        }
+        .msg-err {
+            align-self: flex-start;
+            background: rgba(244, 63, 94, 0.16);
+            border-left: 3px solid var(--rose-accent);
+            color: #fecdd3;
+            padding: 8px 12px;
+            border-radius: 12px 12px 12px 2px;
+            font-size: 12.5px;
+            max-width: 94%;
             white-space: pre-line;
             word-wrap: break-word;
         }
@@ -738,14 +767,18 @@
             </div>
         </div>
 
-        <!-- 3. ADMIN PANEL 2: Separate 5 Gemini API Keys Vault -->
+        <!-- 3. ADMIN PANEL 2: Separate 5 Gemini API Keys Vault + Live Key Tester -->
         <div id="admin-api-panel" class="panel-card admin-only-panel">
             <div class="panel-header">
                 <span>🔑 GEMINI API KEYS VAULT (5 SLOTS)</span>
                 <span id="keys-status-label" style="font-size:11px; color:var(--gold-accent);">Loading...</span>
             </div>
             <div id="api-slots-container"></div>
-            <button class="btn-green" style="width:100%; padding:12px; font-size:13px;" onclick="saveAllApiKeys()">Save All 5 API Keys</button>
+            <div id="api-diagnostic-box"></div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-green" style="flex:2; padding:12px; font-size:13px;" onclick="saveAllApiKeys()">Save All 5 API Keys</button>
+                <button style="flex:1; padding:12px; font-size:13px;" onclick="testAllApiKeys()">🔍 Test Keys</button>
+            </div>
         </div>
 
         <!-- 4. ADMIN PANEL 3: Clean Stock Activity Logs -->
@@ -753,7 +786,7 @@
             <div class="panel-header">
                 <span>🛡️ STOCK UPDATE LOGS</span>
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <span id="active-model-display" style="font-size:11px; color:#94a3b8;">Engine: Ready</span>
+                    <span id="active-model-display" style="font-size:11px; color:#94a3b8;">AI: Ready</span>
                     <button class="btn-danger" style="padding:5px 10px; font-size:11px;" onclick="clearAllStockLogs()">🗑️ Delete All</button>
                 </div>
             </div>
@@ -795,13 +828,14 @@
             <span class="drawer-title">RAX AI ASSISTANT</span>
             <div style="display:flex; gap:6px;">
                 <button id="voice-toggle-btn" class="drawer-icon-btn" onclick="toggleVoiceOutput()" title="Voice On/Off">🔊</button>
+                <button class="drawer-icon-btn" onclick="clearChatHistory()" title="Clear Chat">🗑️</button>
                 <button class="drawer-icon-btn" onclick="toggleRexDrawer()">✕</button>
             </div>
         </div>
         <div id="chat-history">
-            <div class="msg-ai">Namaste! Main RAX AI hoon. Jockey, Van Heusen, U.S. Polo Assn., ya Park Avenue ka stock check ya update karna ho to boliye!</div>
+            <div class="msg-ai">Namaste! Main RAX AI hoon. Aap mujhse kuchh bhi puchh sakte hain ya stock add/minus/check karwa sakte hain!</div>
         </div>
-        <input type="text" id="user-input" placeholder="Jaise: US Polo P4 size M 5 pcs add karo..." onkeypress="if(event.key==='Enter') processCommand()">
+        <input type="text" id="user-input" placeholder="Kuchh bhi likhein ya puchhein..." onkeypress="if(event.key==='Enter') processCommand()">
         <div class="drawer-controls">
             <button onclick="processCommand()">Bhejen</button>
             <button class="btn-mic" onclick="startListening()">🎤 Bolkar Puchhen</button>
@@ -817,6 +851,7 @@
         let deviceBatteryLevel = "N/A";
         let clientIP = "Detecting...";
         let clientDeviceName = "Detecting...";
+        let chatConversationHistory = [];
 
         const PRIORITY_BRANDS = ["JOCKEY", "VAN HEUSEN", "U.S. POLO ASSN.", "PARK AVENUE"];
         const MODEL_FALLBACK_CHAIN = [
@@ -1111,7 +1146,7 @@
             applyAuthState(null);
         }
 
-        /* 3. 5 GEMINI API KEYS VAULT */
+        /* 3. 5 GEMINI API KEYS VAULT + LIVE DIAGNOSTIC TESTER */
         function renderApiSlots() {
             const container = document.getElementById('api-slots-container');
             container.innerHTML = '';
@@ -1129,11 +1164,11 @@
                         id="api-key-${i}"
                         data-saved-key="${rawKey}"
                         value="${maskedDots}"
-                        placeholder="Paste Gemini API Key ${i + 1}..."
+                        placeholder="Paste AIzaSy... Key ${i + 1}"
                         onfocus="if(this.dataset.savedKey && this.value.includes('•')) { this.value = ''; }"
                         onblur="if(this.value.trim() === '' && this.dataset.savedKey) { this.value = '•'.repeat(24); }"
                     >
-                    ${hasKey ? `<span class="slot-saved-tag">✅ SAVED</span>` : ''}
+                    ${hasKey ? `<span class="slot-saved-tag">SAVED</span>` : ''}
                     <button type="button" class="slot-clear-btn" title="Remove Key" onclick="removeSingleApiKey(${i})">✕</button>
                 `;
                 container.appendChild(row);
@@ -1175,7 +1210,7 @@
             }
             database.ref('settings/geminiApiKeys').set(updatedKeys)
                 .then(() => {
-                    showCyberToast("✅ Sabhi API Keys सुरक्षित रूप से सेव हो गई हैं!");
+                    showCyberToast("✅ Sabhi API Keys save ho gayi! Ab 'Test Keys' dabakar check karein.");
                 })
                 .catch(e => showCyberToast("Error: " + e.message, true));
         }
@@ -1186,6 +1221,42 @@
             updatedKeys[slotIndex] = "";
             database.ref('settings/geminiApiKeys').set(updatedKeys);
             showCyberToast(`🗑️ Slot ${slotIndex + 1} API Key हटा दी गई`);
+        }
+
+        async function testAllApiKeys() {
+            const diagBox = document.getElementById('api-diagnostic-box');
+            diagBox.style.display = "block";
+            diagBox.innerHTML = "🔍 Sabhi saved API Keys ko Google Gemini server par check kiya ja raha hai...";
+
+            let reportLines = [];
+            for (let i = 0; i < 5; i++) {
+                const k = (geminiApiKeys[i] || '').trim();
+                if (!k) {
+                    reportLines.push(`• <b>Slot ${i + 1}:</b> Khali hai (No Key)`);
+                    continue;
+                }
+                if (!k.startsWith("AIza")) {
+                    reportLines.push(`• <b>Slot ${i + 1}:</b> ❌ Galat Format (Key 'AIza...' se shuru honi chahiye)`);
+                    continue;
+                }
+                try {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(k)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: "Reply OK" }] }] })
+                    });
+                    const data = await res.json();
+                    if (res.ok && data?.candidates?.[0]) {
+                        reportLines.push(`• <b>Slot ${i + 1}:</b> ✅ Working (gemini-2.5-flash Active)`);
+                    } else {
+                        const errMsg = data?.error?.message || `HTTP ${res.status}`;
+                        reportLines.push(`• <b>Slot ${i + 1}:</b> ❌ Error — ${errMsg}`);
+                    }
+                } catch (e) {
+                    reportLines.push(`• <b>Slot ${i + 1}:</b> ❌ Network Error — ${e.message}`);
+                }
+            }
+            diagBox.innerHTML = reportLines.join("<br>");
         }
 
         /* 4. BRAND-SEPARATED LIVE GODOWN INVENTORY */
@@ -1562,7 +1633,7 @@
         }
         animateOrb();
 
-        /* 7. RAX AI VOICE, CHAT & SMART PARSER (HANDLES SHORT STYLES LIKE P4 & MISSING QTY) */
+        /* 7. TRUE UNRESTRICTED GEMINI AI ASSISTANT (ANSWERS ANYTHING + FULL STOCK CONTROL) */
         let voiceEnabled = true;
 
         function toggleVoiceOutput() {
@@ -1574,7 +1645,7 @@
         function speakText(text) {
             if (!voiceEnabled || !('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
-            const clean = text.replace(/[✅❌⚠️📦🎤⚡🗑️•]/g, '').trim();
+            const clean = text.replace(/[✅❌⚠️📦🎤⚡🗑️•🔍]/g, '').trim();
             const u = new SpeechSynthesisUtterance(clean);
             u.lang = 'hi-IN';
             u.rate = 1.02;
@@ -1584,12 +1655,23 @@
         function addChatMessage(sender, text, speak = false) {
             const box = document.getElementById('chat-history');
             const div = document.createElement('div');
-            div.className = sender === 'user' ? 'msg-user' : (sender === 'status' ? 'msg-status' : 'msg-ai');
+            if (sender === 'user') div.className = 'msg-user';
+            else if (sender === 'status') div.className = 'msg-status';
+            else if (sender === 'error') div.className = 'msg-err';
+            else div.className = 'msg-ai';
+
             div.innerText = text;
             box.appendChild(div);
             box.scrollTop = box.scrollHeight;
             if (sender === 'ai' && speak) speakText(text);
             return div;
+        }
+
+        function clearChatHistory() {
+            chatConversationHistory = [];
+            sessionStorage.removeItem('pending_qty_step');
+            sessionStorage.removeItem('pending_new_style');
+            document.getElementById('chat-history').innerHTML = '<div class="msg-ai">Chat saaf ho gaya! Boliye, kya puchhna ya update karna hai?</div>';
         }
 
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1615,205 +1697,101 @@
             const start = cleaned.indexOf('{');
             const end = cleaned.lastIndexOf('}');
             if (start !== -1 && end !== -1 && end > start) {
-                return JSON.parse(cleaned.slice(start, end + 1));
+                try {
+                    return JSON.parse(cleaned.slice(start, end + 1));
+                } catch (e) {
+                    return null;
+                }
             }
             return null;
         }
 
-        function convertHindiNumbers(str) {
-            const map = {
-                'ek': '1', 'one': '1',
-                'do': '2', 'two': '2',
-                'teen': '3', 'three': '3',
-                'char': '4', 'four': '4',
-                'panch': '5', 'paanch': '5', 'five': '5',
-                'chhe': '6', 'six': '6',
-                'saat': '7', 'seven': '7',
-                'aath': '8', 'eight': '8',
-                'nau': '9', 'nine': '9',
-                'das': '10', 'ten': '10',
-                'pandrah': '15', 'fifteen': '15',
-                'bees': '20', 'twenty': '20',
-                'pachis': '25', 'pachees': '25',
-                'tees': '30', 'thirty': '30',
-                'pachas': '50', 'fifty': '50',
-                'sau': '100', 'hundred': '100'
-            };
-            return str.replace(/\b([a-zA-Z]+)\b/g, w => map[w.toLowerCase()] || w);
-        }
-
-        function localSmartCommandParser(q) {
-            const raw = convertHindiNumbers(q.trim());
-            const lower = raw.toLowerCase();
-
-            // 1. Detect Brand
-            let brand = "JOCKEY";
-            if (lower.includes("van") || lower.includes("heusen") || lower.includes("husen")) brand = "VAN HEUSEN";
-            else if (lower.includes("polo") || lower.includes("uspa")) brand = "U.S. POLO ASSN.";
-            else if (lower.includes("park") || lower.includes("avenue")) brand = "PARK AVENUE";
-            else if (lower.includes("jockey") || lower.includes("jocky")) brand = "JOCKEY";
-
-            // 2. Detect ADD or MINUS intent
-            const isAdd = /\b(add|plus|jod|jodo|dal|daal|daldo|daaldo|entry|in)\b/i.test(lower);
-            const isMinus = /\b(minus|less|nikal|nikalo|ghata|ghatao|dispatch|sale|sold|out|kam)\b/i.test(lower);
-
-            if (isAdd || isMinus) {
-                const intent = isMinus ? "MINUS" : "ADD";
-                const color = /\bwhite\b/i.test(lower) ? "WHITE" : "ASSTD";
-
-                // Style Number (Supports short codes like P4, A1, IC32, IC 32, 8035, 901)
-                let styleNo = "";
-                const explicitStyle = raw.match(/style\s*(?:no|number)?\s*[:\-]?\s*([a-zA-Z]{0,4}\s*[-]?\s*\d{1,5}[a-zA-Z]?)/i);
-                const alphaNumStyle = raw.match(/\b([a-zA-Z]{1,4})\s*[-]?\s*(\d{1,5}[a-zA-Z]?)\b/);
-
-                if (explicitStyle) {
-                    styleNo = explicitStyle[1].replace(/\s+/g, '').toUpperCase();
-                } else if (alphaNumStyle) {
-                    styleNo = (alphaNumStyle[1] + alphaNumStyle[2]).toUpperCase();
-                } else {
-                    const allNums = raw.match(/\b(\d{3,5})\b/g);
-                    if (allNums && allNums.length > 0) styleNo = allNums[0];
-                }
-
-                // Size
-                let size = "";
-                const sizeMatch = raw.match(/\bsize\s*(?:no|number)?\s*[:\-]?\s*(xxl|xl|xs|s|m|l|75|80|85|90|95|100|105|110)\b/i);
-                if (sizeMatch) {
-                    size = sizeMatch[1].toUpperCase();
-                } else {
-                    const tokenSize = raw.match(/\b(xxl|xl|xs|s|m|l|75|80|85|90|95|100|105|110)\b/i);
-                    if (tokenSize) size = tokenSize[1].toUpperCase();
-                }
-
-                // Quantity (Exclude digits already used inside styleNo)
-                let qty = 0;
-                const withoutStyle = styleNo ? raw.replace(new RegExp(styleNo.split('').join('\\s*'), 'i'), ' ') : raw;
-                const qtyWithUnit = withoutStyle.toLowerCase().match(/(\d+)\s*(?:pcs?|pieces?|peaces?|pis|pic|pack|box|nos?)\b/i);
-                if (qtyWithUnit) {
-                    qty = parseInt(qtyWithUnit[1], 10);
-                } else {
-                    const remainingNums = withoutStyle.match(/\b(\d+)\b/g);
-                    if (remainingNums && remainingNums.length > 0) {
-                        const filtered = remainingNums.filter(n => n !== size);
-                        if (filtered.length > 0) qty = parseInt(filtered[filtered.length - 1], 10);
-                    }
-                }
-
-                // Optional Item Name
-                let itemName = "";
-                const knownItems = ["TRUNK", "BRIEF", "VEST", "BOXER", "TRACK", "TSHIRT", "T-SHIRT", "SHORTS", "BRA", "PANTY", "SOCKS", "THERMAL", "POLO", "SHIRT"];
-                for (const ki of knownItems) {
-                    if (lower.includes(ki.toLowerCase())) {
-                        itemName = ki;
-                        break;
-                    }
-                }
-
-                if (styleNo) {
-                    return { intent, brand, styleNo, itemName, color, size: size || "M", qty, reply: "" };
-                }
-            }
-
-            // 3. Greeting / Identity
-            if (lower.includes('kaun') || lower.includes('kya kar') || lower.includes('who are you') || lower.includes('help') || lower.includes('namaste') || lower.includes('hello') || lower.includes('hey')) {
-                return {
-                    intent: "CHAT",
-                    reply: "Namaste! Main RAX AI hoon aur main Plezer Collection ka stock maintain karta hoon. Aap Jockey, Van Heusen, U.S. Polo Assn. ya Park Avenue ka stock check, add ya minus karwa sakte hain."
-                };
-            }
-
-            // 4. Stock Check by Brand or Style
-            const brands = Object.keys(liveBrandStock);
-            for (const b of brands) {
-                for (const s of Object.keys(liveBrandStock[b])) {
-                    if (lower.replace(/\s+/g, '').includes(s.toLowerCase())) {
-                        const item = liveBrandStock[b][s];
-                        let summary = `${b} - Style ${s} (${item.itemName}):\n`;
-                        if (item.colors) {
-                            Object.keys(item.colors).forEach(c => {
-                                const sizes = Object.entries(item.colors[c]).map(([sz, qt]) => `Size ${sz}: ${qt} pcs`).join(', ');
-                                summary += `• ${c}: ${sizes}\n`;
-                            });
-                        }
-                        return { intent: "CHECK", reply: summary.trim() };
-                    }
-                }
-                if (lower.includes(b.toLowerCase()) || (b === 'VAN HEUSEN' && lower.includes('van')) || (b === 'U.S. POLO ASSN.' && lower.includes('polo')) || (b === 'PARK AVENUE' && lower.includes('park'))) {
-                    const styles = Object.keys(liveBrandStock[b]);
-                    const list = styles.map(s => `${s} (${liveBrandStock[b][s].itemName})`).join(', ');
-                    return { intent: "CHECK", reply: `${b} mein ${styles.length} styles hain: ${list}.` };
-                }
-            }
-
-            if (lower.includes('stock') || lower.includes('kitna') || lower.includes('list') || lower.includes('all')) {
-                if (brands.length === 0) return { intent: "CHECK", reply: "Abhi godown mein koi stock entry nahi hai." };
-                const summary = brands.map(b => `${b} (${Object.keys(liveBrandStock[b]).length} styles)`).join(', ');
-                return { intent: "CHECK", reply: `Abhi godown mein yeh brands available hain: ${summary}.` };
-            }
-
-            return null;
-        }
-
-        async function runGeminiFailover(userQuery) {
+        async function askTrueGeminiAI(userQuery) {
             const validKeys = geminiApiKeys
                 .map((k, idx) => ({ key: (k || '').trim(), idx }))
                 .filter(x => x.key !== '' && !x.key.includes('•'));
 
-            if (validKeys.length > 0) {
-                const prompt = `You are RAX AI, stock assistant for Plezer Collection undergarments.
-Rules:
-1. Brands are strictly: "JOCKEY", "VAN HEUSEN", "U.S. POLO ASSN.", "PARK AVENUE" (default "JOCKEY" if not mentioned).
-2. Understand Hindi, Hinglish, and English commands for ADD stock, MINUS/DISPATCH stock, CHECK stock, or general chat.
-3. Remove spaces in styleNo (e.g. "IC 32" -> "IC32", "P4" -> "P4").
-4. Colors are strictly "WHITE" or "ASSTD" (default "ASSTD" if not specified).
-5. Sizes can be numbers (75, 80, 85, 90, 95, 100, 105) or letters (S, M, L, XL, XXL).
-6. If user did not mention quantity (qty), set qty to 0.
-7. Live brand-grouped stock JSON: ${JSON.stringify(liveBrandStock)}
-8. Respond ONLY with raw JSON:
-{"intent":"ADD|MINUS|CHECK|CHAT","brand":"JOCKEY","styleNo":"","itemName":"","color":"ASSTD","size":"","qty":0,"reply":"short helpful Hinglish reply"}
+            if (validKeys.length === 0) {
+                return {
+                    error: "❌ Koi Gemini API Key save nahi hai!\n\nThik karne ka tarika:\n1. Admin Login karein\n2. 'GEMINI API KEYS VAULT' mein apni AIzaSy... key paste karein\n3. 'Save All 5 API Keys' button dabayein."
+                };
+            }
 
-User: ${userQuery}`;
+            const systemInstruction = `You are RAX AI, a friendly, intelligent, unrestricted AI assistant for Reza Ahmad's showroom "Plezer Collection".
+You can answer ANY question the user asks (greetings like "Hii", general knowledge, business math, advice, jokes, Hindi/Hinglish/Bhojpuri/English chat) AND you also manage the showroom's live godown stock!
 
-                for (const kObj of validKeys) {
-                    activeKeyIndex = kObj.idx;
-                    for (const model of MODEL_FALLBACK_CHAIN) {
-                        try {
-                            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(kObj.key)}`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    contents: [{ parts: [{ text: prompt }] }],
-                                    generationConfig: { temperature: 0.1 }
-                                })
-                            });
-                            const data = await res.json();
-                            if (!res.ok || data.error) continue;
+Current Live Brand Stock Data (JSON):
+${JSON.stringify(liveBrandStock)}
 
-                            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                            if (!text) continue;
+Recent Chat History:
+${chatConversationHistory.slice(-6).map(m => `${m.role}: ${m.text}`).join('\n')}
 
-                            const parsed = safeExtractJson(text);
-                            if (!parsed) continue;
+How to respond:
+- Always return a valid JSON object with these keys:
+{
+  "intent": "CHAT" | "CHECK" | "ADD" | "MINUS",
+  "brand": "JOCKEY" | "VAN HEUSEN" | "U.S. POLO ASSN." | "PARK AVENUE" | "<other brand>",
+  "styleNo": "uppercase without spaces e.g. P4, IC32, 8035",
+  "itemName": "uppercase item name if mentioned or known",
+  "color": "ASSTD" | "WHITE",
+  "size": "uppercase size e.g. S, M, L, XL, 85",
+  "qty": number (0 if user did not specify quantity),
+  "reply": "Your natural, helpful, friendly Hinglish response answering whatever the user asked"
+}
+- If the user is just chatting, greeting ("Hii", "Hello", "Kaise ho"), or asking ANY general question, set "intent": "CHAT" and give a great, natural answer in "reply".
+- If the user wants to ADD or MINUS stock, extract brand, styleNo (remove spaces like "IC 32" -> "IC32", "P4" -> "P4"), color (default "ASSTD"), size (default "M" if not mentioned), and qty (set 0 if not mentioned).`;
 
-                            const lbl = document.getElementById('active-model-display');
-                            if (lbl) lbl.innerText = `Model: ${model} (Slot ${kObj.idx + 1})`;
+            let lastDetailedError = "";
 
-                            return { data: parsed };
-                        } catch (e) {
+            for (const kObj of validKeys) {
+                activeKeyIndex = kObj.idx;
+                for (const model of MODEL_FALLBACK_CHAIN) {
+                    try {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(kObj.key)}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                contents: [{
+                                    parts: [{ text: `${systemInstruction}\n\nUser Message: ${userQuery}` }]
+                                }],
+                                generationConfig: {
+                                    temperature: 0.5,
+                                    responseMimeType: "application/json"
+                                }
+                            })
+                        });
+                        const data = await res.json();
+
+                        if (!res.ok || data.error) {
+                            const reason = data?.error?.message || `HTTP Status ${res.status}`;
+                            lastDetailedError = `Slot ${kObj.idx + 1} (${model}): ${reason}`;
                             continue;
                         }
+
+                        const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (!rawText) {
+                            lastDetailedError = `Slot ${kObj.idx + 1} (${model}): Empty response from Gemini`;
+                            continue;
+                        }
+
+                        const lbl = document.getElementById('active-model-display');
+                        if (lbl) lbl.innerText = `AI: ${model} (Slot ${kObj.idx + 1})`;
+
+                        const parsed = safeExtractJson(rawText);
+                        if (parsed && parsed.reply !== undefined) {
+                            return { data: parsed };
+                        }
+                        return { data: { intent: "CHAT", reply: rawText.trim() } };
+                    } catch (err) {
+                        lastDetailedError = `Slot ${kObj.idx + 1} Network Error: ${err.message}`;
+                        continue;
                     }
                 }
             }
 
-            const localPlan = localSmartCommandParser(userQuery);
-            if (localPlan) {
-                const lbl = document.getElementById('active-model-display');
-                if (lbl) lbl.innerText = `Engine: Smart Local Core`;
-                return { data: localPlan };
-            }
-
-            return { error: "Samajh nahi aaya. Jaise bolein: 'US Polo P4 size M 5 pcs add karo'." };
+            return {
+                error: `❌ Gemini API se connect nahi ho paya!\n\nAsli Problem:\n${lastDetailedError}\n\nUpay: Admin panel mein '🔍 Test Keys' dabakar check karein ya Google AI Studio se nayi API Key Slot 1 mein save karein.`
+            };
         }
 
         function continueStockAction(plan) {
@@ -1827,7 +1805,9 @@ User: ${userQuery}`;
                 sessionStorage.setItem('pending_new_style', JSON.stringify({
                     brand: brandName, styleNo, color, size, qty: plan.qty, action: plan.intent
                 }));
-                addChatMessage('ai', `${brandName} mein naya style mila! Style ${styleNo} ka Item Name batayein:`, true);
+                const msg = `${brandName} mein naya style mila! Style ${styleNo} ka Item Name batayein (jaise Trunk, Vest, Brief):`;
+                chatConversationHistory.push({ role: 'AI', text: msg });
+                addChatMessage('ai', msg, true);
                 return;
             }
 
@@ -1843,6 +1823,7 @@ User: ${userQuery}`;
             inputEl.value = '';
 
             addChatMessage('user', query, false);
+            chatConversationHistory.push({ role: 'User', text: query });
 
             // Step A: Waiting for missing Quantity
             if (sessionStorage.getItem('pending_qty_step')) {
@@ -1852,10 +1833,9 @@ User: ${userQuery}`;
                     return;
                 }
                 const savedPlan = JSON.parse(sessionStorage.getItem('pending_qty_step'));
-                const converted = convertHindiNumbers(query);
-                const numMatch = converted.match(/(\d+)/);
+                const numMatch = query.match(/(\d+)/);
                 if (!numMatch || parseInt(numMatch[1], 10) <= 0) {
-                    addChatMessage('ai', '⚠️ Kripya sahi pieces ki gिनती (number) batayein, jaise 5 ya 10.', true);
+                    addChatMessage('ai', '⚠️ Kripya pieces ki ginti (number) batayein, jaise 5 ya 10.', true);
                     return;
                 }
                 sessionStorage.removeItem('pending_qty_step');
@@ -1877,41 +1857,49 @@ User: ${userQuery}`;
                 return;
             }
 
-            const statusEl = addChatMessage('status', '⚡ System mein khoja ja raha hai...', false);
-            const result = await runGeminiFailover(query);
+            const statusEl = addChatMessage('status', '⚡ RAX AI soch raha hai...', false);
+            const result = await askTrueGeminiAI(query);
             statusEl.remove();
 
             if (result.error) {
-                addChatMessage('ai', `⚠️ ${result.error}`, false);
+                addChatMessage('error', result.error, false);
                 return;
             }
 
             const plan = result.data;
-            if (!plan || !plan.intent) return;
+            if (!plan) return;
 
             if (plan.intent === 'ADD' || plan.intent === 'MINUS') {
                 if (!currentAdminUser) {
-                    addChatMessage('ai', 'Pehle aap admin login kar le.', true);
+                    const msg = 'Stock update karne ke liye pehle niche se Admin Login kar lein.';
+                    chatConversationHistory.push({ role: 'AI', text: msg });
+                    addChatMessage('ai', msg, true);
                     return;
                 }
                 if (!plan.styleNo) {
-                    addChatMessage('ai', '⚠️ Style number bhi batayein, jaise P4 ya IC32.', true);
+                    const msg = plan.reply || 'Kripya style number bhi batayein, jaise P4 ya IC32.';
+                    chatConversationHistory.push({ role: 'AI', text: msg });
+                    addChatMessage('ai', msg, true);
                     return;
                 }
-                if (!plan.qty || plan.qty <= 0) {
+                if (!plan.qty || Number(plan.qty) <= 0) {
                     const bName = normalizeBrandName(plan.brand || 'JOCKEY');
                     const sNo = String(plan.styleNo).toUpperCase().replace(/\s+/g, '');
                     const sz = String(plan.size || 'M').toUpperCase();
                     sessionStorage.setItem('pending_qty_step', JSON.stringify(plan));
                     const verb = plan.intent === 'ADD' ? 'add' : 'minus';
-                    addChatMessage('ai', `${bName} Style ${sNo} (Size ${sz}) mein kitne pieces ${verb} karne hain?`, true);
+                    const msg = `${bName} Style ${sNo} (Size ${sz}) mein kitne pieces ${verb} karne hain?`;
+                    chatConversationHistory.push({ role: 'AI', text: msg });
+                    addChatMessage('ai', msg, true);
                     return;
                 }
                 continueStockAction(plan);
                 return;
             }
 
-            addChatMessage('ai', plan.reply, true);
+            const finalReply = plan.reply || "Ji boliye, main aapki kya madad kar sakta hoon?";
+            chatConversationHistory.push({ role: 'AI', text: finalReply });
+            addChatMessage('ai', finalReply, true);
         }
     </script>
 </body>
