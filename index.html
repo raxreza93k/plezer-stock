@@ -526,53 +526,6 @@
             line-height: 1.45;
         }
 
-        #logs-container {
-            background: #0b1020;
-            border: 1px solid rgba(0, 243, 255, 0.22);
-            padding: 12px;
-            border-radius: 12px;
-            max-height: 290px;
-            overflow-y: auto;
-            font-size: 13px;
-        }
-        .log-card-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 11px 12px;
-            border-radius: 10px;
-            background: #131b33;
-            border-left: 4px solid var(--neon-emerald);
-            margin-bottom: 9px;
-        }
-        .log-card-item:last-child { margin-bottom: 0; }
-        .log-card-item.minus-log { border-left-color: var(--neon-pink); }
-        .log-meta-line {
-            color: #cbd5e1;
-            font-size: 12.5px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            line-height: 1.45;
-        }
-        .log-meta-line b { color: #ffffff; }
-        .log-action-line {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: #34d399;
-        }
-        .log-card-item.minus-log .log-action-line { color: #fda4af; }
-        .single-log-del {
-            background: rgba(244, 63, 94, 0.16);
-            border: 1px solid rgba(244, 63, 94, 0.45);
-            color: #fda4af;
-            padding: 5px 9px;
-            font-size: 12px;
-            border-radius: 7px;
-            flex-shrink: 0;
-            box-shadow: none;
-        }
-
         #bottom-admin-launcher {
             position: fixed;
             bottom: 22px;
@@ -862,7 +815,10 @@
         <div id="admin-api-panel" class="panel-card admin-only-panel">
             <div class="panel-header">
                 <span>🔑 GEMINI API KEYS VAULT (5 SLOTS)</span>
-                <span id="keys-status-label" style="font-size:11px; color:var(--neon-gold);">Loading...</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span id="active-model-display" style="font-size:11px; color:#94a3b8;">AI: Ready</span>
+                    <span id="keys-status-label" style="font-size:11px; color:var(--neon-gold);">Loading...</span>
+                </div>
             </div>
             <div id="api-slots-container"></div>
             <div id="api-diagnostic-box"></div>
@@ -870,18 +826,6 @@
                 <button class="btn-green" style="flex:2; padding:12px; font-size:13px;" onclick="saveAllApiKeys()">Save All 5 API Keys</button>
                 <button style="flex:1; padding:12px; font-size:13px;" onclick="testAllApiKeys()">🔍 Test Keys</button>
             </div>
-        </div>
-
-        <!-- 4. ADMIN PANEL 3: Clean Stock Activity Logs (Only Date & Time, No Email Saved) -->
-        <div id="admin-logs-panel" class="panel-card admin-only-panel">
-            <div class="panel-header">
-                <span>🛡️ STOCK UPDATE LOGS</span>
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <span id="active-model-display" style="font-size:11px; color:#94a3b8;">AI: Ready</span>
-                    <button class="btn-danger" style="padding:5px 10px; font-size:11px;" onclick="clearAllStockLogs()">🗑️ Delete All</button>
-                </div>
-            </div>
-            <div id="logs-container">No stock activity logs yet.</div>
         </div>
 
     </div>
@@ -934,14 +878,11 @@
     </div>
 
     <script>
-        /* 1. GLOBALS, FULL DEVICE MODEL DETECTION, IP & BATTERY */
+        /* 1. GLOBALS & BRAND HELPERS */
         let isAdminLoggedIn = false;
         let liveBrandStock = {};
         let geminiApiKeys = ["", "", "", "", ""];
         let activeKeyIndex = 0;
-        let deviceBatteryLevel = "N/A";
-        let clientIP = "Detecting...";
-        let clientDeviceName = "Detecting...";
         let chatConversationHistory = [];
         let discoveredActiveModels = null;
 
@@ -953,82 +894,6 @@
             "gemini-2.5-flash",
             "gemini-2.5-pro"
         ];
-
-        async function resolveFullDeviceName() {
-            try {
-                if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
-                    const hints = await navigator.userAgentData.getHighEntropyValues([
-                        "model",
-                        "platform",
-                        "platformVersion"
-                    ]);
-                    if (hints.model && hints.model.trim().length > 1) {
-                        clientDeviceName = `${hints.platform || "Android"} (${hints.model.trim()})`;
-                        return;
-                    }
-                    if (hints.platform) {
-                        const isMobile = navigator.userAgentData.mobile;
-                        clientDeviceName = isMobile ? `${hints.platform} Smartphone` : `${hints.platform} Computer`;
-                        return;
-                    }
-                }
-            } catch (e) {}
-
-            const ua = navigator.userAgent;
-            const androidMatch = ua.match(/Android\s[\d.]+;\s([^;)]+)/i);
-            if (androidMatch && androidMatch[1]) {
-                const rawModel = androidMatch[1].replace(/Build\/.*/i, '').trim();
-                if (rawModel.length > 2 && rawModel.toUpperCase() !== 'K') {
-                    clientDeviceName = rawModel;
-                    return;
-                }
-                clientDeviceName = "Android Smartphone";
-                return;
-            }
-            if (/iPhone/i.test(ua)) { clientDeviceName = "Apple iPhone"; return; }
-            if (/iPad/i.test(ua)) { clientDeviceName = "Apple iPad"; return; }
-            if (/Macintosh|Mac OS X/i.test(ua)) { clientDeviceName = "Apple MacBook"; return; }
-            if (/Windows NT/i.test(ua)) { clientDeviceName = "Windows PC"; return; }
-            clientDeviceName = navigator.platform || "Mobile Device";
-        }
-        resolveFullDeviceName();
-
-        if ('getBattery' in navigator) {
-            navigator.getBattery().then(b => {
-                deviceBatteryLevel = Math.round(b.level * 100) + "%";
-                b.addEventListener('levelchange', () => {
-                    deviceBatteryLevel = Math.round(b.level * 100) + "%";
-                });
-            });
-        }
-
-        fetch('https://api.ipify.org?format=json')
-            .then(r => r.json())
-            .then(d => { clientIP = d.ip; })
-            .catch(() => { clientIP = "Mobile Network"; });
-
-        /* Logs ONLY Date, Time, IP, Device, Battery & Action (No Email Stored) */
-        function logStockChange(mode, summaryText) {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('en-IN', {
-                timeZone: 'Asia/Kolkata',
-                day: '2-digit', month: '2-digit', year: 'numeric'
-            });
-            const timeStr = now.toLocaleTimeString('en-IN', {
-                timeZone: 'Asia/Kolkata',
-                hour: '2-digit', minute: '2-digit', second: '2-digit'
-            });
-
-            database.ref('stock_activity_logs').push({
-                mode: mode,
-                date: dateStr,
-                time: timeStr,
-                ip: clientIP,
-                device: clientDeviceName,
-                batt: deviceBatteryLevel,
-                action: summaryText
-            }).catch(() => {});
-        }
 
         function normalizeBrandName(rawBrand) {
             const b = String(rawBrand || "JOCKEY").trim().toUpperCase();
@@ -1125,7 +990,7 @@
             window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
         }
 
-        /* 2. ADMIN AUTHENTICATION (NO EMAIL SAVED IN STORAGE OR LOGS) */
+        /* 2. ADMIN AUTHENTICATION */
         const adminLauncherBtn = document.getElementById('bottom-admin-launcher');
         const authModal = document.getElementById('auth-modal');
         const loginErrorBox = document.getElementById('login-error-box');
@@ -1528,7 +1393,6 @@
             const path = getStockFirebasePath(brandName, styleNo, isLegacy);
             database.ref(path).remove()
                 .then(() => {
-                    logStockChange('MINUS', `Deleted: ${brandName} Style ${styleNo} (${itemName})`);
                     showCyberToast(`🗑️ ${brandName} - Style ${styleNo} delete ho gaya!`);
                 })
                 .catch(e => showCyberToast("Error: " + e.message, true));
@@ -1599,10 +1463,6 @@
                 database.ref(`${basePath}/itemName`).set(itemName);
                 database.ref(`${basePath}/brand`).set(cleanBrand);
 
-                const mode = qtyDelta > 0 ? 'ADD' : 'MINUS';
-                const sign = qtyDelta > 0 ? `+${Math.abs(qtyDelta)} pcs Added` : `-${Math.abs(qtyDelta)} pcs Minus`;
-                logStockChange(mode, `${sign} | ${cleanBrand} • Style ${cleanStyle} (${itemName}) • ${color} • Size ${size} • Total: ${updated} pcs`);
-
                 if (notifyChat) {
                     const msg = `✅ Done! ${cleanBrand} - Style ${cleanStyle} (${color}, Size ${size}) update ho gaya. Total stock: ${updated} pcs.`;
                     chatConversationHistory.push({ role: 'AI', text: msg });
@@ -1628,50 +1488,7 @@
             });
         }
 
-        /* 5. CLEAN STOCK LOGS LISTENER (DATE & TIME ONLY, NO EMAIL) */
-        database.ref('stock_activity_logs').limitToLast(40).on('value', snap => {
-            const box = document.getElementById('logs-container');
-            box.innerHTML = '';
-            const logs = snap.val();
-            if (!logs) {
-                box.innerHTML = '<div style="color:#94a3b8; text-align:center; padding:12px;">Abhi tak koi stock add ya minus nahi kiya gaya hai.</div>';
-                return;
-            }
-
-            const entries = Object.entries(logs).reverse();
-            entries.forEach(([key, log]) => {
-                const isMinus = log.mode === 'MINUS';
-                const cleanAction = String(log.action || '').replace(/^\[(?:STOCK ADDED \(\+\)|STOCK MINUS \(-\)|ITEM DELETED)\]\s*/i, '');
-                const safeDevice = (log.device && log.device.length > 1) ? log.device : 'Android Smartphone';
-
-                box.innerHTML += `
-                    <div class="log-card-item ${isMinus ? 'minus-log' : ''}">
-                        <div>
-                            <div class="log-meta-line">
-                                📅 Date: <b>${log.date || ''}</b> &nbsp;|&nbsp; ⏰ Time: <b>${log.time || ''}</b><br>
-                                🌐 IP: <b>${log.ip || 'N/A'}</b> &nbsp;|&nbsp; 📱 Device: <b>${safeDevice}</b> &nbsp;|&nbsp; 🔋 Battery: <b>${log.batt || 'N/A'}</b>
-                            </div>
-                            <div class="log-action-line">${cleanAction}</div>
-                        </div>
-                        <button class="single-log-del" title="Delete Log" onclick="deleteSingleStockLog('${key}')">🗑️</button>
-                    </div>
-                `;
-            });
-        });
-
-        function deleteSingleStockLog(logKey) {
-            if (!isAdminLoggedIn) return;
-            database.ref('stock_activity_logs/' + logKey).remove();
-            showCyberToast("🗑️ Log delete ho gaya");
-        }
-
-        function clearAllStockLogs() {
-            if (!isAdminLoggedIn) return;
-            database.ref('stock_activity_logs').remove();
-            showCyberToast("🗑️ Sabhi Stock Logs delete kar diye gaye!");
-        }
-
-        /* 6. RAX AI PARTICLE ORB */
+        /* 5. RAX AI PARTICLE ORB */
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = 160; canvas.height = 160;
@@ -1764,7 +1581,7 @@
         }
         animateOrb();
 
-        /* 7. TRUE UNRESTRICTED GEMINI AI ASSISTANT WITH AUTO-MODEL DISCOVERY */
+        /* 6. TRUE UNRESTRICTED GEMINI AI ASSISTANT WITH AUTO-MODEL DISCOVERY */
         let voiceEnabled = true;
 
         function toggleVoiceOutput() {
