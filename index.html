@@ -55,7 +55,6 @@
             overflow-x: hidden;
         }
 
-        /* Ambient Neon Light Orbs Across the Page */
         .neon-ambient-light {
             position: fixed;
             border-radius: 50%;
@@ -71,7 +70,6 @@
             100% { transform: scale(1.18) translateY(-18px); opacity: 1; }
         }
 
-        /* Wide, Tall & Glowing Neon Showroom Banner (No Subtitle Below) */
         header {
             width: 100%;
             text-align: center;
@@ -85,7 +83,6 @@
             animation: bannerBorderNeon 3.6s infinite alternate;
         }
 
-        /* Sweeping Light Beam Effect Inside Banner */
         header::before {
             content: '';
             position: absolute;
@@ -175,7 +172,6 @@
             }
         }
 
-        /* Custom Toast Notification */
         #cyber-toast {
             position: fixed;
             top: 18px;
@@ -202,7 +198,6 @@
             width: 94%;
         }
 
-        /* Neon Glowing Glass Cards Across Whole Page */
         .panel-card {
             background: var(--card-bg);
             border: 1.5px solid rgba(0, 243, 255, 0.28);
@@ -271,7 +266,6 @@
         .btn-danger { background: linear-gradient(135deg, #e11d48, #be123c); color: #ffffff; box-shadow: 0 0 14px rgba(225, 29, 72, 0.38); }
         .btn-mic { background: linear-gradient(135deg, #f59e0b, #ff007f); color: #ffffff; box-shadow: 0 0 14px rgba(255, 0, 127, 0.38); }
 
-        /* Admin-Only Panels */
         .admin-only-panel {
             display: none;
             animation: slideUp 0.25s ease-out;
@@ -281,7 +275,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Stock Control Grid */
         .stock-form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -306,7 +299,6 @@
         .stock-action-btns { display: flex; gap: 10px; }
         .stock-action-btns button { flex: 1; padding: 12px; font-size: 14px; }
 
-        /* BRAND-WISE SEPARATE NEON INVENTORY CARDS */
         .brand-section-card {
             background: #0c1224;
             border: 1.5px solid rgba(0, 243, 255, 0.32);
@@ -474,7 +466,6 @@
         }
         .delete-item-btn:hover { background: #e11d48; color: #ffffff; }
 
-        /* 5 API Keys Vault Slots */
         .api-slot-row {
             display: flex;
             align-items: center;
@@ -535,7 +526,6 @@
             line-height: 1.45;
         }
 
-        /* Clean Stock Logs Panel */
         #logs-container {
             background: #0b1020;
             border: 1px solid rgba(0, 243, 255, 0.22);
@@ -583,7 +573,6 @@
             box-shadow: none;
         }
 
-        /* Bottom-Left Admin Access Button */
         #bottom-admin-launcher {
             position: fixed;
             bottom: 22px;
@@ -607,7 +596,6 @@
             box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
         }
 
-        /* System Access Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -678,7 +666,6 @@
             transition: width 0.25s ease;
         }
 
-        /* Floating Bottom-Right RAX AI Orb */
         #rex-ai-launcher {
             position: fixed;
             bottom: 16px;
@@ -711,7 +698,6 @@
             box-shadow: 0 0 12px rgba(0, 243, 255, 0.35);
         }
 
-        /* RAX AI Chat Drawer */
         #rex-ai-drawer {
             display: none;
             position: fixed;
@@ -813,7 +799,6 @@
 
     <div id="cyber-toast"></div>
 
-    <!-- Wide, Tall & Glowing Neon Showroom Banner Only -->
     <header>
         <h1>PLE<span class="sig-z">Z</span>ER COLLECTION</h1>
     </header>
@@ -852,7 +837,6 @@
                     <input type="text" id="ctrl-custom-brand" placeholder="Enter Brand Name" style="display:none; margin-top:7px;" oninput="refreshSavedStylesDropdown()">
                 </div>
 
-                <!-- Saved Style Dropdown + New Style Box -->
                 <div class="style-stack-box">
                     <select id="ctrl-existing-style" onchange="onExistingStyleSelected()">
                         <option value="">-- Saved Styles (0) --</option>
@@ -888,7 +872,7 @@
             </div>
         </div>
 
-        <!-- 4. ADMIN PANEL 3: Clean Stock Activity Logs -->
+        <!-- 4. ADMIN PANEL 3: Clean Stock Activity Logs (Only Date & Time, No Email Saved) -->
         <div id="admin-logs-panel" class="panel-card admin-only-panel">
             <div class="panel-header">
                 <span>🛡️ STOCK UPDATE LOGS</span>
@@ -951,7 +935,7 @@
 
     <script>
         /* 1. GLOBALS, FULL DEVICE MODEL DETECTION, IP & BATTERY */
-        let currentAdminUser = null;
+        let isAdminLoggedIn = false;
         let liveBrandStock = {};
         let geminiApiKeys = ["", "", "", "", ""];
         let activeKeyIndex = 0;
@@ -1023,6 +1007,7 @@
             .then(d => { clientIP = d.ip; })
             .catch(() => { clientIP = "Mobile Network"; });
 
+        /* Logs ONLY Date, Time, IP, Device, Battery & Action (No Email Stored) */
         function logStockChange(mode, summaryText) {
             const now = new Date();
             const dateStr = now.toLocaleDateString('en-IN', {
@@ -1140,20 +1125,20 @@
             window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
         }
 
-        /* 2. ADMIN AUTHENTICATION & STRICT PANEL VISIBILITY */
+        /* 2. ADMIN AUTHENTICATION (NO EMAIL SAVED IN STORAGE OR LOGS) */
         const adminLauncherBtn = document.getElementById('bottom-admin-launcher');
         const authModal = document.getElementById('auth-modal');
         const loginErrorBox = document.getElementById('login-error-box');
         const adminPanels = document.querySelectorAll('.admin-only-panel');
 
-        function applyAuthState(user) {
-            currentAdminUser = user;
+        function applyAuthState(loggedIn) {
+            isAdminLoggedIn = Boolean(loggedIn);
             const quickBtns = document.querySelectorAll('.quick-qty-btn');
             const delItemBtns = document.querySelectorAll('.delete-item-btn');
             const delColCells = document.querySelectorAll('.action-col-cell');
             const actionColHdrs = document.querySelectorAll('.action-col-header');
 
-            if (user) {
+            if (isAdminLoggedIn) {
                 adminLauncherBtn.innerText = "🔓 Admin Logout";
                 adminLauncherBtn.classList.add('logged-in');
                 adminPanels.forEach(p => p.style.display = "block");
@@ -1174,14 +1159,15 @@
         }
 
         function handleAdminButtonClick() {
-            if (currentAdminUser) {
+            if (isAdminLoggedIn) {
                 localStorage.removeItem('plezer_admin_session');
                 try { auth.signOut(); } catch (e) {}
-                applyAuthState(null);
+                applyAuthState(false);
                 showCyberToast("🔒 Admin Logged Out");
             } else {
                 loginErrorBox.style.display = "none";
                 document.getElementById('login-progress-wrap').style.display = "none";
+                document.getElementById('admin-email').value = '';
                 document.getElementById('admin-password').value = '';
                 authModal.style.display = "flex";
             }
@@ -1190,6 +1176,8 @@
         function closeAuthModal() {
             loginErrorBox.style.display = "none";
             document.getElementById('login-progress-wrap').style.display = "none";
+            document.getElementById('admin-email').value = '';
+            document.getElementById('admin-password').value = '';
             authModal.style.display = "none";
         }
 
@@ -1222,9 +1210,9 @@
                     progFill.style.width = "100%";
                     progText.innerText = "ACCESS GRANTED";
                     setTimeout(() => {
-                        localStorage.setItem('plezer_admin_session', email);
+                        localStorage.setItem('plezer_admin_session', 'active');
                         closeAuthModal();
-                        applyAuthState({ email: email });
+                        applyAuthState(true);
                         showCyberToast("✅ Admin Access Active");
                     }, 220);
                 } else {
@@ -1234,13 +1222,13 @@
             }
 
             auth.signInWithEmailAndPassword(email, password)
-                .then(res => {
+                .then(() => {
                     progFill.style.width = "100%";
                     progText.innerText = "ACCESS GRANTED";
                     setTimeout(() => {
-                        localStorage.setItem('plezer_admin_session', res.user.email);
+                        localStorage.setItem('plezer_admin_session', 'active');
                         closeAuthModal();
-                        applyAuthState({ email: res.user.email });
+                        applyAuthState(true);
                         showCyberToast("✅ Admin Access Active");
                     }, 220);
                 })
@@ -1249,11 +1237,11 @@
                 });
         }
 
-        const savedAdmin = localStorage.getItem('plezer_admin_session');
-        if (savedAdmin) {
-            applyAuthState({ email: savedAdmin });
+        if (localStorage.getItem('plezer_admin_session')) {
+            localStorage.setItem('plezer_admin_session', 'active');
+            applyAuthState(true);
         } else {
-            applyAuthState(null);
+            applyAuthState(false);
         }
 
         /* 3. 5 GEMINI API KEYS VAULT + LIVE DIAGNOSTIC & AUTO-MODEL DISCOVERY */
@@ -1308,7 +1296,7 @@
         });
 
         function saveAllApiKeys() {
-            if (!currentAdminUser) return;
+            if (!isAdminLoggedIn) return;
             const updatedKeys = [];
             for (let i = 0; i < 5; i++) {
                 const inputEl = document.getElementById(`api-key-${i}`);
@@ -1328,7 +1316,7 @@
         }
 
         function removeSingleApiKey(slotIndex) {
-            if (!currentAdminUser) return;
+            if (!isAdminLoggedIn) return;
             const updatedKeys = [...geminiApiKeys];
             updatedKeys[slotIndex] = "";
             database.ref('settings/geminiApiKeys').set(updatedKeys);
@@ -1458,8 +1446,8 @@
                 return a.localeCompare(b);
             });
 
-            const btnDisplay = currentAdminUser ? 'inline-block' : 'none';
-            const cellDisplay = currentAdminUser ? 'table-cell' : 'none';
+            const btnDisplay = isAdminLoggedIn ? 'inline-block' : 'none';
+            const cellDisplay = isAdminLoggedIn ? 'table-cell' : 'none';
 
             activeBrandNames.forEach(brandName => {
                 const stylesMap = grouped[brandName];
@@ -1536,7 +1524,7 @@
         }
 
         function deleteFullStockItem(brandName, styleNo, itemName, isLegacy = false) {
-            if (!currentAdminUser) return;
+            if (!isAdminLoggedIn) return;
             const path = getStockFirebasePath(brandName, styleNo, isLegacy);
             database.ref(path).remove()
                 .then(() => {
@@ -1547,7 +1535,7 @@
         }
 
         function handleManualStock(mode) {
-            if (!currentAdminUser) return;
+            if (!isAdminLoggedIn) return;
             let selectedBrand = document.getElementById('ctrl-brand').value;
             if (selectedBrand === 'CUSTOM') {
                 selectedBrand = document.getElementById('ctrl-custom-brand').value.trim();
@@ -1585,7 +1573,7 @@
         }
 
         function adjustStock(brandName, styleNo, itemName, color, size, qtyDelta, notifyChat, isLegacy = false) {
-            if (!currentAdminUser) {
+            if (!isAdminLoggedIn) {
                 if (notifyChat) addChatMessage('ai', 'Pehle aap admin login kar le.', true);
                 return;
             }
@@ -1640,7 +1628,7 @@
             });
         }
 
-        /* 5. CLEAN STOCK LOGS LISTENER */
+        /* 5. CLEAN STOCK LOGS LISTENER (DATE & TIME ONLY, NO EMAIL) */
         database.ref('stock_activity_logs').limitToLast(40).on('value', snap => {
             const box = document.getElementById('logs-container');
             box.innerHTML = '';
@@ -1672,13 +1660,13 @@
         });
 
         function deleteSingleStockLog(logKey) {
-            if (!currentAdminUser) return;
+            if (!isAdminLoggedIn) return;
             database.ref('stock_activity_logs/' + logKey).remove();
             showCyberToast("🗑️ Log delete ho gaya");
         }
 
         function clearAllStockLogs() {
-            if (!currentAdminUser) return;
+            if (!isAdminLoggedIn) return;
             database.ref('stock_activity_logs').remove();
             showCyberToast("🗑️ Sabhi Stock Logs delete kar diye gaye!");
         }
@@ -1971,7 +1959,7 @@ How to respond:
             chatConversationHistory.push({ role: 'User', text: query });
 
             if (sessionStorage.getItem('pending_qty_step')) {
-                if (!currentAdminUser) {
+                if (!isAdminLoggedIn) {
                     sessionStorage.removeItem('pending_qty_step');
                     addChatMessage('ai', 'Pehle aap admin login kar le.', true);
                     return;
@@ -1989,7 +1977,7 @@ How to respond:
             }
 
             if (sessionStorage.getItem('pending_new_style')) {
-                if (!currentAdminUser) {
+                if (!isAdminLoggedIn) {
                     sessionStorage.removeItem('pending_new_style');
                     addChatMessage('ai', 'Pehle aap admin login kar le.', true);
                     return;
@@ -2013,7 +2001,7 @@ How to respond:
             if (!plan) return;
 
             if (plan.intent === 'ADD' || plan.intent === 'MINUS') {
-                if (!currentAdminUser) {
+                if (!isAdminLoggedIn) {
                     const msg = 'Stock update karne ke liye pehle niche se Admin Login kar lein.';
                     chatConversationHistory.push({ role: 'AI', text: msg });
                     addChatMessage('ai', msg, true);
